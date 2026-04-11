@@ -77,7 +77,7 @@ async function sendWelcomeEmail(to, name) {
           </div>
         </div>
         <div style="text-align:center">
-          <a href="${process.env.FRONTEND_URL || 'https://nestmatch.up.railway.app'}" style="display:inline-block;background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff;padding:14px 32px;border-radius:99px;text-decoration:none;font-weight:700;font-size:15px">
+          <a href="${process.env.FRONTEND_URL || 'https://web-production-8e00.up.railway.app'}" style="display:inline-block;background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:#fff;padding:14px 32px;border-radius:99px;text-decoration:none;font-weight:700;font-size:15px">
             Explorar NestMatch
           </a>
         </div>
