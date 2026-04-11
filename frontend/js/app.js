@@ -372,13 +372,19 @@ const App = {
 
   // Google sign-in callback
   async handleGoogleCredential(response) {
+    console.log('[Google] Credential received, calling API...');
     try {
       const result = await API.googleAuth(response.credential);
+      console.log('[Google] API success, user:', result.user?.email);
       localStorage.setItem('pm_token', result.token);
       currentUser = result.user;
       await this.loadUser();
     } catch (err) {
-      UI.showToast(err.error || 'Google sign-in error');
+      console.error('[Google] Auth error:', err);
+      // Make sure we're not stuck on a blank screen
+      this.showAuthContainer();
+      this.showPage('landing');
+      UI.showToast(err.error || 'Error con Google. Intenta de nuevo.');
     }
   }
 };

@@ -137,14 +137,17 @@ router.post('/register', async (req, res) => {
 router.post('/google', async (req, res) => {
   try {
     const { credential } = req.body;
+    console.log('[Google Auth] Received credential, length:', credential?.length);
     if (!credential) return res.status(400).json({ error: 'Google credential required' });
 
-    // Decode Google JWT (verify with Google's public keys)
-    // For simplicity, we decode the JWT payload. In production, use google-auth-library to verify.
     const parts = credential.split('.');
     if (parts.length !== 3) return res.status(400).json({ error: 'Invalid credential format' });
 
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+    // Decode base64url safely (replace URL-safe chars, add padding)
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+    const payload = JSON.parse(Buffer.from(padded, 'base64').toString());
+    console.log('[Google Auth] Decoded email:', payload.email, 'name:', payload.name);
     const { email, name, picture, email_verified } = payload;
 
     if (!email) return res.status(400).json({ error: 'No email in Google credential' });
