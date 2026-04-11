@@ -133,30 +133,70 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ── Google OAuth ──
-router.post('/google', async (req, res) => {
+// ── Google OAuth2 (server-side redirect flow) ──
+router.get('/google', (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
+
+  if (!clientId) {
+    return res.status(500).send('GOOGLE_CLIENT_ID not configured');
+  }
+
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    `client_id=${encodeURIComponent(clientId)}` +
+    `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+    `&response_type=code` +
+    `&scope=${encodeURIComponent('openid email profile')}` +
+    `&prompt=select_account`;
+
+  console.log('[Google] Redirecting to Google, callback:', redirectUri);
+  res.redirect(url);
+});
+
+router.get('/google/callback', async (req, res) => {
+  const baseUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
   try {
-    const { credential } = req.body;
-    console.log('[Google Auth] Received credential, length:', credential?.length);
-    if (!credential) return res.status(400).json({ error: 'Google credential required' });
+    const { code } = req.query;
+    if (!code) return res.redirect('/?error=google_no_code');
 
-    const parts = credential.split('.');
-    if (parts.length !== 3) return res.status(400).json({ error: 'Invalid credential format' });
+    const redirectUri = `${baseUrl}/api/auth/google/callback`;
 
-    // Decode base64url safely (replace URL-safe chars, add padding)
-    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
-    const payload = JSON.parse(Buffer.from(padded, 'base64').toString());
-    console.log('[Google Auth] Decoded email:', payload.email, 'name:', payload.name);
-    const { email, name, picture, email_verified } = payload;
+    // Exchange code for tokens
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      })
+    });
 
-    if (!email) return res.status(400).json({ error: 'No email in Google credential' });
+    const tokens = await tokenRes.json();
+    console.log('[Google] Token exchange status:', tokenRes.status);
 
-    // Check if user exists
+    if (!tokens.access_token) {
+      console.error('[Google] Token error:', tokens);
+      return res.redirect('/?error=google_token_fail');
+    }
+
+    // Get user info
+    const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.access_token}` }
+    });
+    const profile = await userInfoRes.json();
+    console.log('[Google] User:', profile.email, profile.name);
+
+    const { email, name, picture } = profile;
+    if (!email) return res.redirect('/?error=google_no_email');
+
+    // Find or create user
     let userResult = await query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (userResult.rows.length === 0) {
-      // Create new user (no password needed for Google users)
       const randomPass = require('crypto').randomBytes(32).toString('hex');
       const hash = await bcrypt.hash(randomPass, 12);
 
@@ -167,7 +207,6 @@ router.post('/google', async (req, res) => {
         [email, hash, name || email.split('@')[0], picture || null]
       );
 
-      // Send welcome email
       sendWelcomeEmail(email, name || email.split('@')[0]).catch(err => {
         console.error('Welcome email error:', err.message);
       });
@@ -176,13 +215,11 @@ router.post('/google', async (req, res) => {
     const user = userResult.rows[0];
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-    res.json({
-      token,
-      user: { id: user.id, email: user.email, name: user.name, avatar_url: user.avatar_url }
-    });
+    // Redirect to frontend with token
+    res.redirect(`/?token=${token}`);
   } catch (error) {
-    console.error('Google auth error:', error);
-    res.status(500).json({ error: 'Server error during Google sign-in' });
+    console.error('Google callback error:', error);
+    res.redirect('/?error=google_server_error');
   }
 });
 

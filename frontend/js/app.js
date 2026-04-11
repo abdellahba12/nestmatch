@@ -25,6 +25,26 @@ const App = {
 
     setTimeout(() => {
       document.getElementById('loading-screen').style.display = 'none';
+
+      // Check for Google OAuth token in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const googleToken = urlParams.get('token');
+      const googleError = urlParams.get('error');
+
+      if (googleToken) {
+        localStorage.setItem('pm_token', googleToken);
+        history.replaceState({}, '', '/');
+        this.loadUser();
+        return;
+      }
+      if (googleError) {
+        history.replaceState({}, '', '/');
+        this.showAuthContainer();
+        this.showPage('landing');
+        UI.showToast('Error con Google: ' + googleError);
+        return;
+      }
+
       const token = localStorage.getItem('pm_token');
       if (token) {
         this.loadUser();
