@@ -9,9 +9,14 @@
   <title>NestMatch — Tu compañero de piso ideal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main.css?v=3">
 </head>
 <body>
+  <script>
+    window.onerror = function(msg, src, line, col, err) {
+      console.error('[GLOBAL ERROR]', msg, '\n  at', src, 'line', line + ':' + col, '\n ', err);
+    };
+  </script>
   <div id="app">
     <!-- Loading screen -->
     <div id="loading-screen" class="loading-screen">
@@ -44,16 +49,16 @@
             <div class="l-nav-links">
               <!-- Language Selector (SVG flags) -->
               <div class="lang-selector" id="lang-selector">
-                <button class="lang-btn" id="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')">
+                <button class="lang-btn" id="lang-current" type="button">
                   <svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>
                 </button>
                 <div class="lang-dropdown hidden" id="lang-dropdown">
-                  <button onclick="I18n.setLang('es');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> Español</button>
-                  <button onclick="I18n.setLang('en');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> English</button>
-                  <button onclick="I18n.setLang('fr');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> Français</button>
-                  <button onclick="I18n.setLang('pt');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> Português</button>
-                  <button onclick="I18n.setLang('de');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> Deutsch</button>
-                  <button onclick="I18n.setLang('it');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> Italiano</button>
+                  <button type="button" data-lang="es"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> Español</button>
+                  <button type="button" data-lang="en"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> English</button>
+                  <button type="button" data-lang="fr"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> Français</button>
+                  <button type="button" data-lang="pt"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> Português</button>
+                  <button type="button" data-lang="de"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> Deutsch</button>
+                  <button type="button" data-lang="it"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> Italiano</button>
                 </div>
               </div>
               <button class="l-nav-btn-ghost" onclick="App.showPage('login')" data-i18n="nav_login">Iniciar sesión</button>
@@ -644,13 +649,13 @@
   </div>
 
   <script src="https://cdn.socket.io/4.6.2/socket.io.min.js"></script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/api.js"></script>
-  <script src="/js/zonemap.js"></script>
-  <script src="/js/app.js"></script>
-  <script src="/js/discover.js"></script>
-  <script src="/js/chat.js"></script>
-  <script src="/js/profile.js"></script>
-  <script src="/js/payments.js"></script>
+  <script src="/js/i18n.js?v=3"></script>
+  <script src="/js/api.js?v=3"></script>
+  <script src="/js/zonemap.js?v=3"></script>
+  <script src="/js/app.js?v=3"></script>
+  <script src="/js/discover.js?v=3"></script>
+  <script src="/js/chat.js?v=3"></script>
+  <script src="/js/profile.js?v=3"></script>
+  <script src="/js/payments.js?v=3"></script>
 </body>
 </html>

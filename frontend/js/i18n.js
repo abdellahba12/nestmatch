@@ -3,12 +3,14 @@
 // ═══════════════════════════════════════════
 
 const I18n = (() => {
+  console.log('[i18n] Module loading...');
   const STORAGE_KEY = 'nm_lang';
   let currentLang = localStorage.getItem(STORAGE_KEY) || navigator.language?.slice(0, 2) || 'es';
 
   // Fallback to 'es' if browser lang not supported
   const supported = ['es', 'en', 'fr', 'pt', 'de', 'it'];
   if (!supported.includes(currentLang)) currentLang = 'es';
+  console.log('[i18n] Initial lang:', currentLang);
 
   // ── Translation dictionaries ──
   const translations = {
@@ -1656,20 +1658,26 @@ const I18n = (() => {
   function getFlag(lang) { return FLAGS[lang] || FLAGS.es; }
 
   function setLang(lang) {
-    if (!supported.includes(lang)) return;
+    console.log('[i18n] setLang called with:', lang);
+    if (!supported.includes(lang)) { console.warn('[i18n] Unsupported lang:', lang); return; }
     currentLang = lang;
     localStorage.setItem(STORAGE_KEY, lang);
     document.documentElement.lang = lang;
     document.title = t('meta_title');
+    console.log('[i18n] Calling translatePage...');
     translatePage();
     // Update the lang selector button with flag
     const btn = document.getElementById('lang-current');
+    console.log('[i18n] lang-current button found:', !!btn);
     if (btn) btn.innerHTML = getFlag(lang);
+    console.log('[i18n] setLang complete');
   }
 
   function translatePage() {
+    const elements = document.querySelectorAll('[data-i18n]');
+    console.log('[i18n] translatePage: found', elements.length, 'elements, lang:', currentLang);
     // Translate all elements with data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    elements.forEach(el => {
       const key = el.getAttribute('data-i18n');
       const val = t(key);
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
@@ -1688,8 +1696,10 @@ const I18n = (() => {
     });
   }
 
+  console.log('[i18n] Module loaded OK. Methods:', Object.keys({ t, getLang, getFlag, setLang, translatePage, supported }).join(', '));
   return { t, getLang, getFlag, setLang, translatePage, supported };
 })();
 
 // Shorthand
 const t = I18n.t;
+console.log('[i18n] Global t() ready, I18n.setLang available:', typeof I18n.setLang);

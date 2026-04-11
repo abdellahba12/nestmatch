@@ -7,14 +7,20 @@ const TOTAL_REG_STEPS = 5;
 
 const App = {
   init() {
+    console.log('[App] init() starting...');
     this.fixViewportHeight();
     window.addEventListener('resize', () => this.fixViewportHeight());
 
     // Initialize i18n
-    const lang = I18n.getLang();
-    const langBtn = document.getElementById('lang-current');
-    if (langBtn) langBtn.innerHTML = I18n.getFlag(lang);
-    I18n.translatePage();
+    try {
+      const lang = I18n.getLang();
+      console.log('[App] I18n.getLang():', lang);
+      this.initLangSelector(lang);
+      I18n.translatePage();
+      console.log('[App] i18n init complete');
+    } catch (err) {
+      console.error('[App] i18n init FAILED:', err);
+    }
 
     // Browser back button support
     this.initHistory();
@@ -30,6 +36,43 @@ const App = {
         this.showPage('landing');
       }
     }, 1500);
+  },
+
+  initLangSelector(lang) {
+    const toggleBtn = document.getElementById('lang-current');
+    const dropdown = document.getElementById('lang-dropdown');
+    console.log('[Lang] Init selector. Button:', !!toggleBtn, 'Dropdown:', !!dropdown);
+
+    // Set initial flag
+    if (toggleBtn) {
+      toggleBtn.innerHTML = I18n.getFlag(lang);
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        console.log('[Lang] Toggle dropdown');
+        dropdown.classList.toggle('hidden');
+      });
+    }
+
+    // Bind each language button
+    if (dropdown) {
+      dropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+        const btnLang = btn.getAttribute('data-lang');
+        console.log('[Lang] Binding button for:', btnLang);
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          console.log('[Lang] Clicked:', btnLang);
+          I18n.setLang(btnLang);
+          dropdown.classList.add('hidden');
+        });
+      });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (dropdown && toggleBtn && !toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
   },
 
   fixViewportHeight() {
@@ -474,14 +517,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   }
 });
 
-// Close lang dropdown on outside click
-document.addEventListener('click', (e) => {
-  const sel = document.getElementById('lang-selector');
-  const dd = document.getElementById('lang-dropdown');
-  if (sel && dd && !sel.contains(e.target)) {
-    dd.classList.add('hidden');
-  }
-});
+// Lang dropdown outside-click is handled in App.initLangSelector()
 
 // UI utilities
 const UI = {
