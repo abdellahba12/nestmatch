@@ -20,12 +20,36 @@ const API = (() => {
     return data;
   };
 
+  const upload = async (path, formData) => {
+    const opts = {
+      method: 'POST',
+      headers: {},
+      body: formData
+    };
+    const t = getToken();
+    if (t) opts.headers['Authorization'] = `Bearer ${t}`;
+    const res = await fetch(`${BASE}${path}`, opts);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw { status: res.status, ...data };
+    return data;
+  };
+
   return {
     // Auth
     login: (email, password) => request('POST', '/auth/login', { email, password }),
     register: (data) => request('POST', '/auth/register', data),
     getMe: () => request('GET', '/auth/me'),
     updateMe: (data) => request('PUT', '/auth/me', data),
+
+    // Verification
+    sendVerificationCode: (contact, method) =>
+      request('POST', '/auth/send-code', { contact, method }),
+    verifyCode: (contact, code, method) =>
+      request('POST', '/auth/verify-code', { contact, code, method }),
+
+    // Identity verification
+    submitVerification: (formData) => upload('/auth/verify-identity', formData),
+    getVerificationStatus: () => request('GET', '/auth/verification-status'),
 
     // Users
     discover: (filters = {}) => {

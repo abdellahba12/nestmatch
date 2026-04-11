@@ -5,7 +5,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  email VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  phone VARCHAR(30) UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   name VARCHAR(100) NOT NULL,
   age INTEGER CHECK (age >= 18 AND age <= 99),
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
   is_smoker BOOLEAN DEFAULT FALSE,
   has_pets BOOLEAN DEFAULT FALSE,
   is_verified BOOLEAN DEFAULT FALSE,
+  verification_status VARCHAR(30) DEFAULT 'none', -- none, pending, verified, rejected
   subscription_status VARCHAR(30) DEFAULT 'free', -- free, premium, cancelled
   subscription_expires_at TIMESTAMP,
   stripe_customer_id VARCHAR(100),
@@ -104,6 +106,28 @@ CREATE TABLE IF NOT EXISTS reports (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Verification codes (for email/phone verification)
+CREATE TABLE IF NOT EXISTS verification_codes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  contact VARCHAR(255) NOT NULL, -- email or phone
+  code VARCHAR(6) NOT NULL,
+  method VARCHAR(10) NOT NULL DEFAULT 'email', -- email or phone
+  verified BOOLEAN DEFAULT FALSE,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Identity verification documents
+CREATE TABLE IF NOT EXISTS verification_documents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  dni_data TEXT, -- base64 encoded image
+  selfie_data TEXT, -- base64 encoded image
+  status VARCHAR(30) DEFAULT 'pending', -- pending, approved, rejected
+  reviewed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_swipes_swiper ON swipes(swiper_id);
 CREATE INDEX IF NOT EXISTS idx_swipes_swiped ON swipes(swiped_id);
@@ -112,3 +136,12 @@ CREATE INDEX IF NOT EXISTS idx_matches_user2 ON matches(user2_id);
 CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_users_city ON users(city);
+CREATE INDEX IF NOT EXISTS idx_verification_codes_contact ON verification_codes(contact);
+CREATE INDEX IF NOT EXISTS idx_verification_docs_user ON verification_documents(user_id);
+
+-- Migration: add new columns if they don't exist (safe for existing DBs)
+DO $$ BEGIN
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(30) UNIQUE;
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_status VARCHAR(30) DEFAULT 'none';
+EXCEPTION WHEN OTHERS THEN NULL;
+END $$;

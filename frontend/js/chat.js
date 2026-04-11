@@ -14,8 +14,8 @@ const Chat = {
         container.innerHTML = `
           <div class="empty-state">
             <div class="empty-state-icon">💬</div>
-            <h3>Sin mensajes aún</h3>
-            <p style="color:var(--text-light);font-size:14px">Cuando tengas un match, podrás chatear aquí</p>
+            <h3>${t('chat_empty_title')}</h3>
+            <p style="color:var(--text-light);font-size:14px">${t('chat_empty_sub')}</p>
           </div>`;
         return;
       }
@@ -29,7 +29,7 @@ const Chat = {
           </div>
           <div class="match-card-info">
             <div class="match-card-name">${m.other_user_name}</div>
-            <div class="match-card-preview">${m.last_message || 'Iniciar conversación...'}</div>
+            <div class="match-card-preview">${m.last_message || t('chat_start')}</div>
           </div>
           <div class="match-card-meta">
             ${m.unread_count > 0 ? `<span class="match-unread">${m.unread_count}</span>` : ''}
@@ -37,7 +37,7 @@ const Chat = {
         </div>
       `).join('');
     } catch (e) {
-      container.innerHTML = '<p style="padding:20px;color:var(--text-light);text-align:center">Error cargando mensajes</p>';
+      container.innerHTML = `<p style="padding:20px;color:var(--text-light);text-align:center">${t('chat_error_load')}</p>`;
     }
   },
 
@@ -48,14 +48,12 @@ const Chat = {
     const isDesktop = window.innerWidth >= 1100;
 
     if (!isDesktop) {
-      // Mobile: hide list, show room
       document.getElementById('chat-list-view').classList.add('hidden-mobile');
     }
     const roomView = document.getElementById('chat-room-view');
     roomView.classList.remove('hidden');
     roomView.classList.add('visible');
 
-    // Set header
     const nameEl = document.getElementById('chat-partner-name');
     const cityEl = document.getElementById('chat-partner-city');
     const avatarEl = document.getElementById('chat-partner-avatar');
@@ -72,13 +70,10 @@ const Chat = {
       }
     }
 
-    // Join socket room
     if (socket) socket.emit('join_conversation', convId);
 
-    // Load messages
     await this.loadMessages(convId);
 
-    // Focus input
     document.getElementById('message-input').focus();
   },
 
@@ -94,7 +89,7 @@ const Chat = {
         container.innerHTML = `
           <div style="text-align:center;padding:40px 20px;color:var(--text-light);font-size:14px">
             <div style="font-size:40px;margin-bottom:12px">👋</div>
-            <p>¡Has hecho match! Di hola y empieza a conoceros.</p>
+            <p>${t('chat_hello')}</p>
           </div>`;
         return;
       }
@@ -102,7 +97,7 @@ const Chat = {
       messages.forEach(msg => this.appendMessage(msg, false));
       this.scrollToBottom();
     } catch (e) {
-      container.innerHTML = '<p style="padding:20px;text-align:center;color:var(--text-light)">Error cargando mensajes</p>';
+      container.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-light)">${t('chat_error_load')}</p>`;
     }
   },
 
@@ -110,12 +105,11 @@ const Chat = {
     const container = document.getElementById('messages-container');
     if (!container) return;
 
-    // Remove empty state if present
     const emptyState = container.querySelector('[style*="text-align:center"]');
     if (emptyState) emptyState.remove();
 
     const isMine = msg.sender_id === currentUser?.id;
-    const time = new Date(msg.created_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    const time = new Date(msg.created_at).toLocaleTimeString(I18n.getLang(), { hour: '2-digit', minute: '2-digit' });
 
     const wrapper = document.createElement('div');
     wrapper.style.cssText = `display:flex;flex-direction:column;${isMine ? 'align-items:flex-end' : 'align-items:flex-start'}`;
@@ -142,7 +136,6 @@ const Chat = {
 
     input.value = '';
 
-    // Optimistic: show immediately
     const optimistic = {
       id: Date.now().toString(),
       content,
@@ -160,7 +153,7 @@ const Chat = {
       }
     } catch (e) {
       console.error('Send message error:', e);
-      UI.showToast('Error al enviar el mensaje');
+      UI.showToast(t('chat_error_send'));
     }
   },
 
@@ -172,8 +165,8 @@ const Chat = {
 
   showTyping() {
     const indicator = document.getElementById('typing-indicator');
-    const nameEl = document.getElementById('typing-name');
-    if (nameEl) nameEl.textContent = this.currentPartner?.name || '';
+    const textEl = document.getElementById('typing-text');
+    if (textEl) textEl.textContent = t('chat_typing', { name: this.currentPartner?.name || '' });
     if (indicator) indicator.classList.remove('hidden');
 
     if (this.typingTimeout) clearTimeout(this.typingTimeout);

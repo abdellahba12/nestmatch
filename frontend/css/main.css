@@ -2214,9 +2214,212 @@ html, body {
 }
 
 /* ── Small screens ── */
-/* ── Small screens ── */
 @media (max-width: 360px) {
   .hero-title { font-size: 28px; }
   .action-btn { width: 56px; height: 56px; }
   .like-btn { width: 66px; height: 66px; }
+}
+
+/* ═══════════════════════════════════════
+   Language Selector
+   ═══════════════════════════════════════ */
+.lang-selector {
+  position: relative;
+  display: inline-block;
+}
+.lang-btn {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.2s;
+}
+.lang-btn:hover { background: rgba(255,255,255,0.25); }
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  min-width: 160px;
+  z-index: 100;
+  overflow: hidden;
+}
+.lang-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lang-dropdown button:hover {
+  background: var(--bg);
+}
+
+/* ═══════════════════════════════════════
+   Verification Code Input
+   ═══════════════════════════════════════ */
+.code-input-group {
+  display: flex;
+  justify-content: center;
+}
+.code-input {
+  font-size: 28px !important;
+  font-weight: 700;
+  letter-spacing: 10px;
+  text-align: center;
+  padding: 14px 20px !important;
+  max-width: 220px;
+  border: 2px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-body);
+}
+.code-input:focus {
+  border-color: var(--primary) !important;
+  outline: none;
+}
+.verification-target {
+  text-align: center;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.resend-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 0;
+}
+.btn-link:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════
+   Identity Verification Section
+   ═══════════════════════════════════════ */
+.verify-section {
+  border: 2px solid var(--border);
+  background: var(--bg);
+}
+.verify-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+}
+.verify-done {
+  background: #dcfce7;
+  color: #166534;
+}
+.verify-pending-status {
+  background: #fef3c7;
+  color: #92400e;
+}
+.verify-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.verify-upload-box {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.verify-upload-box:hover {
+  border-color: var(--primary);
+}
+.verify-upload-label {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.verify-upload-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+.verify-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+.verify-upload-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.verify-preview {
+  margin-bottom: 12px;
+}
+.verify-preview img {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+.verify-submit-btn {
+  margin-top: 4px;
+}
+.verify-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Verified badge on cards */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #22c55e;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: 4px;
+  vertical-align: middle;
 }

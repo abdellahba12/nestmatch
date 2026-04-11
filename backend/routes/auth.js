@@ -2,42 +2,136 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 const { query } = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { sendVerificationCode: sendCodeEmail, sendWelcomeEmail } = require('../utils/mailer');
 
-// Register
+// Multer config for identity verification (memory storage → base64)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max per file
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only images allowed'));
+  }
+});
+
+// ── Send verification code ──
+router.post('/send-code', async (req, res) => {
+  try {
+    const { contact, method } = req.body;
+    if (!contact) return res.status(400).json({ error: 'Contact is required' });
+
+    // Generate 6-digit code
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Delete old codes for this contact
+    await query('DELETE FROM verification_codes WHERE contact = $1', [contact]);
+
+    // Insert new code
+    await query(
+      'INSERT INTO verification_codes (contact, code, method, expires_at) VALUES ($1, $2, $3, $4)',
+      [contact, code, method || 'email', expiresAt]
+    );
+
+    // Send code via email
+    if (method === 'email') {
+      try {
+        await sendCodeEmail(contact, code);
+      } catch (emailErr) {
+        console.error('Email send error:', emailErr.message);
+        // In dev/if SMTP not configured, log the code
+        if (!process.env.SMTP_USER) {
+          console.log(`[DEV] Verification code for ${contact}: ${code}`);
+        } else {
+          return res.status(500).json({ error: 'Failed to send verification email. Check SMTP configuration.' });
+        }
+      }
+    } else {
+      // Phone: log code (SMS integration would go here with Twilio etc.)
+      console.log(`[SMS placeholder] Verification code for ${contact}: ${code}`);
+    }
+
+    res.json({ message: 'Code sent', method });
+  } catch (error) {
+    console.error('Send code error:', error);
+    res.status(500).json({ error: 'Server error sending verification code' });
+  }
+});
+
+// ── Verify code ──
+router.post('/verify-code', async (req, res) => {
+  try {
+    const { contact, code, method } = req.body;
+    if (!contact || !code) return res.status(400).json({ error: 'Contact and code are required' });
+
+    const result = await query(
+      `SELECT * FROM verification_codes
+       WHERE contact = $1 AND code = $2 AND method = $3 AND verified = false AND expires_at > NOW()
+       ORDER BY created_at DESC LIMIT 1`,
+      [contact, code, method || 'email']
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid or expired code' });
+    }
+
+    // Mark as verified
+    await query('UPDATE verification_codes SET verified = true WHERE id = $1', [result.rows[0].id]);
+
+    res.json({ verified: true });
+  } catch (error) {
+    console.error('Verify code error:', error);
+    res.status(500).json({ error: 'Server error verifying code' });
+  }
+});
+
+// ── Register ──
 router.post('/register', async (req, res) => {
   try {
     const {
-      email, password, name, age, gender, bio, city, neighborhood,
+      email, phone, password, name, age, gender, bio, city, neighborhood,
       profession, hobbies, languages, is_smoker, has_pets,
       budget_min, budget_max, preferred_zones, move_in_date,
       stay_duration, room_type, looking_for_gender, age_min, age_max,
-      accepts_smokers, accepts_pets
+      accepts_smokers, accepts_pets, verified, reg_method
     } = req.body;
 
+    const contact = email || phone;
+
     // Validate required fields
-    if (!email || !password || !name || !age || !city) {
-      return res.status(400).json({ error: 'Missing required fields: email, password, name, age, city' });
+    if (!contact || !password || !name || !age || !city) {
+      return res.status(400).json({ error: 'Missing required fields' });
     }
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    // Check if email exists
-    const existing = await query('SELECT id FROM users WHERE email = $1', [email]);
-    if (existing.rows.length > 0) {
-      return res.status(409).json({ error: 'Email already registered' });
+    // Check if email/phone exists
+    if (email) {
+      const existing = await query('SELECT id FROM users WHERE email = $1', [email]);
+      if (existing.rows.length > 0) {
+        return res.status(409).json({ error: 'Email already registered' });
+      }
+    }
+    if (phone) {
+      const existing = await query('SELECT id FROM users WHERE phone = $1', [phone]);
+      if (existing.rows.length > 0) {
+        return res.status(409).json({ error: 'Phone already registered' });
+      }
     }
 
     const hash = await bcrypt.hash(password, 12);
 
     const userResult = await query(
-      `INSERT INTO users (email, password_hash, name, age, gender, bio, city, neighborhood, profession, hobbies, languages, is_smoker, has_pets)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING id, email, name, city, subscription_status`,
-      [email, hash, name, age, gender || null, bio || null, city, neighborhood || null,
-       profession || null, hobbies || [], languages || [], is_smoker || false, has_pets || false]
+      `INSERT INTO users (email, phone, password_hash, name, age, gender, bio, city, neighborhood, profession, hobbies, languages, is_smoker, has_pets, is_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+       RETURNING id, email, phone, name, city, subscription_status`,
+      [email || null, phone || null, hash, name, age, gender || null, bio || null, city,
+       neighborhood || null, profession || null, hobbies || [], languages || [],
+       is_smoker || false, has_pets || false, verified || false]
     );
 
     const user = userResult.rows[0];
@@ -57,22 +151,36 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-    res.status(201).json({ token, user: { id: user.id, email: user.email, name: user.name, city: user.city } });
+    // Send welcome email (async, non-blocking)
+    if (email) {
+      sendWelcomeEmail(email, name).catch(err => {
+        console.error('Welcome email error:', err.message);
+      });
+    }
+
+    res.status(201).json({
+      token,
+      user: { id: user.id, email: user.email, phone: user.phone, name: user.name, city: user.city }
+    });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ error: 'Server error during registration' });
   }
 });
 
-// Login
+// ── Login ──
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password required' });
+      return res.status(400).json({ error: 'Email/phone and password required' });
     }
 
-    const result = await query('SELECT * FROM users WHERE email = $1', [email]);
+    // Allow login with email or phone
+    const result = await query(
+      'SELECT * FROM users WHERE email = $1 OR phone = $1',
+      [email]
+    );
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -90,6 +198,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
+        phone: user.phone,
         name: user.name,
         city: user.city,
         subscription_status: user.subscription_status,
@@ -102,13 +211,14 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get own profile
+// ── Get own profile ──
 router.get('/me', authenticate, async (req, res) => {
   try {
     const result = await query(
-      `SELECT u.id, u.email, u.name, u.age, u.gender, u.bio, u.city, u.neighborhood,
+      `SELECT u.id, u.email, u.phone, u.name, u.age, u.gender, u.bio, u.city, u.neighborhood,
               u.profession, u.hobbies, u.languages, u.is_smoker, u.has_pets,
-              u.avatar_url, u.subscription_status, u.subscription_expires_at,
+              u.avatar_url, u.is_verified, u.verification_status,
+              u.subscription_status, u.subscription_expires_at,
               u.daily_swipes_count, u.daily_swipes_reset_at, u.created_at,
               rp.budget_min, rp.budget_max, rp.preferred_zones, rp.move_in_date,
               rp.stay_duration, rp.room_type, rp.looking_for_gender, rp.age_min, rp.age_max,
@@ -141,7 +251,7 @@ router.get('/me', authenticate, async (req, res) => {
   }
 });
 
-// Update profile
+// ── Update profile ──
 router.put('/me', authenticate, async (req, res) => {
   try {
     const {
@@ -192,6 +302,59 @@ router.put('/me', authenticate, async (req, res) => {
     res.json({ message: 'Profile updated successfully' });
   } catch (error) {
     console.error('Update profile error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ── Submit identity verification (DNI + Selfie) ──
+router.post('/verify-identity', authenticate, upload.fields([
+  { name: 'dni', maxCount: 1 },
+  { name: 'selfie', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const dniFile = req.files?.dni?.[0];
+    const selfieFile = req.files?.selfie?.[0];
+
+    if (!dniFile || !selfieFile) {
+      return res.status(400).json({ error: 'Both DNI photo and selfie are required' });
+    }
+
+    // Convert to base64
+    const dniBase64 = `data:${dniFile.mimetype};base64,${dniFile.buffer.toString('base64')}`;
+    const selfieBase64 = `data:${selfieFile.mimetype};base64,${selfieFile.buffer.toString('base64')}`;
+
+    // Delete old verification docs for this user
+    await query('DELETE FROM verification_documents WHERE user_id = $1', [req.user.id]);
+
+    // Insert new verification
+    await query(
+      `INSERT INTO verification_documents (user_id, dni_data, selfie_data, status)
+       VALUES ($1, $2, $3, 'pending')`,
+      [req.user.id, dniBase64, selfieBase64]
+    );
+
+    // Update user verification status
+    await query(
+      `UPDATE users SET verification_status = 'pending', updated_at = NOW() WHERE id = $1`,
+      [req.user.id]
+    );
+
+    res.json({ message: 'Verification documents submitted', status: 'pending' });
+  } catch (error) {
+    console.error('Verify identity error:', error);
+    res.status(500).json({ error: 'Server error uploading verification documents' });
+  }
+});
+
+// ── Get verification status ──
+router.get('/verification-status', authenticate, async (req, res) => {
+  try {
+    const result = await query(
+      `SELECT verification_status, is_verified FROM users WHERE id = $1`,
+      [req.user.id]
+    );
+    res.json(result.rows[0] || { verification_status: 'none', is_verified: false });
+  } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });

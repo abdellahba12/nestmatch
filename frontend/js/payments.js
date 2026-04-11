@@ -8,7 +8,7 @@ const Payments = {
       }
     } catch (e) {
       console.error('Checkout error:', e);
-      UI.showToast('Error al abrir el checkout. Inténtalo de nuevo.');
+      UI.showToast(t('toast_checkout_error'));
     }
   },
 
@@ -17,7 +17,7 @@ const Payments = {
       const result = await API.openPortal();
       if (result.url) window.location.href = result.url;
     } catch (e) {
-      UI.showToast('Error al abrir el portal de facturación.');
+      UI.showToast(t('toast_portal_error'));
     }
   }
 };
@@ -34,12 +34,12 @@ const Matches = {
         container.innerHTML = `
           <div class="empty-state">
             <div class="empty-state-icon">💫</div>
-            <h3>Aún no tienes matches</h3>
+            <h3>${t('matches_empty_title')}</h3>
             <p style="color:var(--text-light);font-size:14px;max-width:240px;margin:0 auto">
-              Sigue explorando perfiles y pronto encontrarás a alguien compatible
+              ${t('matches_empty_sub')}
             </p>
             <button class="btn-primary" style="margin-top:20px" onclick="App.switchTab('discover')">
-              Explorar perfiles
+              ${t('matches_empty_btn')}
             </button>
           </div>`;
         return;
@@ -58,10 +58,10 @@ const Matches = {
           <div class="match-card-info">
             <div class="match-card-name">${m.other_user_name}</div>
             <div class="match-card-preview" style="color:var(--text-muted);font-size:12px">
-              📍 ${m.other_user_city || 'Sin ciudad'}
+              📍 ${m.other_user_city || t('matches_no_city')}
             </div>
             <div class="match-card-preview">
-              ${m.last_message || '¡Nuevo match! Envía un mensaje 👋'}
+              ${m.last_message || t('matches_new')}
             </div>
           </div>
           <div class="match-card-meta">
@@ -71,7 +71,7 @@ const Matches = {
         </div>
       `).join('');
     } catch (e) {
-      container.innerHTML = '<p style="padding:20px;color:var(--text-light);text-align:center">Error cargando matches</p>';
+      container.innerHTML = `<p style="padding:20px;color:var(--text-light);text-align:center">${t('chat_error_load')}</p>`;
     }
   },
 
@@ -80,18 +80,18 @@ const Matches = {
     const d = new Date(dateStr);
     const now = new Date();
     const diff = now - d;
-    if (diff < 86400000) return d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    if (diff < 86400000) return d.toLocaleTimeString(I18n.getLang(), { hour: '2-digit', minute: '2-digit' });
     if (diff < 604800000) {
       const days = Math.floor(diff / 86400000);
-      return `hace ${days}d`;
+      return `${days}d`;
     }
-    return d.toLocaleDateString('es', { day: 'numeric', month: 'short' });
+    return d.toLocaleDateString(I18n.getLang(), { day: 'numeric', month: 'short' });
   }
 };
 
 // Handle premium success redirect
 if (window.location.pathname === '/premium-success') {
   history.replaceState({}, '', '/');
-  UI?.showToast('🎉 ¡Bienvenido/a a Premium!');
+  UI?.showToast(t('prem_welcome'));
   Profile?.load();
 }

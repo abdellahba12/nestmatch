@@ -30,9 +30,23 @@
         <!-- HERO: fullscreen grid of phone cards + overlay text -->
         <section class="l-hero">
 
-          <!-- Hero background image -->
-          <div class="l-hero-bg">
-            <img src="/img/hero-bg.jpeg" alt="NestMatch" class="l-hero-bg-img">
+          <!-- Grid of tilted phone mockup cards -->
+          <div class="l-phones-grid" id="l-phones-grid">
+            <!-- Row 1 -->
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f97316,#ec4899)"><div class="l-phone-info"><span class="l-pname">Sofia, 23</span><span class="l-pcity">Barcelona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#6366f1,#06b6d4)"><div class="l-phone-info"><span class="l-pname">Marc, 28</span><span class="l-pcity">Madrid</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#22c55e,#fbbf24)"><div class="l-phone-info"><span class="l-pname">Ana, 25</span><span class="l-pcity">Valencia</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#a855f7,#f43f5e)"><div class="l-phone-info"><span class="l-pname">David, 26</span><span class="l-pcity">Sevilla</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#0ea5e9,#10b981)"><div class="l-phone-info"><span class="l-pname">Laura, 24</span><span class="l-pcity">Bilbao</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <!-- Row 2 -->
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f59e0b,#ef4444)"><div class="l-phone-info"><span class="l-pname">Carlos, 29</span><span class="l-pcity">Zaragoza</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#ec4899,#8b5cf6)"><div class="l-phone-info"><span class="l-pname">Marta, 22</span><span class="l-pcity">Málaga</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#14b8a6,#6366f1)"><div class="l-phone-info"><span class="l-pname">Pau, 27</span><span class="l-pcity">Girona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f97316,#facc15)"><div class="l-phone-info"><span class="l-pname">Sara, 23</span><span class="l-pcity">Alicante</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#be185d,#0284c7)"><div class="l-phone-info"><span class="l-pname">Iván, 31</span><span class="l-pcity">Murcia</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <!-- Row 3 (extra for large screens) -->
+            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#7c3aed,#06b6d4)"><div class="l-phone-info"><span class="l-pname">Noa, 24</span><span class="l-pcity">Tarragona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#16a34a,#f59e0b)"><div class="l-phone-info"><span class="l-pname">Rui, 25</span><span class="l-pcity">Lisboa</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
           </div>
 
           <!-- Dark overlay gradient -->
@@ -40,54 +54,55 @@
 
           <!-- Nav on top -->
           <nav class="l-nav">
-            <div class="l-nav-logo">
-              <svg class="l-nav-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5L12 3L21 10.5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V10.5Z" fill="#FF6B6B" stroke="white" stroke-width="1.5"/><path d="M9 21V13H15V21" fill="#fff" stroke="white" stroke-width="1.5"/><path d="M12 3L2 11H5V20H19V11H22L12 3Z" fill="#FF6B6B"/><rect x="9" y="14" width="6" height="7" rx="0.5" fill="white"/></svg>
-              NestMatch
-            </div>
+            <div class="l-nav-logo">🏡 NestMatch</div>
             <div class="l-nav-links">
-              <div class="l-lang-switcher" id="lang-switcher">
-                <button class="l-lang-btn" onclick="toggleLangMenu()" aria-label="Cambiar idioma">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
-                  <span id="current-lang">ES</span>
-                </button>
-                <div class="l-lang-dropdown hidden" id="lang-dropdown">
-                  <button class="l-lang-option active" onclick="setLang('es')">Espanol</button>
-                  <button class="l-lang-option" onclick="setLang('en')">English</button>
+              <!-- Language Selector -->
+              <div class="lang-selector" id="lang-selector">
+                <button class="lang-btn" id="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')">ES</button>
+                <div class="lang-dropdown hidden" id="lang-dropdown">
+                  <button onclick="I18n.setLang('es');document.getElementById('lang-dropdown').classList.add('hidden')">🇪🇸 Español</button>
+                  <button onclick="I18n.setLang('en');document.getElementById('lang-dropdown').classList.add('hidden')">🇬🇧 English</button>
+                  <button onclick="I18n.setLang('fr');document.getElementById('lang-dropdown').classList.add('hidden')">🇫🇷 Français</button>
+                  <button onclick="I18n.setLang('pt');document.getElementById('lang-dropdown').classList.add('hidden')">🇵🇹 Português</button>
+                  <button onclick="I18n.setLang('de');document.getElementById('lang-dropdown').classList.add('hidden')">🇩🇪 Deutsch</button>
+                  <button onclick="I18n.setLang('it');document.getElementById('lang-dropdown').classList.add('hidden')">🇮🇹 Italiano</button>
                 </div>
               </div>
-              <button class="l-nav-btn-ghost" onclick="App.showPage('login')">Iniciar sesion</button>
+              <button class="l-nav-btn-ghost" onclick="App.showPage('login')" data-i18n="nav_login">Iniciar sesión</button>
+              <button class="l-nav-btn-solid" onclick="App.showPage('register')" data-i18n="nav_signup">Crear cuenta</button>
             </div>
           </nav>
 
           <!-- Centered hero text -->
           <div class="l-hero-content">
-            <h1 class="l-hero-title">Find your<br><em>perfect nest</em></h1>
-            <button class="l-cta-main" onclick="App.showPage('register')">Crear cuenta</button>
+            <h1 class="l-hero-title"><span data-i18n="hero_title_1">Desliza hacia</span><br><span data-i18n="hero_title_2">tu</span> <em data-i18n="hero_title_em">nido perfecto</em></h1>
+            <button class="l-cta-main" onclick="App.showPage('register')" data-i18n="hero_cta">Crear cuenta gratis</button>
+            <p class="l-cta-sub" data-i18n="hero_sub">Sin tarjeta de crédito · Cancela cuando quieras</p>
           </div>
         </section>
 
         <!-- HOW IT WORKS -->
         <section class="l-how">
-          <h2 class="l-section-title">¿Cómo funciona?</h2>
-          <p class="l-section-sub">Tres pasos para encontrar a tu compañero ideal</p>
+          <h2 class="l-section-title" data-i18n="how_title">¿Cómo funciona?</h2>
+          <p class="l-section-sub" data-i18n="how_sub">Tres pasos para encontrar a tu compañero ideal</p>
           <div class="l-steps">
             <div class="l-step">
               <div class="l-step-num">1</div>
               <div class="l-step-icon">📝</div>
-              <h3>Crea tu perfil</h3>
-              <p>Cuéntanos quién eres, qué buscas y en qué zona quieres vivir. Solo tarda 2 minutos.</p>
+              <h3 data-i18n="how_step1_title">Crea tu perfil</h3>
+              <p data-i18n="how_step1_desc">Cuéntanos quién eres, qué buscas y en qué zona quieres vivir. Solo tarda 2 minutos.</p>
             </div>
             <div class="l-step">
               <div class="l-step-num">2</div>
               <div class="l-step-icon">👆</div>
-              <h3>Explora y conecta</h3>
-              <p>Desliza perfiles de personas compatibles en tu zona. Si os gustáis mutuamente, es un match.</p>
+              <h3 data-i18n="how_step2_title">Explora y conecta</h3>
+              <p data-i18n="how_step2_desc">Desliza perfiles de personas compatibles en tu zona. Si os gustáis mutuamente, es un match.</p>
             </div>
             <div class="l-step">
               <div class="l-step-num">3</div>
               <div class="l-step-icon">🏡</div>
-              <h3>Encuentra tu hogar</h3>
-              <p>Chatea, conócete y decidid juntos vuestra próxima casa. Así de fácil.</p>
+              <h3 data-i18n="how_step3_title">Encuentra tu hogar</h3>
+              <p data-i18n="how_step3_desc">Chatea, conócete y decidid juntos vuestra próxima casa. Así de fácil.</p>
             </div>
           </div>
         </section>
@@ -96,16 +111,16 @@
         <section class="l-features">
           <div class="l-feature-grid">
             <div class="l-feature-text">
-              <div class="l-feature-tag">Para ti</div>
-              <h2>Filtra por zona con nuestro mapa interactivo</h2>
-              <p>Selecciona exactamente los barrios donde quieres vivir. No pierdas tiempo con personas que no están en tu zona.</p>
-              <button class="l-feature-cta" onclick="App.showPage('register')">Buscar en mi zona →</button>
+              <div class="l-feature-tag" data-i18n="feat_tag">Para ti</div>
+              <h2 data-i18n="feat_title">Filtra por zona con nuestro mapa interactivo</h2>
+              <p data-i18n="feat_desc">Selecciona exactamente los barrios donde quieres vivir. No pierdas tiempo con personas que no están en tu zona.</p>
+              <button class="l-feature-cta" onclick="App.showPage('register')" data-i18n="feat_cta">Buscar en mi zona →</button>
             </div>
             <div class="l-feature-visual">
               <div class="l-map-preview">
-                <div class="l-map-dot l-map-dot--1"><div class="l-map-pulse"></div><div class="l-map-label">Gràcia<br><span>12 usuarios</span></div></div>
-                <div class="l-map-dot l-map-dot--2"><div class="l-map-pulse"></div><div class="l-map-label">Eixample<br><span>28 usuarios</span></div></div>
-                <div class="l-map-dot l-map-dot--3"><div class="l-map-pulse"></div><div class="l-map-label">Poblenou<br><span>9 usuarios</span></div></div>
+                <div class="l-map-dot l-map-dot--1"><div class="l-map-pulse"></div><div class="l-map-label">Gràcia<br><span>12 <span data-i18n="feat_users">usuarios</span></span></div></div>
+                <div class="l-map-dot l-map-dot--2"><div class="l-map-pulse"></div><div class="l-map-label">Eixample<br><span>28 <span data-i18n="feat_users">usuarios</span></span></div></div>
+                <div class="l-map-dot l-map-dot--3"><div class="l-map-pulse"></div><div class="l-map-label">Poblenou<br><span>9 <span data-i18n="feat_users">usuarios</span></span></div></div>
               </div>
             </div>
           </div>
@@ -113,171 +128,203 @@
 
         <!-- TESTIMONIALS -->
         <section class="l-testimonials">
-          <h2 class="l-section-title">Ya encontraron su nido</h2>
+          <h2 class="l-section-title" data-i18n="test_title">Ya encontraron su nido</h2>
           <div class="l-testimonial-grid">
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#f97316,#ec4899)">L</div><p>"Encontré a mi compañera de piso en menos de una semana. ¡Ahora somos amigas!"</p><strong>Laura, 24 · Barcelona</strong></div>
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#6366f1,#06b6d4)">M</div><p>"El filtro por zonas es genial. Solo vi gente que buscaba en mi barrio."</p><strong>Marc, 29 · Madrid</strong></div>
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#22c55e,#fbbf24)">S</div><p>"Muy fácil de usar. Perfecto para cuando llegas nueva a una ciudad."</p><strong>Sara, 26 · Valencia</strong></div>
+            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#f97316,#ec4899)">L</div><p data-i18n="test_1">"Encontré a mi compañera de piso en menos de una semana. ¡Ahora somos amigas!"</p><strong>Laura, 24 · Barcelona</strong></div>
+            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#6366f1,#06b6d4)">M</div><p data-i18n="test_2">"El filtro por zonas es genial. Solo vi gente que buscaba en mi barrio."</p><strong>Marc, 29 · Madrid</strong></div>
+            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#22c55e,#fbbf24)">S</div><p data-i18n="test_3">"Muy fácil de usar. Perfecto para cuando llegas nueva a una ciudad."</p><strong>Sara, 26 · Valencia</strong></div>
           </div>
         </section>
 
         <!-- BOTTOM CTA -->
         <section class="l-bottom-cta">
           <div class="l-bcta-inner">
-            <h2>¿Listo para encontrar tu nido?</h2>
-            <p>Únete a más de 10.000 personas que ya encontraron compañero de piso</p>
-            <button class="l-cta-main l-cta-main--light" onclick="App.showPage('register')">Crear perfil gratis</button>
+            <h2 data-i18n="bcta_title">¿Listo para encontrar tu nido?</h2>
+            <p data-i18n="bcta_sub">Únete a más de 10.000 personas que ya encontraron compañero de piso</p>
+            <button class="l-cta-main l-cta-main--light" onclick="App.showPage('register')" data-i18n="bcta_btn">Crear perfil gratis</button>
           </div>
         </section>
 
         <!-- Footer -->
         <footer class="l-footer">
           <div class="l-footer-logo">🏡 NestMatch</div>
-          <p>© 2025 NestMatch · Tu compañero de piso ideal</p>
+          <p data-i18n="footer_text">© 2025 NestMatch · Tu compañero de piso ideal</p>
         </footer>
       </div>
       <!-- Login -->
       <div id="page-login" class="page hidden">
         <div class="auth-page">
-          <button class="back-btn" onclick="App.showPage('landing')">← Volver</button>
+          <button class="back-btn" onclick="App.showPage('landing')" data-i18n="back">← Volver</button>
           <div class="auth-card">
             <div class="auth-logo">🏡</div>
-            <h2>Bienvenido de nuevo</h2>
-            <p class="auth-sub">Inicia sesión en tu cuenta</p>
+            <h2 data-i18n="login_title">Bienvenido de nuevo</h2>
+            <p class="auth-sub" data-i18n="login_sub">Inicia sesión en tu cuenta</p>
             <form id="login-form" class="auth-form">
               <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="login-email" placeholder="tu@email.com" required>
+                <label data-i18n="login_email_label">Email</label>
+                <input type="email" id="login-email" data-i18n-ph="login_email_ph" placeholder="tu@email.com" required>
               </div>
               <div class="form-group">
-                <label>Contraseña</label>
-                <input type="password" id="login-password" placeholder="••••••" required>
+                <label data-i18n="login_pass_label">Contraseña</label>
+                <input type="password" id="login-password" data-i18n-ph="login_pass_ph" placeholder="••••••" required>
               </div>
               <div id="login-error" class="form-error hidden"></div>
-              <button type="submit" class="btn-submit" id="login-btn">Entrar</button>
+              <button type="submit" class="btn-submit" id="login-btn" data-i18n="login_btn">Entrar</button>
             </form>
-            <p class="auth-switch">¿Sin cuenta? <a href="#" onclick="App.showPage('register')">Regístrate gratis</a></p>
+            <p class="auth-switch"><span data-i18n="login_no_account">¿Sin cuenta?</span> <a href="#" onclick="App.showPage('register')" data-i18n="login_signup_link">Regístrate gratis</a></p>
           </div>
         </div>
       </div>
 
-      <!-- Register (multi-step) -->
+      <!-- Register (multi-step: 5 steps now) -->
       <div id="page-register" class="page hidden">
         <div class="register-page">
-          <button class="back-btn" onclick="App.goRegisterBack()">← Volver</button>
+          <button class="back-btn" onclick="App.goRegisterBack()" data-i18n="back">← Volver</button>
           <div class="register-progress">
             <div class="progress-dots">
               <span class="dot active" data-step="1"></span>
               <span class="dot" data-step="2"></span>
               <span class="dot" data-step="3"></span>
               <span class="dot" data-step="4"></span>
+              <span class="dot" data-step="5"></span>
             </div>
-            <div class="progress-label" id="register-step-label">Paso 1 de 4</div>
+            <div class="progress-label" id="register-step-label">Paso 1 de 5</div>
           </div>
 
-          <!-- Step 1: Basic info -->
+          <!-- Step 1: Basic info + auth -->
           <div class="register-step" id="reg-step-1">
-            <h2>Cuéntanos sobre ti</h2>
-            <p class="step-sub">Datos básicos para tu perfil</p>
+            <h2 data-i18n="reg1_title">Cuéntanos sobre ti</h2>
+            <p class="step-sub" data-i18n="reg1_sub">Datos básicos para tu perfil</p>
             <div class="form-group">
-              <label>Tu nombre *</label>
-              <input type="text" id="reg-name" placeholder="¿Cómo te llamas?" required>
+              <label data-i18n="reg1_name_label">Tu nombre *</label>
+              <input type="text" id="reg-name" data-i18n-ph="reg1_name_ph" placeholder="¿Cómo te llamas?" required>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Edad *</label>
-                <input type="number" id="reg-age" placeholder="Ej: 24" min="18" max="99" required>
+                <label data-i18n="reg1_age_label">Edad *</label>
+                <input type="number" id="reg-age" data-i18n-ph="reg1_age_ph" placeholder="Ej: 24" min="18" max="99" required>
               </div>
               <div class="form-group">
-                <label>Género</label>
+                <label data-i18n="reg1_gender_label">Género</label>
                 <select id="reg-gender">
-                  <option value="">Prefiero no decirlo</option>
-                  <option value="male">Hombre</option>
-                  <option value="female">Mujer</option>
-                  <option value="non-binary">No binario</option>
-                  <option value="other">Otro</option>
+                  <option value="" data-i18n="reg1_gender_none">Prefiero no decirlo</option>
+                  <option value="male" data-i18n="reg1_gender_male">Hombre</option>
+                  <option value="female" data-i18n="reg1_gender_female">Mujer</option>
+                  <option value="non-binary" data-i18n="reg1_gender_nb">No binario</option>
+                  <option value="other" data-i18n="reg1_gender_other">Otro</option>
                 </select>
               </div>
             </div>
+            <!-- Registration method toggle -->
             <div class="form-group">
-              <label>Email *</label>
-              <input type="email" id="reg-email" placeholder="tu@email.com" required>
+              <label data-i18n="reg1_method_label">Método de registro *</label>
+              <div class="toggle-group" id="reg-method-toggle">
+                <button class="toggle-btn active" data-val="email" onclick="App.setRegMethod('email')" data-i18n="reg1_method_email">Email</button>
+                <button class="toggle-btn" data-val="phone" onclick="App.setRegMethod('phone')" data-i18n="reg1_method_phone">Teléfono</button>
+              </div>
+            </div>
+            <div class="form-group" id="reg-email-group">
+              <label data-i18n="reg1_email_label">Email *</label>
+              <input type="email" id="reg-email" data-i18n-ph="reg1_email_ph" placeholder="tu@email.com" required>
+            </div>
+            <div class="form-group hidden" id="reg-phone-group">
+              <label data-i18n="reg1_phone_label">Teléfono *</label>
+              <input type="tel" id="reg-phone" data-i18n-ph="reg1_phone_ph" placeholder="+34 612 345 678">
             </div>
             <div class="form-group">
-              <label>Contraseña *</label>
-              <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required>
+              <label data-i18n="reg1_pass_label">Contraseña *</label>
+              <input type="password" id="reg-password" data-i18n-ph="reg1_pass_ph" placeholder="Mínimo 6 caracteres" required>
             </div>
             <div id="reg-error-1" class="form-error hidden"></div>
-            <button class="btn-submit" onclick="App.regNext(1)">Continuar →</button>
+            <button class="btn-submit" onclick="App.regNext(1)" data-i18n="reg1_continue">Continuar →</button>
           </div>
 
-          <!-- Step 2: About you -->
+          <!-- Step 2: Verification Code (NEW) -->
           <div class="register-step hidden" id="reg-step-2">
-            <h2>Tu historia</h2>
-            <p class="step-sub">Que los demás te conozcan</p>
+            <h2 data-i18n="reg2_title">Verifica tu cuenta</h2>
+            <p class="step-sub" id="reg2-sub" data-i18n="reg2_sub_email">Hemos enviado un código de 6 dígitos a tu email</p>
+            <div class="verification-target" id="verification-target"></div>
             <div class="form-group">
-              <label>Profesión</label>
-              <input type="text" id="reg-profession" placeholder="Ej: Diseñadora, Estudiante, Ingeniero...">
+              <label data-i18n="reg2_code_label">Código de verificación *</label>
+              <div class="code-input-group">
+                <input type="text" id="reg-code" class="code-input" maxlength="6" data-i18n-ph="reg2_code_ph" placeholder="000000" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+              </div>
+            </div>
+            <div id="reg-error-2" class="form-error hidden"></div>
+            <button class="btn-submit" id="verify-btn" onclick="App.regNext(2)" data-i18n="reg2_verify">Verificar →</button>
+            <div class="resend-row">
+              <span data-i18n="reg2_resend">¿No has recibido el código?</span>
+              <button class="btn-link" id="resend-btn" onclick="App.resendCode()" data-i18n="reg2_resend_btn">Reenviar código</button>
+            </div>
+          </div>
+
+          <!-- Step 3: About you (was step 2) -->
+          <div class="register-step hidden" id="reg-step-3">
+            <h2 data-i18n="reg3_title">Tu historia</h2>
+            <p class="step-sub" data-i18n="reg3_sub">Que los demás te conozcan</p>
+            <div class="form-group">
+              <label data-i18n="reg3_profession_label">Profesión</label>
+              <input type="text" id="reg-profession" data-i18n-ph="reg3_profession_ph" placeholder="Ej: Diseñadora, Estudiante, Ingeniero...">
             </div>
             <div class="form-group">
-              <label>Sobre ti</label>
-              <textarea id="reg-bio" placeholder="Cuéntanos algo sobre ti: cómo eres, qué buscas en un compañero de piso..." rows="4"></textarea>
+              <label data-i18n="reg3_bio_label">Sobre ti</label>
+              <textarea id="reg-bio" data-i18n-ph="reg3_bio_ph" placeholder="Cuéntanos algo sobre ti: cómo eres, qué buscas en un compañero de piso..." rows="4"></textarea>
             </div>
             <div class="form-group">
-              <label>Hobbies e intereses</label>
+              <label data-i18n="reg3_hobbies_label">Hobbies e intereses</label>
               <div class="hobbies-grid" id="hobbies-grid">
-                <button type="button" class="hobby-btn" data-hobby="música">🎵 Música</button>
-                <button type="button" class="hobby-btn" data-hobby="cine">🎬 Cine</button>
-                <button type="button" class="hobby-btn" data-hobby="deporte">⚽ Deporte</button>
-                <button type="button" class="hobby-btn" data-hobby="cocinar">🍳 Cocinar</button>
-                <button type="button" class="hobby-btn" data-hobby="viajes">✈️ Viajes</button>
-                <button type="button" class="hobby-btn" data-hobby="lectura">📚 Lectura</button>
-                <button type="button" class="hobby-btn" data-hobby="gaming">🎮 Gaming</button>
-                <button type="button" class="hobby-btn" data-hobby="yoga">🧘 Yoga</button>
-                <button type="button" class="hobby-btn" data-hobby="fotografía">📷 Fotografía</button>
-                <button type="button" class="hobby-btn" data-hobby="arte">🎨 Arte</button>
-                <button type="button" class="hobby-btn" data-hobby="naturaleza">🌿 Naturaleza</button>
-                <button type="button" class="hobby-btn" data-hobby="salir">🍻 Salir</button>
+                <button type="button" class="hobby-btn" data-hobby="música" data-i18n="hobby_musica">🎵 Música</button>
+                <button type="button" class="hobby-btn" data-hobby="cine" data-i18n="hobby_cine">🎬 Cine</button>
+                <button type="button" class="hobby-btn" data-hobby="deporte" data-i18n="hobby_deporte">⚽ Deporte</button>
+                <button type="button" class="hobby-btn" data-hobby="cocinar" data-i18n="hobby_cocinar">🍳 Cocinar</button>
+                <button type="button" class="hobby-btn" data-hobby="viajes" data-i18n="hobby_viajes">✈️ Viajes</button>
+                <button type="button" class="hobby-btn" data-hobby="lectura" data-i18n="hobby_lectura">📚 Lectura</button>
+                <button type="button" class="hobby-btn" data-hobby="gaming" data-i18n="hobby_gaming">🎮 Gaming</button>
+                <button type="button" class="hobby-btn" data-hobby="yoga" data-i18n="hobby_yoga">🧘 Yoga</button>
+                <button type="button" class="hobby-btn" data-hobby="fotografía" data-i18n="hobby_foto">📷 Fotografía</button>
+                <button type="button" class="hobby-btn" data-hobby="arte" data-i18n="hobby_arte">🎨 Arte</button>
+                <button type="button" class="hobby-btn" data-hobby="naturaleza" data-i18n="hobby_naturaleza">🌿 Naturaleza</button>
+                <button type="button" class="hobby-btn" data-hobby="salir" data-i18n="hobby_salir">🍻 Salir</button>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group checkbox-group">
                 <input type="checkbox" id="reg-smoker">
-                <label for="reg-smoker">🚬 Soy fumador/a</label>
+                <label for="reg-smoker" data-i18n="reg3_smoker">🚬 Soy fumador/a</label>
               </div>
               <div class="form-group checkbox-group">
                 <input type="checkbox" id="reg-pets">
-                <label for="reg-pets">🐾 Tengo mascota</label>
+                <label for="reg-pets" data-i18n="reg3_pets">🐾 Tengo mascota</label>
               </div>
             </div>
-            <button class="btn-submit" onclick="App.regNext(2)">Continuar →</button>
+            <button class="btn-submit" onclick="App.regNext(3)" data-i18n="reg1_continue">Continuar →</button>
           </div>
 
-          <!-- Step 3: Location -->
-          <div class="register-step hidden" id="reg-step-3">
-            <h2>¿Dónde buscas?</h2>
-            <p class="step-sub">Tu ubicación y preferencias de zona</p>
+          <!-- Step 4: Location (was step 3) -->
+          <div class="register-step hidden" id="reg-step-4">
+            <h2 data-i18n="reg4_title">¿Dónde buscas?</h2>
+            <p class="step-sub" data-i18n="reg4_sub">Tu ubicación y preferencias de zona</p>
             <div class="form-group">
-              <label>Ciudad actual *</label>
-              <input type="text" id="reg-city" placeholder="Ej: Barcelona, Madrid, Valencia...">
+              <label data-i18n="reg4_city_label">Ciudad actual *</label>
+              <input type="text" id="reg-city" data-i18n-ph="reg4_city_ph" placeholder="Ej: Barcelona, Madrid, Valencia...">
             </div>
             <div class="form-group">
-              <label>Barrio (opcional)</label>
-              <input type="text" id="reg-neighborhood" placeholder="Ej: Gràcia, Malasaña, Ruzafa...">
+              <label data-i18n="reg4_neighborhood_label">Barrio (opcional)</label>
+              <input type="text" id="reg-neighborhood" data-i18n-ph="reg4_neighborhood_ph" placeholder="Ej: Gràcia, Malasaña, Ruzafa...">
             </div>
             <div class="form-group">
-              <label>Zonas que te gustarían <span class="label-hint">(puedes añadir varias)</span></label>
+              <label><span data-i18n="reg4_zones_label">Zonas que te gustarían</span> <span class="label-hint" data-i18n="reg4_zones_hint">(puedes añadir varias)</span></label>
               <!-- Map zone picker -->
               <div class="zone-map-picker" id="zone-map-picker">
                 <div class="zmp-search-wrap">
-                  <input type="text" id="zone-input" placeholder="Escribe barrio o zona..." oninput="ZoneMap.search(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();ZoneMap.addFromInput()}">
+                  <input type="text" id="zone-input" data-i18n-ph="reg4_zone_ph" placeholder="Escribe barrio o zona..." oninput="ZoneMap.search(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();ZoneMap.addFromInput()}">
                   <button type="button" onclick="ZoneMap.addFromInput()" class="btn-add">+</button>
                 </div>
                 <!-- Suggestions dropdown -->
                 <div class="zmp-suggestions hidden" id="zmp-suggestions"></div>
                 <!-- Popular zones chips by city -->
                 <div class="zmp-popular" id="zmp-popular">
-                  <div class="zmp-popular-label">Zonas populares en <span id="zmp-city-name">tu ciudad</span>:</div>
+                  <div class="zmp-popular-label"><span data-i18n="reg4_popular_label">Zonas populares en</span> <span id="zmp-city-name">tu ciudad</span>:</div>
                   <div class="zmp-chips" id="zmp-chips"></div>
                 </div>
                 <!-- Selected zones -->
@@ -293,70 +340,70 @@
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Presupuesto mín. (€/mes)</label>
-                <input type="number" id="reg-budget-min" placeholder="Ej: 400">
+                <label data-i18n="reg4_budget_min">Presupuesto mín. (€/mes)</label>
+                <input type="number" id="reg-budget-min" data-i18n-ph="reg4_budget_min_ph" placeholder="Ej: 400">
               </div>
               <div class="form-group">
-                <label>Presupuesto máx. (€/mes)</label>
-                <input type="number" id="reg-budget-max" placeholder="Ej: 800">
+                <label data-i18n="reg4_budget_max">Presupuesto máx. (€/mes)</label>
+                <input type="number" id="reg-budget-max" data-i18n-ph="reg4_budget_max_ph" placeholder="Ej: 800">
               </div>
             </div>
             <div class="form-group">
-              <label>¿Cuándo te quieres mudar?</label>
+              <label data-i18n="reg4_movein">¿Cuándo te quieres mudar?</label>
               <input type="date" id="reg-movein">
             </div>
             <div class="form-group">
-              <label>Duración prevista</label>
+              <label data-i18n="reg4_duration">Duración prevista</label>
               <select id="reg-duration">
-                <option value="short">Corta (menos de 6 meses)</option>
-                <option value="medium" selected>Media (6-12 meses)</option>
-                <option value="long">Larga (más de 1 año)</option>
+                <option value="short" data-i18n="reg4_dur_short">Corta (menos de 6 meses)</option>
+                <option value="medium" selected data-i18n="reg4_dur_medium">Media (6-12 meses)</option>
+                <option value="long" data-i18n="reg4_dur_long">Larga (más de 1 año)</option>
               </select>
             </div>
-            <button class="btn-submit" onclick="App.regNext(3)">Continuar →</button>
+            <button class="btn-submit" onclick="App.regNext(4)" data-i18n="reg1_continue">Continuar →</button>
           </div>
 
-          <!-- Step 4: Preferences -->
-          <div class="register-step hidden" id="reg-step-4">
-            <h2>Tu compañero ideal</h2>
-            <p class="step-sub">¿Qué buscas en un compañero de piso?</p>
+          <!-- Step 5: Preferences (was step 4) -->
+          <div class="register-step hidden" id="reg-step-5">
+            <h2 data-i18n="reg5_title">Tu compañero ideal</h2>
+            <p class="step-sub" data-i18n="reg5_sub">¿Qué buscas en un compañero de piso?</p>
             <div class="form-group">
-              <label>Busco</label>
+              <label data-i18n="reg5_looking">Busco</label>
               <div class="toggle-group" id="gender-pref">
-                <button class="toggle-btn active" data-val="any">Cualquier persona</button>
-                <button class="toggle-btn" data-val="male">Hombre</button>
-                <button class="toggle-btn" data-val="female">Mujer</button>
+                <button class="toggle-btn active" data-val="any" data-i18n="reg5_anyone">Cualquier persona</button>
+                <button class="toggle-btn" data-val="male" data-i18n="reg5_male">Hombre</button>
+                <button class="toggle-btn" data-val="female" data-i18n="reg5_female">Mujer</button>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Edad mínima</label>
+                <label data-i18n="reg5_age_min">Edad mínima</label>
                 <input type="number" id="reg-age-min" value="18" min="18">
               </div>
               <div class="form-group">
-                <label>Edad máxima</label>
+                <label data-i18n="reg5_age_max">Edad máxima</label>
                 <input type="number" id="reg-age-max" value="45" max="99">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group checkbox-group">
                 <input type="checkbox" id="reg-accept-smokers" checked>
-                <label for="reg-accept-smokers">Acepto fumadores</label>
+                <label for="reg-accept-smokers" data-i18n="reg5_accept_smokers">Acepto fumadores</label>
               </div>
               <div class="form-group checkbox-group">
                 <input type="checkbox" id="reg-accept-pets" checked>
-                <label for="reg-accept-pets">Acepto mascotas</label>
+                <label for="reg-accept-pets" data-i18n="reg5_accept_pets">Acepto mascotas</label>
               </div>
             </div>
             <div class="form-group">
-              <label>Tipo de habitación</label>
+              <label data-i18n="reg5_room_type">Tipo de habitación</label>
               <div class="toggle-group" id="room-type">
-                <button class="toggle-btn active" data-val="private">Habitación privada</button>
-                <button class="toggle-btn" data-val="shared">Habitación compartida</button>
+                <button class="toggle-btn active" data-val="private" data-i18n="reg5_private">Habitación privada</button>
+                <button class="toggle-btn" data-val="shared" data-i18n="reg5_shared">Habitación compartida</button>
               </div>
             </div>
-            <div id="reg-error-4" class="form-error hidden"></div>
-            <button class="btn-submit" id="register-submit-btn" onclick="App.submitRegister()">
+            <div id="reg-error-5" class="form-error hidden"></div>
+            <button class="btn-submit" id="register-submit-btn" onclick="App.submitRegister()" data-i18n="reg5_submit">
               🎉 Crear mi perfil
             </button>
           </div>
@@ -370,21 +417,21 @@
       <!-- Sidebar / Bottom navigation (adapts via CSS) -->
       <nav class="bottom-nav" id="main-nav">
         <button class="nav-item active" data-tab="discover" onclick="App.switchTab('discover')">
-          <span class="nav-icon">🔍</span><span class="nav-label">Descubrir</span>
+          <span class="nav-icon">🔍</span><span class="nav-label" data-i18n="nav_discover">Descubrir</span>
         </button>
         <button class="nav-item" data-tab="matches" onclick="App.switchTab('matches')">
-          <span class="nav-icon">💫</span><span class="nav-label">Matches</span>
+          <span class="nav-icon">💫</span><span class="nav-label" data-i18n="nav_matches">Matches</span>
           <span class="nav-badge hidden" id="matches-badge">0</span>
         </button>
         <button class="nav-item" data-tab="chat" onclick="App.switchTab('chat')">
-          <span class="nav-icon">💬</span><span class="nav-label">Mensajes</span>
+          <span class="nav-icon">💬</span><span class="nav-label" data-i18n="nav_messages">Mensajes</span>
           <span class="nav-badge hidden" id="chat-badge">0</span>
         </button>
         <button class="nav-item" data-tab="profile" onclick="App.switchTab('profile')">
-          <span class="nav-icon">👤</span><span class="nav-label">Perfil</span>
+          <span class="nav-icon">👤</span><span class="nav-label" data-i18n="nav_profile">Perfil</span>
         </button>
         <button class="nav-item" data-tab="premium" onclick="App.switchTab('premium')" id="nav-premium-btn">
-          <span class="nav-icon">⭐</span><span class="nav-label">Premium</span>
+          <span class="nav-icon">⭐</span><span class="nav-label" data-i18n="nav_premium">Premium</span>
         </button>
       </nav>
 
@@ -398,43 +445,43 @@
           <div class="discover-left">
             <header class="app-header">
               <div class="header-logo">🏡 NestMatch</div>
-              <button class="filter-btn" onclick="UI.toggleFilters()">⚙️ Filtros</button>
+              <button class="filter-btn" onclick="UI.toggleFilters()">⚙️ <span data-i18n="disc_filters">Filtros</span></button>
             </header>
 
             <!-- Filters panel -->
             <div id="filters-panel" class="filters-panel hidden">
               <div class="filters-inner">
-                <h3>Filtrar perfiles</h3>
+                <h3 data-i18n="disc_filter_title">Filtrar perfiles</h3>
                 <div class="form-group">
-                  <label>Ciudad</label>
-                  <input type="text" id="filter-city" placeholder="Ej: Barcelona">
+                  <label data-i18n="disc_filter_city">Ciudad</label>
+                  <input type="text" id="filter-city" data-i18n-ph="disc_filter_city_ph" placeholder="Ej: Barcelona">
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label>Edad mín.</label>
+                    <label data-i18n="disc_filter_age_min">Edad mín.</label>
                     <input type="number" id="filter-age-min" placeholder="18">
                   </div>
                   <div class="form-group">
-                    <label>Edad máx.</label>
+                    <label data-i18n="disc_filter_age_max">Edad máx.</label>
                     <input type="number" id="filter-age-max" placeholder="45">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>Presupuesto máx. (€/mes)</label>
-                  <input type="number" id="filter-budget" placeholder="Ej: 800">
+                  <label data-i18n="disc_filter_budget">Presupuesto máx. (€/mes)</label>
+                  <input type="number" id="filter-budget" data-i18n-ph="disc_filter_budget_ph" placeholder="Ej: 800">
                 </div>
                 <div class="form-group">
-                  <label>Género</label>
+                  <label data-i18n="disc_filter_gender">Género</label>
                   <select id="filter-gender">
-                    <option value="">Cualquiera</option>
-                    <option value="male">Hombre</option>
-                    <option value="female">Mujer</option>
-                    <option value="non-binary">No binario</option>
+                    <option value="" data-i18n="disc_filter_any">Cualquiera</option>
+                    <option value="male" data-i18n="disc_filter_male">Hombre</option>
+                    <option value="female" data-i18n="disc_filter_female">Mujer</option>
+                    <option value="non-binary" data-i18n="disc_filter_nb">No binario</option>
                   </select>
                 </div>
                 <div class="filter-actions">
-                  <button class="btn-ghost" onclick="UI.resetFilters()">Limpiar</button>
-                  <button class="btn-primary" onclick="UI.applyFilters()">Aplicar</button>
+                  <button class="btn-ghost" onclick="UI.resetFilters()" data-i18n="disc_filter_clear">Limpiar</button>
+                  <button class="btn-primary" onclick="UI.applyFilters()" data-i18n="disc_filter_apply">Aplicar</button>
                 </div>
               </div>
             </div>
@@ -449,16 +496,16 @@
             <div id="card-stack" class="card-stack">
               <div class="empty-stack hidden" id="empty-stack">
                 <div class="empty-icon">🌟</div>
-                <h3>¡Has visto todos los perfiles!</h3>
-                <p>Vuelve mañana para ver nuevos compañeros.</p>
-                <button class="btn-primary" onclick="Discover.reload()">Actualizar</button>
+                <h3 data-i18n="disc_empty_title">¡Has visto todos los perfiles!</h3>
+                <p data-i18n="disc_empty_sub">Vuelve mañana para ver nuevos compañeros.</p>
+                <button class="btn-primary" onclick="Discover.reload()" data-i18n="disc_empty_btn">Actualizar</button>
               </div>
             </div>
 
             <!-- Action buttons -->
             <div class="action-buttons" id="action-buttons">
-              <button class="action-btn pass-btn" onclick="Discover.swipe('pass')" title="Pasar">✕</button>
-              <button class="action-btn like-btn" onclick="Discover.swipe('like')" title="Me gusta">♥</button>
+              <button class="action-btn pass-btn" onclick="Discover.swipe('pass')" data-i18n-title="disc_pass" title="Pasar">✕</button>
+              <button class="action-btn like-btn" onclick="Discover.swipe('like')" data-i18n-title="disc_like" title="Me gusta">♥</button>
             </div>
           </div>
 
@@ -466,12 +513,12 @@
           <div class="discover-right">
             <div class="discover-right-inner">
               <div style="font-size:60px;margin-bottom:20px">🏡</div>
-              <h2 style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--dark);margin-bottom:10px">Encuentra tu nido ideal</h2>
-              <p style="color:var(--text-light);font-size:15px;line-height:1.7;max-width:300px">Desliza perfiles a la derecha si te gustan, a la izquierda para pasar. Cuando el interés sea mutuo, ¡es un match!</p>
+              <h2 style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--dark);margin-bottom:10px" data-i18n="disc_right_title">Encuentra tu nido ideal</h2>
+              <p style="color:var(--text-light);font-size:15px;line-height:1.7;max-width:300px" data-i18n="disc_right_desc">Desliza perfiles a la derecha si te gustan, a la izquierda para pasar. Cuando el interés sea mutuo, ¡es un match!</p>
               <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px">
-                <div class="discover-tip"><span>♥</span><span>Desliza a la <strong>derecha</strong> si te gusta</span></div>
-                <div class="discover-tip"><span>✕</span><span>Desliza a la <strong>izquierda</strong> para pasar</span></div>
-                <div class="discover-tip"><span>💬</span><span>Al hacer match, podéis chatear</span></div>
+                <div class="discover-tip"><span>♥</span><span data-i18n="disc_tip_like">Desliza a la <strong>derecha</strong> si te gusta</span></div>
+                <div class="discover-tip"><span>✕</span><span data-i18n="disc_tip_pass">Desliza a la <strong>izquierda</strong> para pasar</span></div>
+                <div class="discover-tip"><span>💬</span><span data-i18n="disc_tip_chat">Al hacer match, podéis chatear</span></div>
               </div>
             </div>
           </div>
@@ -480,32 +527,32 @@
           <div id="paywall" class="paywall-overlay hidden">
             <div class="paywall-card">
               <div class="paywall-icon">🔒</div>
-              <h3>Límite diario alcanzado</h3>
-              <p>Tienes 5 perfiles gratuitos al día. <strong>Hazte Premium</strong> para ver perfiles ilimitados.</p>
+              <h3 data-i18n="pay_title">Límite diario alcanzado</h3>
+              <p data-i18n="pay_desc">Tienes 5 perfiles gratuitos al día. <strong>Hazte Premium</strong> para ver perfiles ilimitados.</p>
               <ul class="premium-perks">
-                <li>✅ Perfiles ilimitados</li>
-                <li>✅ Ver quién te dio like</li>
-                <li>✅ Filtros avanzados</li>
-                <li>✅ Chats prioritarios</li>
+                <li>✅ <span data-i18n="pay_perk1">Perfiles ilimitados</span></li>
+                <li>✅ <span data-i18n="pay_perk2">Ver quién te dio like</span></li>
+                <li>✅ <span data-i18n="pay_perk3">Filtros avanzados</span></li>
+                <li>✅ <span data-i18n="pay_perk4">Chats prioritarios</span></li>
               </ul>
-              <button class="btn-premium" onclick="Payments.openCheckout()">Hacerme Premium · €9.99/mes</button>
-              <button class="btn-ghost-sm" onclick="UI.closePaywall()">Quizás más tarde</button>
+              <button class="btn-premium" onclick="Payments.openCheckout()" data-i18n="pay_btn">Hacerme Premium · €9.99/mes</button>
+              <button class="btn-ghost-sm" onclick="UI.closePaywall()" data-i18n="pay_later">Quizás más tarde</button>
             </div>
           </div>
 
           <!-- Match popup -->
           <div id="match-popup" class="match-popup hidden">
             <div class="match-popup-inner">
-              <h2 class="match-title">¡Es un Match! 🎉</h2>
-              <p class="match-sub">Tú y <strong id="match-name"></strong> os habéis gustado</p>
+              <h2 class="match-title" data-i18n="match_title">¡Es un Match! 🎉</h2>
+              <p class="match-sub" id="match-sub-text"></p>
               <div class="match-avatars">
                 <div class="match-avatar-me" id="match-avatar-me"></div>
                 <div class="match-heart">♥</div>
                 <div class="match-avatar-them" id="match-avatar-them"></div>
               </div>
               <div class="match-actions">
-                <button class="btn-primary" onclick="App.goToChat(currentMatch.conversation_id)">Enviar mensaje</button>
-                <button class="btn-ghost" onclick="UI.closeMatchPopup()">Seguir explorando</button>
+                <button class="btn-primary" onclick="App.goToChat(currentMatch.conversation_id)" data-i18n="match_send">Enviar mensaje</button>
+                <button class="btn-ghost" onclick="UI.closeMatchPopup()" data-i18n="match_continue">Seguir explorando</button>
               </div>
             </div>
           </div>
@@ -514,12 +561,12 @@
         <!-- ══ MATCHES TAB ══ -->
         <div id="tab-matches" class="tab-content">
           <header class="app-header">
-            <h2>Tus Matches</h2>
+            <h2 data-i18n="matches_title">Tus Matches</h2>
           </header>
           <div id="matches-list" class="matches-list">
             <div class="loading-placeholder">
               <div class="spinner"></div>
-              <p>Cargando matches...</p>
+              <p data-i18n="matches_loading">Cargando matches...</p>
             </div>
           </div>
         </div>
@@ -529,12 +576,12 @@
           <!-- Conversations list -->
           <div id="chat-list-view">
             <header class="app-header">
-              <h2>Mensajes</h2>
+              <h2 data-i18n="chat_title">Mensajes</h2>
             </header>
             <div id="conversations-list" class="conversations-list">
               <div class="loading-placeholder">
                 <div class="spinner"></div>
-                <p>Cargando conversaciones...</p>
+                <p data-i18n="chat_loading">Cargando conversaciones...</p>
               </div>
             </div>
           </div>
@@ -552,10 +599,10 @@
             </header>
             <div id="messages-container" class="messages-container"></div>
             <div class="typing-indicator hidden" id="typing-indicator">
-              <span id="typing-name"></span> está escribiendo...
+              <span id="typing-text"></span>
             </div>
             <div class="message-input-bar">
-              <input type="text" id="message-input" placeholder="Escribe un mensaje..."
+              <input type="text" id="message-input" data-i18n-ph="chat_input_ph" placeholder="Escribe un mensaje..."
                      onkeydown="if(event.key==='Enter')Chat.sendMessage()"
                      oninput="Chat.handleTyping()">
               <button class="send-btn" onclick="Chat.sendMessage()">➤</button>
@@ -566,8 +613,8 @@
         <!-- ══ PROFILE TAB ══ -->
         <div id="tab-profile" class="tab-content">
           <header class="app-header">
-            <h2>Mi Perfil</h2>
-            <button class="edit-profile-btn" onclick="Profile.toggleEdit()">✏️ Editar</button>
+            <h2 data-i18n="prof_title">Mi Perfil</h2>
+            <button class="edit-profile-btn" onclick="Profile.toggleEdit()" data-i18n="prof_edit">✏️ Editar</button>
           </header>
           <div id="profile-view" class="profile-view">
             <div class="loading-placeholder">
@@ -575,7 +622,7 @@
             </div>
           </div>
           <div class="profile-footer-actions">
-            <button class="btn-logout" onclick="App.logout()">Cerrar sesión</button>
+            <button class="btn-logout" onclick="App.logout()" data-i18n="prof_logout">Cerrar sesión</button>
           </div>
         </div>
 
@@ -583,26 +630,26 @@
         <div id="tab-premium" class="tab-content">
           <header class="app-header">
             <button class="back-btn" onclick="App.switchTab('discover')">←</button>
-            <h2>Premium</h2>
+            <h2 data-i18n="prem_title">Premium</h2>
           </header>
           <div class="premium-page">
             <div class="premium-hero">
               <div class="premium-star">⭐</div>
-              <h2>NestMatch Premium</h2>
-              <p>Desbloquea todas las funciones y encuentra tu compañero ideal más rápido</p>
+              <h2 data-i18n="prem_hero_title">NestMatch Premium</h2>
+              <p data-i18n="prem_hero_sub">Desbloquea todas las funciones y encuentra tu compañero ideal más rápido</p>
             </div>
             <div class="premium-features">
-              <div class="pf-item"><span class="pf-icon">🔓</span><div><strong>Perfiles ilimitados</strong><p>Sin límite diario de swipes</p></div></div>
-              <div class="pf-item"><span class="pf-icon">👀</span><div><strong>Ve quién te gustó</strong><p>Accede directamente a tus fans</p></div></div>
-              <div class="pf-item"><span class="pf-icon">⚡</span><div><strong>Prioridad en búsquedas</strong><p>Tu perfil aparece antes</p></div></div>
-              <div class="pf-item"><span class="pf-icon">💬</span><div><strong>Chat sin límites</strong><p>Mensajes ilimitados con todos tus matches</p></div></div>
+              <div class="pf-item"><span class="pf-icon">🔓</span><div><strong data-i18n="prem_feat1_title">Perfiles ilimitados</strong><p data-i18n="prem_feat1_desc">Sin límite diario de swipes</p></div></div>
+              <div class="pf-item"><span class="pf-icon">👀</span><div><strong data-i18n="prem_feat2_title">Ve quién te gustó</strong><p data-i18n="prem_feat2_desc">Accede directamente a tus fans</p></div></div>
+              <div class="pf-item"><span class="pf-icon">⚡</span><div><strong data-i18n="prem_feat3_title">Prioridad en búsquedas</strong><p data-i18n="prem_feat3_desc">Tu perfil aparece antes</p></div></div>
+              <div class="pf-item"><span class="pf-icon">💬</span><div><strong data-i18n="prem_feat4_title">Chat sin límites</strong><p data-i18n="prem_feat4_desc">Mensajes ilimitados con todos tus matches</p></div></div>
             </div>
             <div class="premium-price-card">
               <div class="price-amount">€9<span>.99</span></div>
-              <div class="price-period">por mes · cancela cuando quieras</div>
+              <div class="price-period" data-i18n="prem_price">por mes · cancela cuando quieras</div>
             </div>
-            <button class="btn-premium-large" onclick="Payments.openCheckout()">Activar Premium ahora</button>
-            <p class="premium-disclaimer">Pago seguro con Stripe. Cancela en cualquier momento.</p>
+            <button class="btn-premium-large" onclick="Payments.openCheckout()" data-i18n="prem_btn">Activar Premium ahora</button>
+            <p class="premium-disclaimer" data-i18n="prem_disclaimer">Pago seguro con Stripe. Cancela en cualquier momento.</p>
           </div>
         </div>
 
@@ -611,6 +658,7 @@
   </div>
 
   <script src="https://cdn.socket.io/4.6.2/socket.io.min.js"></script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/zonemap.js"></script>
   <script src="/js/app.js"></script>
@@ -618,27 +666,5 @@
   <script src="/js/chat.js"></script>
   <script src="/js/profile.js"></script>
   <script src="/js/payments.js"></script>
-  <script>
-    // Language switcher
-    function toggleLangMenu() {
-      const dd = document.getElementById('lang-dropdown');
-      dd.classList.toggle('hidden');
-    }
-    function setLang(lang) {
-      document.getElementById('current-lang', lang === 'es' ? 'ES' : 'EN');
-      document.getElementById('current-lang').textContent = lang === 'es' ? 'ES' : 'EN';
-      document.querySelectorAll('.l-lang-option').forEach(el => el.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('lang-dropdown').classList.add('hidden');
-      // You can add full i18n translation logic here
-    }
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-      const switcher = document.getElementById('lang-switcher');
-      if (switcher && !switcher.contains(e.target)) {
-        document.getElementById('lang-dropdown').classList.add('hidden');
-      }
-    });
-  </script>
 </body>
 </html>

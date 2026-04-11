@@ -70,14 +70,12 @@ const Discover = {
     actionBtns.style.opacity = '1';
     actionBtns.style.pointerEvents = '';
 
-    // Render up to 3 cards (stack effect)
     const toRender = Math.min(3, this.profiles.length);
     for (let i = toRender - 1; i >= 0; i--) {
       const card = this.createCard(this.profiles[i], i);
       stack.appendChild(card);
     }
 
-    // Init drag on top card
     if (this.profiles.length > 0) {
       this.initDrag(stack.lastElementChild);
     }
@@ -88,7 +86,6 @@ const Discover = {
     card.className = 'profile-card';
     card.dataset.profileId = profile.id;
 
-    // Stack transform for depth effect
     const scale = 1 - stackPos * 0.04;
     const translateY = stackPos * 10;
     card.style.cssText = `
@@ -105,9 +102,9 @@ const Discover = {
       : `background: linear-gradient(135deg, ${this.randomGradient()});`;
 
     const budget = profile.budget_min && profile.budget_max
-      ? `€${profile.budget_min}–€${profile.budget_max}/mes`
+      ? t('disc_budget_range', { min: profile.budget_min, max: profile.budget_max })
       : profile.budget_max
-      ? `Hasta €${profile.budget_max}/mes`
+      ? t('disc_budget_max', { max: profile.budget_max })
       : '';
 
     const hobbyTags = (profile.hobbies || []).slice(0, 4).map(h =>
@@ -122,16 +119,21 @@ const Discover = {
         ).join('')}</div>`
       : '';
 
+    // Verified badge
+    const verifiedBadge = profile.is_verified
+      ? '<span class="verified-badge" title="Verified">✓</span>'
+      : '';
+
     card.innerHTML = `
       <div class="card-photo" style="${photoStyle}">
         ${photoDots}
-        <div class="card-like-badge">❤ ME GUSTA</div>
-        <div class="card-pass-badge">✕ PASAR</div>
+        <div class="card-like-badge">${t('disc_like_badge')}</div>
+        <div class="card-pass-badge">${t('disc_pass_badge')}</div>
         ${!mainPhoto ? `<span style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))">${this.avatarEmoji(profile)}</span>` : ''}
       </div>
       <div class="card-info">
         <div class="card-name-row">
-          <span class="card-name">${profile.name}</span>
+          <span class="card-name">${profile.name} ${verifiedBadge}</span>
           <span class="card-age">${profile.age}</span>
         </div>
         <div class="card-location">📍 ${profile.city}${profile.neighborhood ? ', ' + profile.neighborhood : ''}${profile.profession ? ' · ' + profile.profession : ''}</div>
@@ -208,12 +210,10 @@ const Discover = {
       }
     };
 
-    // Mouse
     card.addEventListener('mousedown', (e) => onStart(e.clientX, e.clientY));
     document.addEventListener('mousemove', (e) => onMove(e.clientX));
     document.addEventListener('mouseup', onEnd);
 
-    // Touch
     card.addEventListener('touchstart', (e) => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
     card.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX), { passive: true });
     card.addEventListener('touchend', onEnd);
@@ -232,7 +232,6 @@ const Discover = {
 
     const profile = this.profiles[0];
 
-    // Remove top card after animation
     if (!cardEl) {
       const stack = document.getElementById('card-stack');
       cardEl = stack.lastElementChild;
@@ -244,16 +243,13 @@ const Discover = {
       }
     }
 
-    // Remove from local array
     this.profiles.shift();
 
-    // Update stack visuals
     setTimeout(() => {
       if (cardEl) cardEl.remove();
       this.renderStack();
     }, 400);
 
-    // API call
     try {
       const result = await API.swipe(profile.id, direction);
 
