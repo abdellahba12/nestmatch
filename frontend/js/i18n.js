@@ -1643,7 +1643,17 @@ const I18n = (() => {
     return str;
   }
 
+  const FLAGS = {
+    es: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>',
+    en: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg>',
+    fr: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg>',
+    pt: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg>',
+    de: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg>',
+    it: '<svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg>'
+  };
+
   function getLang() { return currentLang; }
+  function getFlag(lang) { return FLAGS[lang] || FLAGS.es; }
 
   function setLang(lang) {
     if (!supported.includes(lang)) return;
@@ -1652,9 +1662,9 @@ const I18n = (() => {
     document.documentElement.lang = lang;
     document.title = t('meta_title');
     translatePage();
-    // Update the lang selector display
-    const btn = document.getElementById('lang-current-text');
-    if (btn) btn.textContent = lang.toUpperCase();
+    // Update the lang selector button with flag
+    const btn = document.getElementById('lang-current');
+    if (btn) btn.innerHTML = getFlag(lang);
   }
 
   function translatePage() {
@@ -1678,7 +1688,7 @@ const I18n = (() => {
     });
   }
 
-  return { t, getLang, setLang, translatePage, supported };
+  return { t, getLang, getFlag, setLang, translatePage, supported };
 })();
 
 // Shorthand

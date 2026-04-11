@@ -12,7 +12,8 @@ const App = {
 
     // Initialize i18n
     const lang = I18n.getLang();
-    document.getElementById('lang-current').textContent = lang.toUpperCase();
+    const langBtn = document.getElementById('lang-current');
+    if (langBtn) langBtn.innerHTML = I18n.getFlag(lang);
     I18n.translatePage();
 
     // Browser back button support

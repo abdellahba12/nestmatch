@@ -157,6 +157,7 @@ html, body {
   position: absolute;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
 }
 .l-hero-bg-img {
   width: 100%;
@@ -254,6 +255,7 @@ html, body {
   position: absolute;
   inset: 0;
   z-index: 1;
+  pointer-events: none;
   background:
     linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.1) 55%, rgba(0,0,0,0.7) 100%),
     linear-gradient(to right, rgba(0,0,0,0.3) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%);
@@ -2255,16 +2257,18 @@ html, body {
   background: rgba(255,255,255,0.15);
   color: #fff;
   border: 1px solid rgba(255,255,255,0.3);
-  padding: 6px 14px;
+  padding: 8px 12px;
   border-radius: 99px;
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
-  font-family: var(--font-body);
   transition: background 0.2s;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  line-height: 0;
+}
+.lang-btn .lang-flag {
+  width: 24px;
+  height: 16px;
 }
 .lang-btn:hover { background: rgba(255,255,255,0.25); }
 .lang-dropdown {
