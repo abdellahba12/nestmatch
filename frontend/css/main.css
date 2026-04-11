@@ -152,7 +152,20 @@ html, body {
   background: #111;
 }
 
-/* Phone grid background */
+/* Hero background image */
+.l-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.l-hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Phone grid background (legacy) */
 .l-phones-grid {
   position: absolute;
   inset: -60px -40px;
@@ -2249,6 +2262,9 @@ html, body {
   cursor: pointer;
   font-family: var(--font-body);
   transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .lang-btn:hover { background: rgba(255,255,255,0.25); }
 .lang-dropdown {
@@ -2277,6 +2293,18 @@ html, body {
 }
 .lang-dropdown button:hover {
   background: var(--bg);
+}
+.lang-flag {
+  width: 20px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.lang-dropdown button {
+  display: flex;
+  align-items: center;
 }
 
 /* ═══════════════════════════════════════

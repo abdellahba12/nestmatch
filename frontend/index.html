@@ -27,26 +27,12 @@
       <!-- Landing (Tinder grid style) -->
       <div id="page-landing" class="page">
 
-        <!-- HERO: fullscreen grid of phone cards + overlay text -->
+        <!-- HERO: background image -->
         <section class="l-hero">
 
-          <!-- Grid of tilted phone mockup cards -->
-          <div class="l-phones-grid" id="l-phones-grid">
-            <!-- Row 1 -->
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f97316,#ec4899)"><div class="l-phone-info"><span class="l-pname">Sofia, 23</span><span class="l-pcity">Barcelona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#6366f1,#06b6d4)"><div class="l-phone-info"><span class="l-pname">Marc, 28</span><span class="l-pcity">Madrid</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#22c55e,#fbbf24)"><div class="l-phone-info"><span class="l-pname">Ana, 25</span><span class="l-pcity">Valencia</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#a855f7,#f43f5e)"><div class="l-phone-info"><span class="l-pname">David, 26</span><span class="l-pcity">Sevilla</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#0ea5e9,#10b981)"><div class="l-phone-info"><span class="l-pname">Laura, 24</span><span class="l-pcity">Bilbao</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <!-- Row 2 -->
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f59e0b,#ef4444)"><div class="l-phone-info"><span class="l-pname">Carlos, 29</span><span class="l-pcity">Zaragoza</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#ec4899,#8b5cf6)"><div class="l-phone-info"><span class="l-pname">Marta, 22</span><span class="l-pcity">Málaga</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#14b8a6,#6366f1)"><div class="l-phone-info"><span class="l-pname">Pau, 27</span><span class="l-pcity">Girona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#f97316,#facc15)"><div class="l-phone-info"><span class="l-pname">Sara, 23</span><span class="l-pcity">Alicante</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#be185d,#0284c7)"><div class="l-phone-info"><span class="l-pname">Iván, 31</span><span class="l-pcity">Murcia</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <!-- Row 3 (extra for large screens) -->
-            <div class="l-phone l-phone--tilt-r"><div class="l-phone-screen" style="background:linear-gradient(160deg,#7c3aed,#06b6d4)"><div class="l-phone-info"><span class="l-pname">Noa, 24</span><span class="l-pcity">Tarragona</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
-            <div class="l-phone l-phone--tilt-l"><div class="l-phone-screen" style="background:linear-gradient(160deg,#16a34a,#f59e0b)"><div class="l-phone-info"><span class="l-pname">Rui, 25</span><span class="l-pcity">Lisboa</span></div><div class="l-phone-actions"><span class="l-px">✕</span><span class="l-pheart">♥</span></div></div></div>
+          <!-- Background image -->
+          <div class="l-hero-bg">
+            <img src="/img/hero-bg.jpeg" alt="" class="l-hero-bg-img">
           </div>
 
           <!-- Dark overlay gradient -->
@@ -54,30 +40,31 @@
 
           <!-- Nav on top -->
           <nav class="l-nav">
-            <div class="l-nav-logo">🏡 NestMatch</div>
+            <div class="l-nav-logo">NestMatch</div>
             <div class="l-nav-links">
-              <!-- Language Selector -->
+              <!-- Language Selector (SVG flags) -->
               <div class="lang-selector" id="lang-selector">
-                <button class="lang-btn" id="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')">ES</button>
+                <button class="lang-btn" id="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('hidden')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+                  <span id="lang-current-text">ES</span>
+                </button>
                 <div class="lang-dropdown hidden" id="lang-dropdown">
-                  <button onclick="I18n.setLang('es');document.getElementById('lang-dropdown').classList.add('hidden')">🇪🇸 Español</button>
-                  <button onclick="I18n.setLang('en');document.getElementById('lang-dropdown').classList.add('hidden')">🇬🇧 English</button>
-                  <button onclick="I18n.setLang('fr');document.getElementById('lang-dropdown').classList.add('hidden')">🇫🇷 Français</button>
-                  <button onclick="I18n.setLang('pt');document.getElementById('lang-dropdown').classList.add('hidden')">🇵🇹 Português</button>
-                  <button onclick="I18n.setLang('de');document.getElementById('lang-dropdown').classList.add('hidden')">🇩🇪 Deutsch</button>
-                  <button onclick="I18n.setLang('it');document.getElementById('lang-dropdown').classList.add('hidden')">🇮🇹 Italiano</button>
+                  <button onclick="I18n.setLang('es');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> Español</button>
+                  <button onclick="I18n.setLang('en');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> English</button>
+                  <button onclick="I18n.setLang('fr');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> Français</button>
+                  <button onclick="I18n.setLang('pt');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> Português</button>
+                  <button onclick="I18n.setLang('de');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> Deutsch</button>
+                  <button onclick="I18n.setLang('it');document.getElementById('lang-dropdown').classList.add('hidden')"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> Italiano</button>
                 </div>
               </div>
               <button class="l-nav-btn-ghost" onclick="App.showPage('login')" data-i18n="nav_login">Iniciar sesión</button>
-              <button class="l-nav-btn-solid" onclick="App.showPage('register')" data-i18n="nav_signup">Crear cuenta</button>
             </div>
           </nav>
 
           <!-- Centered hero text -->
           <div class="l-hero-content">
-            <h1 class="l-hero-title"><span data-i18n="hero_title_1">Desliza hacia</span><br><span data-i18n="hero_title_2">tu</span> <em data-i18n="hero_title_em">nido perfecto</em></h1>
-            <button class="l-cta-main" onclick="App.showPage('register')" data-i18n="hero_cta">Crear cuenta gratis</button>
-            <p class="l-cta-sub" data-i18n="hero_sub">Sin tarjeta de crédito · Cancela cuando quieras</p>
+            <h1 class="l-hero-title" data-i18n="hero_title">Find your<br><em>perfect nest</em></h1>
+            <button class="l-cta-main" onclick="App.showPage('register')" data-i18n="hero_cta">Crear cuenta</button>
           </div>
         </section>
 

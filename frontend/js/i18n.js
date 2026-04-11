@@ -26,11 +26,8 @@ const I18n = (() => {
       // Nav / Landing
       nav_login: 'Iniciar sesión',
       nav_signup: 'Crear cuenta',
-      hero_title_1: 'Desliza hacia',
-      hero_title_2: 'tu',
-      hero_title_em: 'nido perfecto',
-      hero_cta: 'Crear cuenta gratis',
-      hero_sub: 'Sin tarjeta de crédito · Cancela cuando quieras',
+      hero_title: 'Encuentra tu<br><em>nido perfecto</em>',
+      hero_cta: 'Crear cuenta',
 
       // How it works
       how_title: '¿Cómo funciona?',
@@ -338,11 +335,8 @@ const I18n = (() => {
       lang_pt: 'Português', lang_de: 'Deutsch', lang_it: 'Italiano',
       nav_login: 'Log in',
       nav_signup: 'Sign up',
-      hero_title_1: 'Swipe towards',
-      hero_title_2: 'your',
-      hero_title_em: 'perfect nest',
-      hero_cta: 'Create free account',
-      hero_sub: 'No credit card · Cancel anytime',
+      hero_title: 'Find your<br><em>perfect nest</em>',
+      hero_cta: 'Create account',
       how_title: 'How does it work?',
       how_sub: 'Three steps to find your ideal roommate',
       how_step1_title: 'Create your profile',
@@ -602,11 +596,8 @@ const I18n = (() => {
       lang_pt: 'Português', lang_de: 'Deutsch', lang_it: 'Italiano',
       nav_login: 'Se connecter',
       nav_signup: 'Créer un compte',
-      hero_title_1: 'Glissez vers',
-      hero_title_2: 'votre',
-      hero_title_em: 'nid parfait',
-      hero_cta: 'Créer un compte gratuit',
-      hero_sub: 'Sans carte de crédit · Annulez quand vous voulez',
+      hero_title: 'Trouvez votre<br><em>nid parfait</em>',
+      hero_cta: 'Créer un compte',
       how_title: 'Comment ça marche ?',
       how_sub: 'Trois étapes pour trouver votre colocataire idéal',
       how_step1_title: 'Créez votre profil',
@@ -866,11 +857,8 @@ const I18n = (() => {
       lang_pt: 'Português', lang_de: 'Deutsch', lang_it: 'Italiano',
       nav_login: 'Entrar',
       nav_signup: 'Criar conta',
-      hero_title_1: 'Desliza para',
-      hero_title_2: 'o teu',
-      hero_title_em: 'ninho perfeito',
-      hero_cta: 'Criar conta grátis',
-      hero_sub: 'Sem cartão de crédito · Cancela quando quiseres',
+      hero_title: 'Encontra o teu<br><em>ninho perfeito</em>',
+      hero_cta: 'Criar conta',
       how_title: 'Como funciona?',
       how_sub: 'Três passos para encontrar o teu colega ideal',
       how_step1_title: 'Cria o teu perfil',
@@ -1130,11 +1118,8 @@ const I18n = (() => {
       lang_pt: 'Português', lang_de: 'Deutsch', lang_it: 'Italiano',
       nav_login: 'Anmelden',
       nav_signup: 'Registrieren',
-      hero_title_1: 'Swipe zu',
-      hero_title_2: 'deinem',
-      hero_title_em: 'perfekten Nest',
-      hero_cta: 'Kostenloses Konto erstellen',
-      hero_sub: 'Keine Kreditkarte · Jederzeit kündbar',
+      hero_title: 'Finde dein<br><em>perfektes Nest</em>',
+      hero_cta: 'Konto erstellen',
       how_title: 'Wie funktioniert es?',
       how_sub: 'Drei Schritte, um deinen idealen Mitbewohner zu finden',
       how_step1_title: 'Erstelle dein Profil',
@@ -1394,11 +1379,8 @@ const I18n = (() => {
       lang_pt: 'Português', lang_de: 'Deutsch', lang_it: 'Italiano',
       nav_login: 'Accedi',
       nav_signup: 'Crea account',
-      hero_title_1: 'Scorri verso',
-      hero_title_2: 'il tuo',
-      hero_title_em: 'nido perfetto',
-      hero_cta: 'Crea account gratuito',
-      hero_sub: 'Senza carta di credito · Cancella quando vuoi',
+      hero_title: 'Trova il tuo<br><em>nido perfetto</em>',
+      hero_cta: 'Crea account',
       how_title: 'Come funziona?',
       how_sub: 'Tre passi per trovare il tuo coinquilino ideale',
       how_step1_title: 'Crea il tuo profilo',
@@ -1671,7 +1653,7 @@ const I18n = (() => {
     document.title = t('meta_title');
     translatePage();
     // Update the lang selector display
-    const btn = document.getElementById('lang-current');
+    const btn = document.getElementById('lang-current-text');
     if (btn) btn.textContent = lang.toUpperCase();
   }
 
