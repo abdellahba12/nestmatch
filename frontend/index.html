@@ -496,7 +496,8 @@
       if (cfg.googleClientId && typeof google !== 'undefined' && google.accounts) {
         google.accounts.id.initialize({
           client_id: cfg.googleClientId,
-          callback: handleGoogleCredentialResponse
+          callback: handleGoogleCredentialResponse,
+          ux_mode: 'popup'
         });
         const loginEl = document.getElementById('google-signin-login');
         const regEl = document.getElementById('google-signin-register');
