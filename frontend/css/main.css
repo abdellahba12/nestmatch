@@ -793,6 +793,28 @@ html, body {
 
 .auth-switch a { color: var(--primary); text-decoration: none; font-weight: 600; }
 
+/* Google button + divider */
+.google-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 /* =================== REGISTER MULTI-STEP =================== */
 .register-page {
   max-width: 480px;

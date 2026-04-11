@@ -65,6 +65,11 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// Pass Google Client ID to frontend
+app.get('/api/config', (req, res) => {
+  res.json({ googleClientId: process.env.GOOGLE_CLIENT_ID || null });
+});
+
 // Serve static frontend
 const frontendPath = path.join(__dirname, '../frontend');
 app.use(express.static(frontendPath));

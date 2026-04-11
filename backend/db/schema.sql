@@ -139,9 +139,13 @@ CREATE INDEX IF NOT EXISTS idx_users_city ON users(city);
 CREATE INDEX IF NOT EXISTS idx_verification_codes_contact ON verification_codes(contact);
 CREATE INDEX IF NOT EXISTS idx_verification_docs_user ON verification_documents(user_id);
 
--- Migration: add new columns if they don't exist (safe for existing DBs)
+-- Migration: add new columns / relax constraints (safe for existing DBs)
 DO $$ BEGIN
   ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(30) UNIQUE;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_status VARCHAR(30) DEFAULT 'none';
+  -- Allow registration without name/age/city (simplified flow)
+  ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
+  ALTER TABLE users ALTER COLUMN age DROP NOT NULL;
+  ALTER TABLE users ALTER COLUMN city DROP DEFAULT;
 EXCEPTION WHEN OTHERS THEN NULL;
 END $$;

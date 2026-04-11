@@ -3,29 +3,26 @@ let currentUser = null;
 let currentMatch = null;
 let socket = null;
 
-const TOTAL_REG_STEPS = 5;
+const TOTAL_REG_STEPS = 2;
 
 const App = {
   init() {
-    console.log('[App] init() starting...');
+    console.log('[App] init()');
     this.fixViewportHeight();
     window.addEventListener('resize', () => this.fixViewportHeight());
 
-    // Initialize i18n
+    // i18n
     try {
       const lang = I18n.getLang();
-      console.log('[App] I18n.getLang():', lang);
-      this.initLangSelector(lang);
+      const btn = document.getElementById('lang-current');
+      if (btn) btn.innerHTML = I18n.getFlag(lang);
       I18n.translatePage();
-      console.log('[App] i18n init complete');
     } catch (err) {
-      console.error('[App] i18n init FAILED:', err);
+      console.error('[App] i18n error:', err);
     }
 
-    // Browser back button support
     this.initHistory();
 
-    // Simulate loading
     setTimeout(() => {
       document.getElementById('loading-screen').style.display = 'none';
       const token = localStorage.getItem('pm_token');
@@ -35,44 +32,7 @@ const App = {
         this.showAuthContainer();
         this.showPage('landing');
       }
-    }, 1500);
-  },
-
-  initLangSelector(lang) {
-    const toggleBtn = document.getElementById('lang-current');
-    const dropdown = document.getElementById('lang-dropdown');
-    console.log('[Lang] Init selector. Button:', !!toggleBtn, 'Dropdown:', !!dropdown);
-
-    // Set initial flag
-    if (toggleBtn) {
-      toggleBtn.innerHTML = I18n.getFlag(lang);
-      toggleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        console.log('[Lang] Toggle dropdown');
-        dropdown.classList.toggle('hidden');
-      });
-    }
-
-    // Bind each language button
-    if (dropdown) {
-      dropdown.querySelectorAll('button[data-lang]').forEach(btn => {
-        const btnLang = btn.getAttribute('data-lang');
-        console.log('[Lang] Binding button for:', btnLang);
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          console.log('[Lang] Clicked:', btnLang);
-          I18n.setLang(btnLang);
-          dropdown.classList.add('hidden');
-        });
-      });
-    }
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (dropdown && toggleBtn && !toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.add('hidden');
-      }
-    });
+    }, 1200);
   },
 
   fixViewportHeight() {
@@ -87,20 +47,13 @@ const App = {
     window.addEventListener('popstate', (e) => {
       const state = e.state;
       if (!state) return;
-
       if (state.page) {
-        // Auth pages
         this._showPageDirect(state.page);
         if (state.page === 'register' && state.regStep) {
           this._showRegStepDirect(state.regStep);
         }
       } else if (state.tab) {
-        // Main app tabs
-        if (state.tab === 'chat' && state.chatRoom) {
-          // Don't re-push state
-        } else {
-          this._switchTabDirect(state.tab);
-        }
+        this._switchTabDirect(state.tab);
       }
     });
   },
@@ -193,7 +146,6 @@ const App = {
     if (!token) return;
 
     socket = io({ auth: { token } });
-
     socket.on('connect', () => console.log('Socket connected'));
     socket.on('disconnect', () => console.log('Socket disconnected'));
 
@@ -217,10 +169,9 @@ const App = {
     });
   },
 
-  // ── Register flow ──
+  // ── Register flow (simplified: 2 steps) ──
   regStep: 1,
-  regZones: [],
-  regMethod: 'email', // 'email' or 'phone'
+  regMethod: 'email',
   regVerified: false,
   resendTimer: null,
 
@@ -235,7 +186,6 @@ const App = {
       emailGroup.classList.add('hidden');
       phoneGroup.classList.remove('hidden');
     }
-    // Toggle active state
     document.querySelectorAll('#reg-method-toggle .toggle-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.val === method);
     });
@@ -250,7 +200,7 @@ const App = {
     }
     if (errEl) errEl.classList.add('hidden');
 
-    // Special handling for step 1 → 2 (send verification code)
+    // Step 1 → send verification code
     if (step === 1) {
       const btn = document.querySelector('#reg-step-1 .btn-submit');
       btn.disabled = true;
@@ -260,18 +210,12 @@ const App = {
           ? document.getElementById('reg-email').value.trim()
           : document.getElementById('reg-phone').value.trim();
         await API.sendVerificationCode(contact, this.regMethod);
-        // Show verification target
         document.getElementById('verification-target').textContent = contact;
-        document.getElementById('reg2-sub').setAttribute('data-i18n',
-          this.regMethod === 'email' ? 'reg2_sub_email' : 'reg2_sub_phone');
         document.getElementById('reg2-sub').textContent =
           t(this.regMethod === 'email' ? 'reg2_sub_email' : 'reg2_sub_phone');
         this.startResendTimer();
       } catch (err) {
-        if (errEl) {
-          errEl.textContent = err.error || 'Error sending code';
-          errEl.classList.remove('hidden');
-        }
+        if (errEl) { errEl.textContent = err.error || 'Error sending code'; errEl.classList.remove('hidden'); }
         btn.disabled = false;
         btn.textContent = t('reg1_continue');
         return;
@@ -280,7 +224,7 @@ const App = {
       btn.textContent = t('reg1_continue');
     }
 
-    // Special handling for step 2 (verify code)
+    // Step 2 → verify code then auto-register
     if (step === 2) {
       const code = document.getElementById('reg-code').value.trim();
       const btn = document.getElementById('verify-btn');
@@ -292,26 +236,26 @@ const App = {
           : document.getElementById('reg-phone').value.trim();
         await API.verifyCode(contact, code, this.regMethod);
         this.regVerified = true;
+        // Auto register after verification
+        await this.submitRegister();
+        return; // submitRegister handles navigation
       } catch (err) {
         const errEl2 = document.getElementById('reg-error-2');
-        errEl2.textContent = t('reg2_invalid');
+        errEl2.textContent = err.error || t('reg2_invalid');
         errEl2.classList.remove('hidden');
         btn.disabled = false;
         btn.textContent = t('reg2_verify');
         return;
       }
-      btn.disabled = false;
-      btn.textContent = t('reg2_verify');
     }
 
+    // Move to next step
     if (step < TOTAL_REG_STEPS) {
       document.getElementById(`reg-step-${step}`).classList.add('hidden');
       document.getElementById(`reg-step-${step + 1}`).classList.remove('hidden');
       this.regStep = step + 1;
       this.updateRegProgress(step + 1);
       this._pushState({ page: 'register', regStep: step + 1 });
-      // Init zone map when reaching location step (step 4)
-      if (step + 1 === 4) setTimeout(() => ZoneMap.init(), 50);
     }
   },
 
@@ -347,11 +291,7 @@ const App = {
 
   validateRegStep(step) {
     if (step === 1) {
-      const name = document.getElementById('reg-name').value.trim();
-      const age = document.getElementById('reg-age').value;
       const pass = document.getElementById('reg-password').value;
-      if (!name) return t('val_name_required');
-      if (!age || age < 18) return t('val_age_min');
       if (this.regMethod === 'email') {
         const email = document.getElementById('reg-email').value.trim();
         if (!email || !/\S+@\S+\.\S+/.test(email)) return t('val_email_invalid');
@@ -399,61 +339,18 @@ const App = {
     }
   },
 
-  addZone() {
-    const input = document.getElementById('zone-input');
-    const val = input.value.trim();
-    if (!val) return;
-    this.regZones.push(val);
-    input.value = '';
-    this.renderZones();
-  },
-
-  removeZone(zone) {
-    this.regZones = this.regZones.filter(z => z !== zone);
-    this.renderZones();
-  },
-
-  renderZones() {
-    const container = document.getElementById('zones-tags');
-    container.innerHTML = this.regZones.map(z =>
-      `<span class="tag">${z}<button class="tag-remove" onclick="App.removeZone('${z}')">×</button></span>`
-    ).join('');
-  },
-
   async submitRegister() {
-    const btn = document.getElementById('register-submit-btn');
-    btn.disabled = true;
-    btn.textContent = t('reg5_submitting');
+    const btn = document.getElementById('verify-btn');
+    if (btn) { btn.disabled = true; btn.textContent = t('reg5_submitting'); }
 
-    const hobbies = Array.from(document.querySelectorAll('.hobby-btn.selected')).map(b => b.dataset.hobby);
-    const genderPref = document.querySelector('#gender-pref .toggle-btn.active')?.dataset.val || 'any';
-    const roomType = document.querySelector('#room-type .toggle-btn.active')?.dataset.val || 'private';
+    const email = this.regMethod === 'email' ? document.getElementById('reg-email').value.trim() : null;
+    const phone = this.regMethod === 'phone' ? document.getElementById('reg-phone').value.trim() : null;
+    const password = document.getElementById('reg-password').value;
 
     const data = {
-      name: document.getElementById('reg-name').value.trim(),
-      age: parseInt(document.getElementById('reg-age').value),
-      gender: document.getElementById('reg-gender').value || null,
-      email: this.regMethod === 'email' ? document.getElementById('reg-email').value.trim() : null,
-      phone: this.regMethod === 'phone' ? document.getElementById('reg-phone').value.trim() : null,
-      password: document.getElementById('reg-password').value,
-      profession: document.getElementById('reg-profession').value.trim() || null,
-      bio: document.getElementById('reg-bio').value.trim() || null,
-      hobbies,
-      is_smoker: document.getElementById('reg-smoker').checked,
-      has_pets: document.getElementById('reg-pets').checked,
-      city: document.getElementById('reg-city').value.trim(),
-      neighborhood: document.getElementById('reg-neighborhood').value.trim() || null,
-      preferred_zones: this.regZones,
-      budget_min: parseInt(document.getElementById('reg-budget-min').value) || null,
-      budget_max: parseInt(document.getElementById('reg-budget-max').value) || null,
-      move_in_date: document.getElementById('reg-movein').value || null,
-      stay_duration: document.getElementById('reg-duration').value,
-      looking_for_gender: genderPref,
-      age_min: parseInt(document.getElementById('reg-age-min').value) || 18,
-      age_max: parseInt(document.getElementById('reg-age-max').value) || 65,
-      accepts_smokers: document.getElementById('reg-accept-smokers').checked,
-      accepts_pets: document.getElementById('reg-accept-pets').checked,
-      room_type: roomType,
+      email,
+      phone,
+      password,
       verified: this.regVerified,
       reg_method: this.regMethod,
     };
@@ -462,22 +359,68 @@ const App = {
       const result = await API.register(data);
       localStorage.setItem('pm_token', result.token);
       currentUser = result.user;
-      await App.loadUser();
+      await this.loadUser();
     } catch (err) {
-      const errEl = document.getElementById('reg-error-5');
-      errEl.textContent = err.error || t('reg5_error');
-      errEl.classList.remove('hidden');
-      btn.disabled = false;
-      btn.textContent = t('reg5_submit');
+      const errEl = document.getElementById('reg-error-2');
+      if (errEl) {
+        errEl.textContent = err.error || t('reg5_error');
+        errEl.classList.remove('hidden');
+      }
+      if (btn) { btn.disabled = false; btn.textContent = t('reg2_verify'); }
+    }
+  },
+
+  // Google sign-in callback
+  async handleGoogleCredential(response) {
+    try {
+      const result = await API.googleAuth(response.credential);
+      localStorage.setItem('pm_token', result.token);
+      currentUser = result.user;
+      await this.loadUser();
+    } catch (err) {
+      UI.showToast(err.error || 'Google sign-in error');
     }
   }
 };
 
-// Hobby buttons
+// ── Event delegation (language selector + toggle buttons + hobbies) ──
 document.addEventListener('click', (e) => {
+  // Language: toggle dropdown
+  if (e.target.closest('#lang-current')) {
+    e.stopPropagation();
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.toggle('hidden');
+    return;
+  }
+
+  // Language: select a language
+  const langBtn = e.target.closest('[data-lang]');
+  if (langBtn) {
+    e.stopPropagation();
+    const lang = langBtn.getAttribute('data-lang');
+    console.log('[Lang] Selected:', lang);
+    try {
+      I18n.setLang(lang);
+    } catch (err) {
+      console.error('[Lang] setLang error:', err);
+    }
+    const dd = document.getElementById('lang-dropdown');
+    if (dd) dd.classList.add('hidden');
+    return;
+  }
+
+  // Close lang dropdown on outside click
+  const dd = document.getElementById('lang-dropdown');
+  if (dd && !dd.classList.contains('hidden')) {
+    dd.classList.add('hidden');
+  }
+
+  // Hobby buttons
   if (e.target.classList.contains('hobby-btn')) {
     e.target.classList.toggle('selected');
   }
+
+  // Toggle buttons
   if (e.target.classList.contains('toggle-btn')) {
     const group = e.target.closest('.toggle-group');
     if (group && group.id !== 'reg-method-toggle') {
@@ -489,7 +432,7 @@ document.addEventListener('click', (e) => {
 
 // Zone input enter
 document.getElementById('zone-input')?.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') { e.preventDefault(); App.addZone(); }
+  if (e.key === 'Enter') { e.preventDefault(); ZoneMap?.addFromInput?.(); }
 });
 
 // Login form
@@ -502,10 +445,9 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   errEl.classList.add('hidden');
 
   try {
-    const result = await API.login(
-      document.getElementById('login-email').value,
-      document.getElementById('login-password').value
-    );
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const result = await API.login(email, password);
     localStorage.setItem('pm_token', result.token);
     currentUser = result.user;
     await App.loadUser();
@@ -517,8 +459,6 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   }
 });
 
-// Lang dropdown outside-click is handled in App.initLangSelector()
-
 // UI utilities
 const UI = {
   toggleFilters() {
@@ -526,108 +466,86 @@ const UI = {
   },
 
   resetFilters() {
-    ['filter-city', 'filter-age-min', 'filter-age-max', 'filter-budget'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
+    document.querySelectorAll('#filters-panel input, #filters-panel select').forEach(el => {
+      if (el.type === 'number' || el.type === 'text') el.value = '';
+      if (el.tagName === 'SELECT') el.selectedIndex = 0;
     });
-    document.getElementById('filter-gender').value = '';
   },
 
   applyFilters() {
     this.toggleFilters();
-    Discover.load();
+    Discover.reload();
   },
 
-  closePaywall() {
-    document.getElementById('paywall').classList.add('hidden');
+  updateSwipeCounter(today, isPremium) {
+    const counter = document.getElementById('swipe-counter');
+    if (counter) {
+      counter.textContent = isPremium ? `${today} ${t('disc_swipes')} (∞)` : `${today}/5 ${t('disc_swipes')}`;
+    }
+  },
+
+  showToast(msg) {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  },
+
+  showMatchPopup(matchData, profile) {
+    const popup = document.getElementById('match-popup');
+    if (!popup) return;
+
+    currentMatch = matchData;
+    popup.querySelector('.match-user-name').textContent = profile.name;
+
+    const avatar = popup.querySelector('.match-user-avatar');
+    if (profile.main_photo || profile.avatar_url) {
+      avatar.style.backgroundImage = `url(${profile.main_photo || profile.avatar_url})`;
+      avatar.style.backgroundSize = 'cover';
+      avatar.textContent = '';
+    } else {
+      avatar.style.backgroundImage = '';
+      avatar.textContent = (profile.name || '?')[0].toUpperCase();
+    }
+
+    popup.classList.remove('hidden');
   },
 
   closeMatchPopup() {
-    document.getElementById('match-popup').classList.add('hidden');
-    currentMatch = null;
-  },
-
-  showMatchPopup(matchData, otherUser) {
-    currentMatch = matchData;
-    document.getElementById('match-sub-text').innerHTML =
-      t('match_sub', { name: otherUser.name });
-
-    const meAvatar = document.getElementById('match-avatar-me');
-    const themAvatar = document.getElementById('match-avatar-them');
-
-    if (currentUser?.avatar_url) {
-      meAvatar.style.backgroundImage = `url(${currentUser.avatar_url})`;
-      meAvatar.textContent = '';
-    } else {
-      meAvatar.textContent = (currentUser?.name || '?')[0].toUpperCase();
-    }
-
-    if (otherUser.avatar_url) {
-      themAvatar.style.backgroundImage = `url(${otherUser.avatar_url})`;
-      themAvatar.textContent = '';
-    } else {
-      themAvatar.textContent = otherUser.name[0].toUpperCase();
-    }
-
-    document.getElementById('match-popup').classList.remove('hidden');
+    document.getElementById('match-popup')?.classList.add('hidden');
   },
 
   showNotificationBadge(tab) {
     const badge = document.getElementById(`${tab}-badge`);
     if (badge) {
-      const count = (parseInt(badge.textContent) || 0) + 1;
-      badge.textContent = count;
+      const current = parseInt(badge.textContent) || 0;
+      badge.textContent = current + 1;
       badge.classList.remove('hidden');
     }
   },
 
   clearBadge(tab) {
     const badge = document.getElementById(`${tab}-badge`);
-    if (badge) { badge.textContent = '0'; badge.classList.add('hidden'); }
-  },
-
-  updateSwipeCounter(swipesUsed, isPremium) {
-    const pips = document.getElementById('swipe-pips');
-    const text = document.getElementById('swipe-text');
-
-    if (isPremium) {
-      pips.innerHTML = '<span class="pip unlimited"></span>'.repeat(5);
-      text.textContent = t('swipe_premium');
-      return;
+    if (badge) {
+      badge.textContent = '0';
+      badge.classList.add('hidden');
     }
-
-    pips.innerHTML = '';
-    for (let i = 0; i < 5; i++) {
-      const pip = document.createElement('span');
-      pip.className = 'pip' + (i < swipesUsed ? ' used' : '');
-      pips.appendChild(pip);
-    }
-    const remaining = Math.max(0, 5 - swipesUsed);
-    const s = remaining !== 1 ? 'es' : '';
-    text.textContent = remaining > 0
-      ? t('swipe_remaining', { n: remaining, s })
-      : t('swipe_limit');
-  },
-
-  showToast(message, duration = 3000) {
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    toast.style.cssText = `
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      background: #1a1a2e; color: white; padding: 12px 20px; border-radius: 99px;
-      font-size: 14px; font-family: var(--font-body); z-index: 999;
-      animation: fadeIn 0.3s ease; white-space: nowrap; max-width: 90vw;
-      overflow: hidden; text-overflow: ellipsis;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    `;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), duration);
   }
 };
 
-// Init
+// Google Sign-In callback (called by Google library)
+function handleGoogleCredentialResponse(response) {
+  App.handleGoogleCredential(response);
+}
+
+// Init on DOM ready
 document.addEventListener('DOMContentLoaded', () => App.init());

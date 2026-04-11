@@ -38,6 +38,7 @@ const API = (() => {
     // Auth
     login: (email, password) => request('POST', '/auth/login', { email, password }),
     register: (data) => request('POST', '/auth/register', data),
+    googleAuth: (credential) => request('POST', '/auth/google', { credential }),
     getMe: () => request('GET', '/auth/me'),
     updateMe: (data) => request('PUT', '/auth/me', data),
 
