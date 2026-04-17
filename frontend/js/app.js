@@ -228,7 +228,7 @@ const App = {
       try {
         const contact = this.regMethod === 'email'
           ? document.getElementById('reg-email').value.trim()
-          : document.getElementById('reg-phone').value.trim();
+          : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
         await API.sendVerificationCode(contact, this.regMethod);
         document.getElementById('verification-target').textContent = contact;
         document.getElementById('reg2-sub').textContent =
@@ -253,7 +253,7 @@ const App = {
       try {
         const contact = this.regMethod === 'email'
           ? document.getElementById('reg-email').value.trim()
-          : document.getElementById('reg-phone').value.trim();
+          : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
         await API.verifyCode(contact, code, this.regMethod);
         this.regVerified = true;
         // Auto register after verification
@@ -316,8 +316,8 @@ const App = {
         const email = document.getElementById('reg-email').value.trim();
         if (!email || !/\S+@\S+\.\S+/.test(email)) return t('val_email_invalid');
       } else {
-        const phone = document.getElementById('reg-phone').value.trim();
-        if (!phone || !/^\+?\d{7,15}$/.test(phone.replace(/\s/g, ''))) return t('val_phone_invalid');
+        const phone = document.getElementById('reg-phone').value.trim().replace(/\s/g, '');
+        if (!phone || !/^\d{6,15}$/.test(phone)) return t('val_phone_invalid');
       }
       if (!pass || pass.length < 6) return t('val_pass_short');
     }
@@ -349,7 +349,7 @@ const App = {
   async resendCode() {
     const contact = this.regMethod === 'email'
       ? document.getElementById('reg-email').value.trim()
-      : document.getElementById('reg-phone').value.trim();
+      : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
     try {
       await API.sendVerificationCode(contact, this.regMethod);
       UI.showToast(t('reg2_sent'));
@@ -364,7 +364,7 @@ const App = {
     if (btn) { btn.disabled = true; btn.textContent = t('reg5_submitting'); }
 
     const email = this.regMethod === 'email' ? document.getElementById('reg-email').value.trim() : null;
-    const phone = this.regMethod === 'phone' ? document.getElementById('reg-phone').value.trim() : null;
+    const phone = this.regMethod === 'phone' ? (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, '')) : null;
     const password = document.getElementById('reg-password').value;
 
     const data = {
@@ -454,6 +454,21 @@ document.addEventListener('click', (e) => {
       e.target.classList.add('active');
     }
   }
+
+  // Filter pill toggles
+  const pill = e.target.closest('.filter-pill');
+  if (pill) {
+    const group = pill.closest('.filter-toggle-group');
+    if (group) {
+      if (group.classList.contains('filter-binary')) {
+        group.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      } else {
+        group.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      }
+    }
+  }
 });
 
 // Zone input enter
@@ -488,14 +503,25 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
 // UI utilities
 const UI = {
   toggleFilters() {
-    document.getElementById('filters-panel').classList.toggle('hidden');
+    document.getElementById('filters-modal').classList.toggle('hidden');
   },
 
   resetFilters() {
-    document.querySelectorAll('#filters-panel input, #filters-panel select').forEach(el => {
-      if (el.type === 'number' || el.type === 'text') el.value = '';
-      if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    document.querySelectorAll('#filters-modal input').forEach(el => {
+      if (el.type === 'range') return;
+      el.value = '';
     });
+    document.getElementById('filter-budget-min').value = 200;
+    document.getElementById('filter-budget-max').value = 1200;
+    this.updatePriceRange();
+    document.querySelectorAll('#filters-modal .filter-pill').forEach(p => p.classList.remove('active'));
+  },
+
+  updatePriceRange() {
+    const min = document.getElementById('filter-budget-min').value;
+    const max = document.getElementById('filter-budget-max').value;
+    document.getElementById('price-min-val').textContent = '€ ' + min;
+    document.getElementById('price-max-val').textContent = '€ ' + max;
   },
 
   applyFilters() {

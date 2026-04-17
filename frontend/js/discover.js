@@ -16,16 +16,12 @@ const Discover = {
 
     const filters = {};
     const city = document.getElementById('filter-city')?.value?.trim();
-    const ageMin = document.getElementById('filter-age-min')?.value;
-    const ageMax = document.getElementById('filter-age-max')?.value;
-    const budget = document.getElementById('filter-budget')?.value;
-    const gender = document.getElementById('filter-gender')?.value;
+    const budgetMin = document.getElementById('filter-budget-min')?.value;
+    const budgetMax = document.getElementById('filter-budget-max')?.value;
 
     if (city) filters.city = city;
-    if (ageMin) filters.age_min = ageMin;
-    if (ageMax) filters.age_max = ageMax;
-    if (budget) filters.budget_max = budget;
-    if (gender) filters.gender = gender;
+    if (budgetMax) filters.budget_max = budgetMax;
+    if (budgetMin) filters.budget_min = budgetMin;
 
     try {
       const data = await API.discover(filters);

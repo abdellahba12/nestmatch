@@ -9,7 +9,7 @@
   <title>NestMatch — Tu compañero de piso ideal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css?v=5">
+  <link rel="stylesheet" href="/css/main.css?v=6">
 </head>
 <body>
   <script>
@@ -46,28 +46,28 @@
           <!-- Nav on top -->
           <nav class="l-nav">
             <div class="l-nav-logo">NestMatch</div>
-            <div class="l-nav-links">
-              <!-- Language Selector (SVG flags) -->
-              <div class="lang-selector" id="lang-selector">
-                <button class="lang-btn" id="lang-current" type="button">
-                  <svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>
-                </button>
-                <div class="lang-dropdown hidden" id="lang-dropdown">
-                  <button type="button" data-lang="es"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> Español</button>
-                  <button type="button" data-lang="en"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> English</button>
-                  <button type="button" data-lang="fr"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> Français</button>
-                  <button type="button" data-lang="pt"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> Português</button>
-                  <button type="button" data-lang="de"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> Deutsch</button>
-                  <button type="button" data-lang="it"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> Italiano</button>
-                </div>
+            <!-- Language selector centered -->
+            <div class="lang-selector" id="lang-selector">
+              <button class="lang-btn" id="lang-current" type="button">
+                <svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>
+              </button>
+              <div class="lang-dropdown hidden" id="lang-dropdown">
+                <button type="button" data-lang="es"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> Español</button>
+                <button type="button" data-lang="en"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> English</button>
+                <button type="button" data-lang="fr"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> Français</button>
+                <button type="button" data-lang="pt"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> Português</button>
+                <button type="button" data-lang="de"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> Deutsch</button>
+                <button type="button" data-lang="it"><svg class="lang-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> Italiano</button>
               </div>
+            </div>
+            <div class="l-nav-links">
               <button class="l-nav-btn-ghost" onclick="App.showPage('login')" data-i18n="nav_login">Iniciar sesión</button>
             </div>
           </nav>
 
           <!-- Centered hero text -->
           <div class="l-hero-content">
-            <h1 class="l-hero-title" data-i18n="hero_title">Find your<br><em>perfect nest</em></h1>
+            <h1 class="l-hero-title" data-i18n="hero_title"><span class="hero-find">Encuentra tu</span><br><em>nido perfecto</em></h1>
             <button class="l-cta-main" onclick="App.showPage('register')" data-i18n="hero_cta">Crear cuenta</button>
           </div>
         </section>
@@ -159,7 +159,7 @@
             <form id="login-form" class="auth-form">
               <div class="form-group">
                 <label data-i18n="login_email_label">Email</label>
-                <input type="email" id="login-email" data-i18n-ph="login_email_ph" placeholder="tu@email.com" required>
+                <input type="email" id="login-email" placeholder="" required>
               </div>
               <div class="form-group">
                 <label data-i18n="login_pass_label">Contraseña</label>
@@ -204,11 +204,36 @@
             </div>
             <div class="form-group" id="reg-email-group">
               <label data-i18n="reg1_email_label">Email *</label>
-              <input type="email" id="reg-email" data-i18n-ph="reg1_email_ph" placeholder="tu@email.com" required>
+              <input type="email" id="reg-email" placeholder="" required>
             </div>
             <div class="form-group hidden" id="reg-phone-group">
               <label data-i18n="reg1_phone_label">Teléfono *</label>
-              <input type="tel" id="reg-phone" data-i18n-ph="reg1_phone_ph" placeholder="+34 612 345 678">
+              <div class="phone-input-wrap">
+                <select id="reg-phone-country" class="phone-country-select">
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+351">🇵🇹 +351</option>
+                  <option value="+31">🇳🇱 +31</option>
+                  <option value="+32">🇧🇪 +32</option>
+                  <option value="+41">🇨🇭 +41</option>
+                  <option value="+43">🇦🇹 +43</option>
+                  <option value="+46">🇸🇪 +46</option>
+                  <option value="+47">🇳🇴 +47</option>
+                  <option value="+45">🇩🇰 +45</option>
+                  <option value="+48">🇵🇱 +48</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+54">🇦🇷 +54</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+56">🇨🇱 +56</option>
+                  <option value="+57">🇨🇴 +57</option>
+                  <option value="+212">🇲🇦 +212</option>
+                </select>
+                <input type="tel" id="reg-phone" placeholder="">
+              </div>
             </div>
             <div class="form-group">
               <label data-i18n="reg1_pass_label">Contraseña *</label>
@@ -277,40 +302,101 @@
               <button class="filter-btn" onclick="UI.toggleFilters()">⚙️ <span data-i18n="disc_filters">Filtros</span></button>
             </header>
 
-            <!-- Filters panel -->
-            <div id="filters-panel" class="filters-panel hidden">
-              <div class="filters-inner">
-                <h3 data-i18n="disc_filter_title">Filtrar perfiles</h3>
-                <div class="form-group">
-                  <label data-i18n="disc_filter_city">Ciudad</label>
-                  <input type="text" id="filter-city" data-i18n-ph="disc_filter_city_ph" placeholder="Ej: Barcelona">
+            <!-- Filters modal overlay -->
+            <div id="filters-modal" class="filters-modal hidden">
+              <div class="filters-modal-content">
+                <div class="filters-modal-header">
+                  <h3>Filtros</h3>
+                  <button class="filters-close-btn" onclick="UI.toggleFilters()">&times;</button>
                 </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label data-i18n="disc_filter_age_min">Edad mín.</label>
-                    <input type="number" id="filter-age-min" placeholder="18">
+                <div class="filters-modal-body">
+                  <!-- Row: Location + Price -->
+                  <div class="filters-row">
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">📍</span> Ubicación</label>
+                      <div class="filter-select-wrap">
+                        <input type="text" id="filter-city" placeholder="Barcelona" class="filter-input-styled">
+                      </div>
+                    </div>
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">€</span> Precio</label>
+                      <div class="filter-price-range">
+                        <span class="price-val" id="price-min-val">€ 200</span>
+                        <span class="price-val" id="price-max-val">€ 1200</span>
+                      </div>
+                      <div class="range-slider-wrap">
+                        <input type="range" id="filter-budget-min" min="0" max="2000" step="50" value="200" class="range-slider range-min" oninput="UI.updatePriceRange()">
+                        <input type="range" id="filter-budget-max" min="0" max="2000" step="50" value="1200" class="range-slider range-max" oninput="UI.updatePriceRange()">
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label data-i18n="disc_filter_age_max">Edad máx.</label>
-                    <input type="number" id="filter-age-max" placeholder="45">
+                  <!-- Row: Move-in date + Offer type -->
+                  <div class="filters-row">
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">📅</span> Fecha de entrada</label>
+                      <div class="filter-select-wrap">
+                        <input type="date" id="filter-movein" class="filter-input-styled">
+                      </div>
+                    </div>
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">🏠</span> Tipo de oferta</label>
+                      <div class="filter-toggle-group" id="filter-offer-type">
+                        <button class="filter-pill active" data-val="room">Habitación</button>
+                        <button class="filter-pill" data-val="full">Piso entero</button>
+                        <button class="filter-pill" data-val="search">Busco compañeros</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Cleanliness -->
+                  <div class="filter-block">
+                    <label class="filter-label"><span class="filter-icon">🧹</span> Limpieza</label>
+                    <div class="filter-toggle-group" id="filter-clean">
+                      <button class="filter-pill" data-val="low"><span class="pill-icon">🧹</span> Bajo</button>
+                      <button class="filter-pill" data-val="mid"><span class="pill-icon">🧽</span> Medio</button>
+                      <button class="filter-pill" data-val="high"><span class="pill-icon">✨</span> Alto</button>
+                    </div>
+                  </div>
+                  <!-- Row: Schedule + Smoking -->
+                  <div class="filters-row">
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">🌙</span> Horarios</label>
+                      <div class="filter-toggle-group" id="filter-schedule">
+                        <button class="filter-pill" data-val="early"><span class="pill-icon">☀️</span> Diurno</button>
+                        <button class="filter-pill" data-val="normal"><span class="pill-icon">🕐</span> Normal</button>
+                        <button class="filter-pill" data-val="late"><span class="pill-icon">🌙</span> Nocturno</button>
+                      </div>
+                    </div>
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">🚬</span> Fumar</label>
+                      <div class="filter-toggle-group filter-binary" id="filter-smoke">
+                        <button class="filter-pill" data-val="yes"><span class="pill-icon">🚬</span> Sí</button>
+                        <button class="filter-pill active filter-pill-no" data-val="no"><span class="pill-icon">🚭</span> No</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row: Ambiente + Pets -->
+                  <div class="filters-row">
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">👥</span> Ambiente</label>
+                      <div class="filter-toggle-group" id="filter-vibe">
+                        <button class="filter-pill" data-val="quiet"><span class="pill-icon">📚</span> Tranquilo</button>
+                        <button class="filter-pill" data-val="social"><span class="pill-icon">👥</span> Social</button>
+                        <button class="filter-pill" data-val="party"><span class="pill-icon">🎉</span> Fiesta</button>
+                      </div>
+                    </div>
+                    <div class="filter-block">
+                      <label class="filter-label"><span class="filter-icon">🐾</span> Mascotas</label>
+                      <div class="filter-toggle-group filter-binary" id="filter-pets">
+                        <button class="filter-pill" data-val="yes"><span class="pill-icon">🐾</span> Sí</button>
+                        <button class="filter-pill active filter-pill-no" data-val="no"><span class="pill-icon">🚭</span> No</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label data-i18n="disc_filter_budget">Presupuesto máx. (€/mes)</label>
-                  <input type="number" id="filter-budget" data-i18n-ph="disc_filter_budget_ph" placeholder="Ej: 800">
-                </div>
-                <div class="form-group">
-                  <label data-i18n="disc_filter_gender">Género</label>
-                  <select id="filter-gender">
-                    <option value="" data-i18n="disc_filter_any">Cualquiera</option>
-                    <option value="male" data-i18n="disc_filter_male">Hombre</option>
-                    <option value="female" data-i18n="disc_filter_female">Mujer</option>
-                    <option value="non-binary" data-i18n="disc_filter_nb">No binario</option>
-                  </select>
-                </div>
-                <div class="filter-actions">
-                  <button class="btn-ghost" onclick="UI.resetFilters()" data-i18n="disc_filter_clear">Limpiar</button>
-                  <button class="btn-primary" onclick="UI.applyFilters()" data-i18n="disc_filter_apply">Aplicar</button>
+                <!-- Footer -->
+                <div class="filters-modal-footer">
+                  <button class="btn-ghost" onclick="UI.resetFilters()">Limpiar</button>
+                  <button class="btn-filter-apply" onclick="UI.applyFilters()">Aplicar filtros</button>
                 </div>
               </div>
             </div>
@@ -487,13 +573,13 @@
   </div>
 
   <script src="https://cdn.socket.io/4.6.2/socket.io.min.js"></script>
-  <script src="/js/i18n.js?v=4"></script>
-  <script src="/js/api.js?v=4"></script>
-  <script src="/js/zonemap.js?v=4"></script>
-  <script src="/js/app.js?v=4"></script>
-  <script src="/js/discover.js?v=4"></script>
-  <script src="/js/chat.js?v=4"></script>
-  <script src="/js/profile.js?v=4"></script>
-  <script src="/js/payments.js?v=4"></script>
+  <script src="/js/i18n.js?v=5"></script>
+  <script src="/js/api.js?v=5"></script>
+  <script src="/js/zonemap.js?v=5"></script>
+  <script src="/js/app.js?v=5"></script>
+  <script src="/js/discover.js?v=5"></script>
+  <script src="/js/chat.js?v=5"></script>
+  <script src="/js/profile.js?v=5"></script>
+  <script src="/js/payments.js?v=5"></script>
 </body>
 </html>
