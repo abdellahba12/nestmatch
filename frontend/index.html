@@ -9,7 +9,7 @@
   <title>NestMatch — Tu compañero de piso ideal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css?v=6">
+  <link rel="stylesheet" href="/css/main.css?v=7">
 </head>
 <body>
   <script>
@@ -271,21 +271,21 @@
       <!-- Sidebar / Bottom navigation (adapts via CSS) -->
       <nav class="bottom-nav" id="main-nav">
         <button class="nav-item active" data-tab="discover" onclick="App.switchTab('discover')">
-          <span class="nav-icon">🔍</span><span class="nav-label" data-i18n="nav_discover">Descubrir</span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><span class="nav-label" data-i18n="nav_discover">Descubrir</span>
         </button>
         <button class="nav-item" data-tab="matches" onclick="App.switchTab('matches')">
-          <span class="nav-icon">💫</span><span class="nav-label" data-i18n="nav_matches">Matches</span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span><span class="nav-label" data-i18n="nav_matches">Matches</span>
           <span class="nav-badge hidden" id="matches-badge">0</span>
         </button>
         <button class="nav-item" data-tab="chat" onclick="App.switchTab('chat')">
-          <span class="nav-icon">💬</span><span class="nav-label" data-i18n="nav_messages">Mensajes</span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label" data-i18n="nav_messages">Mensajes</span>
           <span class="nav-badge hidden" id="chat-badge">0</span>
         </button>
         <button class="nav-item" data-tab="profile" onclick="App.switchTab('profile')">
-          <span class="nav-icon">👤</span><span class="nav-label" data-i18n="nav_profile">Perfil</span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label" data-i18n="nav_profile">Perfil</span>
         </button>
         <button class="nav-item" data-tab="premium" onclick="App.switchTab('premium')" id="nav-premium-btn">
-          <span class="nav-icon">⭐</span><span class="nav-label" data-i18n="nav_premium">Premium</span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span class="nav-label" data-i18n="nav_premium">Premium</span>
         </button>
       </nav>
 
@@ -298,7 +298,7 @@
           <!-- LEFT: swipe column -->
           <div class="discover-left">
             <header class="app-header">
-              <div class="header-logo">🏡 NestMatch</div>
+              <div class="header-logo">NestMatch</div>
               <button class="filter-btn" onclick="UI.toggleFilters()">⚙️ <span data-i18n="disc_filters">Filtros</span></button>
             </header>
 
@@ -427,13 +427,20 @@
           <!-- RIGHT: desktop info panel -->
           <div class="discover-right">
             <div class="discover-right-inner">
-              <div style="font-size:60px;margin-bottom:20px">🏡</div>
-              <h2 style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--dark);margin-bottom:10px" data-i18n="disc_right_title">Encuentra tu nido ideal</h2>
-              <p style="color:var(--text-light);font-size:15px;line-height:1.7;max-width:300px" data-i18n="disc_right_desc">Desliza perfiles a la derecha si te gustan, a la izquierda para pasar. Cuando el interés sea mutuo, ¡es un match!</p>
-              <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px">
-                <div class="discover-tip"><span>♥</span><span data-i18n="disc_tip_like">Desliza a la <strong>derecha</strong> si te gusta</span></div>
-                <div class="discover-tip"><span>✕</span><span data-i18n="disc_tip_pass">Desliza a la <strong>izquierda</strong> para pasar</span></div>
-                <div class="discover-tip"><span>💬</span><span data-i18n="disc_tip_chat">Al hacer match, podéis chatear</span></div>
+              <div class="right-panel-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <h2 class="right-panel-title" data-i18n="disc_right_title">Encuentra tu hogar ideal</h2>
+              <div class="right-panel-tips">
+                <div class="discover-tip"><span class="tip-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span><span data-i18n="disc_tip_like">Desliza para explorar opciones</span></div>
+                <div class="discover-tip"><span class="tip-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span><span data-i18n="disc_tip_pass">Guarda las que te gusten</span></div>
+                <div class="discover-tip"><span class="tip-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span><span data-i18n="disc_tip_chat">Habla con propietarios al hacer match</span></div>
               </div>
             </div>
           </div>
@@ -573,13 +580,13 @@
   </div>
 
   <script src="https://cdn.socket.io/4.6.2/socket.io.min.js"></script>
-  <script src="/js/i18n.js?v=5"></script>
-  <script src="/js/api.js?v=5"></script>
-  <script src="/js/zonemap.js?v=5"></script>
-  <script src="/js/app.js?v=5"></script>
-  <script src="/js/discover.js?v=5"></script>
-  <script src="/js/chat.js?v=5"></script>
-  <script src="/js/profile.js?v=5"></script>
-  <script src="/js/payments.js?v=5"></script>
+  <script src="/js/i18n.js?v=6"></script>
+  <script src="/js/api.js?v=6"></script>
+  <script src="/js/zonemap.js?v=6"></script>
+  <script src="/js/app.js?v=6"></script>
+  <script src="/js/discover.js?v=6"></script>
+  <script src="/js/chat.js?v=6"></script>
+  <script src="/js/profile.js?v=6"></script>
+  <script src="/js/payments.js?v=6"></script>
 </body>
 </html>
