@@ -516,6 +516,46 @@
             </div>
           </div>
 
+          <!-- Profile Detail Modal -->
+          <div id="profile-detail-overlay" class="profile-detail-overlay" onclick="Discover.closeProfileDetail(event)">
+            <div class="profile-detail-modal" id="profile-detail-modal">
+              <button class="pdm-close" onclick="Discover.closeProfileDetail()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+              <div class="pdm-photo" id="pdm-photo"></div>
+              <div class="pdm-body">
+                <div>
+                  <span class="pdm-name" id="pdm-name"></span>
+                  <span class="pdm-verified hidden" id="pdm-verified">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span data-i18n="verify_badge">Verificado</span>
+                  </span>
+                </div>
+                <p class="pdm-subtitle" id="pdm-subtitle"></p>
+
+                <div class="pdm-section hidden" id="pdm-bio-section">
+                  <div class="pdm-section-title" data-i18n="prof_about">Sobre mi</div>
+                  <p class="pdm-bio" id="pdm-bio"></p>
+                </div>
+
+                <div class="pdm-section hidden" id="pdm-hobbies-section">
+                  <div class="pdm-section-title" data-i18n="prof_interests">Intereses</div>
+                  <div class="pdm-tags" id="pdm-hobbies"></div>
+                </div>
+
+                <div class="pdm-section" id="pdm-search-section">
+                  <div class="pdm-section-title" data-i18n="prof_search">Busqueda</div>
+                  <div class="pdm-grid" id="pdm-grid"></div>
+                </div>
+
+                <div class="pdm-section hidden" id="pdm-lifestyle-section">
+                  <div class="pdm-section-title" data-i18n="prof_lifestyle">Estilo de vida</div>
+                  <div class="pdm-flags" id="pdm-flags"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Match popup -->
           <div id="match-popup" class="match-popup hidden">
             <div class="match-popup-inner">

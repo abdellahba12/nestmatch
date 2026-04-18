@@ -42,6 +42,7 @@ const Chat = {
   },
 
   async openConversation(convId, partner = null) {
+    console.log('[Chat] openConversation:', convId, 'partner:', partner?.name || 'none');
     this.currentConvId = convId;
     this.currentPartner = partner;
 
@@ -70,7 +71,12 @@ const Chat = {
       }
     }
 
-    if (socket) socket.emit('join_conversation', convId);
+    if (socket) {
+      console.log('[Chat] Emitting join_conversation:', convId, '| socket connected:', socket.connected);
+      socket.emit('join_conversation', convId);
+    } else {
+      console.warn('[Chat] No socket available for join_conversation');
+    }
 
     await this.loadMessages(convId);
 
@@ -78,11 +84,13 @@ const Chat = {
   },
 
   async loadMessages(convId) {
+    console.log('[Chat] loadMessages for conv:', convId);
     const container = document.getElementById('messages-container');
     container.innerHTML = '<div class="loading-placeholder"><div class="spinner"></div></div>';
 
     try {
       const messages = await API.getMessages(convId);
+      console.log('[Chat] Loaded', messages.length, 'messages');
       container.innerHTML = '';
 
       if (messages.length === 0) {
@@ -147,12 +155,14 @@ const Chat = {
 
     try {
       if (socket?.connected) {
+        console.log('[Chat] Sending via socket:', { conversation_id: this.currentConvId, content_length: content.length });
         socket.emit('send_message', { conversation_id: this.currentConvId, content });
       } else {
+        console.log('[Chat] Socket not connected, sending via REST API');
         await API.sendMessage(this.currentConvId, content);
       }
     } catch (e) {
-      console.error('Send message error:', e);
+      console.error('[Chat] Send message error:', e);
       UI.showToast(t('chat_error_send'));
     }
   },

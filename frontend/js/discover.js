@@ -167,18 +167,21 @@ const Discover = {
 
   initDrag(card) {
     if (!card) return;
+    let hasMoved = false;
 
     const onStart = (clientX, clientY) => {
       this.isDragging = true;
       this.startX = clientX;
       this.startY = clientY;
       this.currentX = 0;
+      hasMoved = false;
       card.style.transition = 'none';
     };
 
     const onMove = (clientX) => {
       if (!this.isDragging) return;
       this.currentX = clientX - this.startX;
+      if (Math.abs(this.currentX) > 5) hasMoved = true;
       const rotate = this.currentX * 0.08;
       card.style.transform = `translateX(${this.currentX}px) rotate(${rotate}deg)`;
 
@@ -206,6 +209,11 @@ const Discover = {
       if (Math.abs(this.currentX) > 100) {
         const dir = this.currentX > 0 ? 'like' : 'pass';
         this.animateSwipe(card, dir);
+      } else if (!hasMoved) {
+        // It was a click, not a drag — show profile detail
+        card.style.transform = 'scale(1) translateY(0)';
+        const profile = this.profiles[0];
+        if (profile) this.showProfileDetail(profile);
       } else {
         card.style.transform = 'scale(1) translateY(0)';
         card.querySelector('.card-like-badge').style.opacity = 0;
@@ -220,6 +228,110 @@ const Discover = {
     card.addEventListener('touchstart', (e) => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
     card.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX), { passive: true });
     card.addEventListener('touchend', onEnd);
+  },
+
+  showProfileDetail(profile) {
+    const overlay = document.getElementById('profile-detail-overlay');
+    if (!overlay) return;
+
+    // Photo
+    const photoEl = document.getElementById('pdm-photo');
+    const mainPhoto = profile.main_photo || (profile.photos && profile.photos[0]);
+    if (mainPhoto) {
+      photoEl.style.backgroundImage = `url(${mainPhoto})`;
+      photoEl.classList.remove('pdm-photo-placeholder');
+      photoEl.textContent = '';
+    } else {
+      photoEl.style.backgroundImage = '';
+      photoEl.style.background = `linear-gradient(135deg, ${this.randomGradient()})`;
+      photoEl.classList.add('pdm-photo-placeholder');
+      photoEl.textContent = (profile.name || '?')[0].toUpperCase();
+    }
+
+    // Name + age
+    const nameEl = document.getElementById('pdm-name');
+    nameEl.textContent = `${profile.name || ''}${profile.age ? ', ' + profile.age : ''}`;
+
+    // Verified badge
+    const verifiedEl = document.getElementById('pdm-verified');
+    if (profile.is_verified) verifiedEl.classList.remove('hidden');
+    else verifiedEl.classList.add('hidden');
+
+    // Subtitle (profession + city)
+    const subtitleEl = document.getElementById('pdm-subtitle');
+    const parts = [profile.profession, profile.city].filter(Boolean);
+    subtitleEl.textContent = parts.join(' · ');
+
+    // Bio
+    const bioSection = document.getElementById('pdm-bio-section');
+    const bioEl = document.getElementById('pdm-bio');
+    if (profile.bio) {
+      bioEl.textContent = profile.bio;
+      bioSection.classList.remove('hidden');
+    } else {
+      bioSection.classList.add('hidden');
+    }
+
+    // Hobbies
+    const hobbiesSection = document.getElementById('pdm-hobbies-section');
+    const hobbiesEl = document.getElementById('pdm-hobbies');
+    if (profile.hobbies && profile.hobbies.length > 0) {
+      hobbiesEl.innerHTML = profile.hobbies.map(h => `<span class="pdm-tag">${h}</span>`).join('');
+      hobbiesSection.classList.remove('hidden');
+    } else {
+      hobbiesSection.classList.add('hidden');
+    }
+
+    // Search grid (budget, duration, zones, room type)
+    const gridEl = document.getElementById('pdm-grid');
+    const budget = profile.budget_min || profile.budget_max
+      ? `€${profile.budget_min || '?'} – €${profile.budget_max || '?'}`
+      : t('prof_not_specified');
+    const duration = profile.stay_duration === 'short' ? t('prof_duration_short')
+      : profile.stay_duration === 'long' ? t('prof_duration_long')
+      : t('prof_duration_medium');
+    const zones = (profile.preferred_zones || []).join(', ') || t('prof_no_zones');
+    const room = profile.room_type === 'private' ? t('prof_room_private') : t('prof_room_shared');
+
+    gridEl.innerHTML = `
+      <div class="pdm-grid-item">
+        <div class="pdm-grid-label">${t('prof_budget')}</div>
+        <div class="pdm-grid-value">${budget}</div>
+      </div>
+      <div class="pdm-grid-item">
+        <div class="pdm-grid-label">${t('prof_duration')}</div>
+        <div class="pdm-grid-value">${duration}</div>
+      </div>
+      <div class="pdm-grid-item">
+        <div class="pdm-grid-label">${t('prof_zones')}</div>
+        <div class="pdm-grid-value" style="font-size:13px">${zones}</div>
+      </div>
+      <div class="pdm-grid-item">
+        <div class="pdm-grid-label">${t('prof_room')}</div>
+        <div class="pdm-grid-value">${room}</div>
+      </div>
+    `;
+
+    // Lifestyle flags
+    const flagsSection = document.getElementById('pdm-lifestyle-section');
+    const flagsEl = document.getElementById('pdm-flags');
+    const flags = [];
+    if (profile.is_smoker) flags.push(t('prof_smoker'));
+    if (profile.has_pets) flags.push(t('prof_has_pets'));
+    if (flags.length > 0) {
+      flagsEl.innerHTML = flags.map(f => `<span class="pdm-flag">${f}</span>`).join('');
+      flagsSection.classList.remove('hidden');
+    } else {
+      flagsSection.classList.add('hidden');
+    }
+
+    overlay.classList.add('visible');
+  },
+
+  closeProfileDetail(event) {
+    if (event && event.target !== event.currentTarget && !event.target.closest('.pdm-close')) return;
+    const overlay = document.getElementById('profile-detail-overlay');
+    if (overlay) overlay.classList.remove('visible');
   },
 
   animateSwipe(card, direction) {

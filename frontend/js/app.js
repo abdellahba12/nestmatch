@@ -197,19 +197,39 @@ const App = {
 
   initSocket() {
     const token = localStorage.getItem('pm_token');
-    if (!token) return;
+    if (!token) { console.warn('[Socket] No token, skipping connection'); return; }
 
+    console.log('[Socket] Connecting...');
     socket = io({ auth: { token } });
-    socket.on('connect', () => console.log('Socket connected'));
-    socket.on('disconnect', () => console.log('Socket disconnected'));
+
+    socket.on('connect', () => {
+      console.log('[Socket] Connected — id:', socket.id, 'transport:', socket.io.engine?.transport?.name);
+    });
+    socket.on('disconnect', (reason) => {
+      console.warn('[Socket] Disconnected — reason:', reason);
+    });
+    socket.on('connect_error', (err) => {
+      console.error('[Socket] Connection error:', err.message, err.data || '');
+    });
+    socket.on('reconnect', (attempt) => {
+      console.log('[Socket] Reconnected after', attempt, 'attempts');
+    });
+    socket.on('reconnect_error', (err) => {
+      console.error('[Socket] Reconnect error:', err.message);
+    });
+    socket.on('reconnect_attempt', (attempt) => {
+      console.log('[Socket] Reconnect attempt #', attempt);
+    });
 
     socket.on('new_message', (msg) => {
+      console.log('[Socket] new_message received:', { conversation_id: msg.conversation_id, sender_id: msg.sender_id, content_length: msg.content?.length });
       if (Chat.currentConvId === msg.conversation_id || Chat.currentConvId === undefined) {
         Chat.appendMessage(msg);
       }
     });
 
     socket.on('message_notification', (data) => {
+      console.log('[Socket] message_notification:', { conversation_id: data.conversation_id, sender: data.sender_name });
       UI.showNotificationBadge('chat');
       if (data.conversation_id !== Chat.currentConvId) {
         UI.showToast(`${data.sender_name}: ${data.preview}`);
