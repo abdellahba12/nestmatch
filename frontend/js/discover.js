@@ -120,6 +120,21 @@ const Discover = {
       ? '<span class="verified-badge" title="Verified">✓</span>'
       : '';
 
+    // Room-style title: use neighborhood/zones or fallback to name
+    const roomTitle = profile.neighborhood
+      ? `Habitación en ${profile.neighborhood}`
+      : (profile.preferred_zones && profile.preferred_zones.length > 0)
+      ? `Habitación en ${profile.preferred_zones[0]}`
+      : profile.name || 'Habitación disponible';
+
+    const cityName = profile.city || '';
+
+    const priceText = profile.budget_max
+      ? `€${profile.budget_max}`
+      : profile.budget_min
+      ? `€${profile.budget_min}`
+      : '';
+
     card.innerHTML = `
       <div class="card-photo" style="${photoStyle}">
         ${photoDots}
@@ -128,17 +143,9 @@ const Discover = {
         ${!mainPhoto ? `<span style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))">${this.avatarEmoji(profile)}</span>` : ''}
       </div>
       <div class="card-info">
-        <div class="card-name-row">
-          <span class="card-name">${profile.name} ${verifiedBadge}</span>
-          <span class="card-age">${profile.age}</span>
-        </div>
-        <div class="card-location">📍 ${profile.city}${profile.neighborhood ? ', ' + profile.neighborhood : ''}${profile.profession ? ' · ' + profile.profession : ''}</div>
-        ${profile.bio ? `<p class="card-bio">${profile.bio}</p>` : ''}
-        ${hobbyTags ? `<div class="card-tags">${hobbyTags}</div>` : ''}
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          ${budget ? `<span class="card-budget">💰 ${budget}</span>` : ''}
-          ${zones ? `<span style="font-size:12px;color:var(--text-light)">📍 ${zones}</span>` : ''}
-        </div>
+        <div class="card-room-title">${roomTitle}</div>
+        <div class="card-room-city">${cityName}</div>
+        ${priceText ? `<div class="card-room-divider"></div><div class="card-room-price"><span class="price-amount">${priceText}</span> / mes</div>` : ''}
       </div>
     `;
 
