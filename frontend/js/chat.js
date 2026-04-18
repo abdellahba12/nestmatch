@@ -13,7 +13,7 @@ const Chat = {
       if (matches.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-state-icon">💬</div>
+            <div class="empty-state-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
             <h3>${t('chat_empty_title')}</h3>
             <p style="color:var(--text-light);font-size:14px">${t('chat_empty_sub')}</p>
           </div>`;

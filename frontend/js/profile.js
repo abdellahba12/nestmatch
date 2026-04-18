@@ -135,14 +135,14 @@ const Profile = {
   renderVerification(user) {
     if (user.is_verified) {
       return `<div class="verify-status verify-done">
-        <span class="verify-icon">✅</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         <span>${t('verify_badge')}</span>
       </div>`;
     }
 
     if (user.verification_status === 'pending') {
       return `<div class="verify-status verify-pending-status">
-        <span class="verify-icon">⏳</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a16207" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span>${t('verify_pending')}</span>
       </div>`;
     }

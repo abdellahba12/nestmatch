@@ -212,7 +212,7 @@ const App = {
     socket.on('message_notification', (data) => {
       UI.showNotificationBadge('chat');
       if (data.conversation_id !== Chat.currentConvId) {
-        UI.showToast(`💬 ${data.sender_name}: ${data.preview}`);
+        UI.showToast(`${data.sender_name}: ${data.preview}`);
       }
     });
 
