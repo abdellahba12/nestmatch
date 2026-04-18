@@ -208,29 +208,67 @@
             <div class="form-group hidden" id="reg-phone-group">
               <label data-i18n="reg1_phone_label">Teléfono *</label>
               <div class="phone-input-wrap">
-                <select id="reg-phone-country" class="phone-country-select">
-                  <option value="+34">🇪🇸 +34</option>
-                  <option value="+33">🇫🇷 +33</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+49">🇩🇪 +49</option>
-                  <option value="+39">🇮🇹 +39</option>
-                  <option value="+351">🇵🇹 +351</option>
-                  <option value="+31">🇳🇱 +31</option>
-                  <option value="+32">🇧🇪 +32</option>
-                  <option value="+41">🇨🇭 +41</option>
-                  <option value="+43">🇦🇹 +43</option>
-                  <option value="+46">🇸🇪 +46</option>
-                  <option value="+47">🇳🇴 +47</option>
-                  <option value="+45">🇩🇰 +45</option>
-                  <option value="+48">🇵🇱 +48</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+52">🇲🇽 +52</option>
-                  <option value="+54">🇦🇷 +54</option>
-                  <option value="+55">🇧🇷 +55</option>
-                  <option value="+56">🇨🇱 +56</option>
-                  <option value="+57">🇨🇴 +57</option>
-                  <option value="+212">🇲🇦 +212</option>
-                </select>
+                <div class="phone-country-custom" id="phone-country-custom">
+                  <button type="button" class="phone-country-btn" id="phone-country-btn">
+                    <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>
+                    <span class="phone-prefix" id="phone-prefix">+34</span>
+                    <svg class="phone-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="phone-country-dropdown hidden" id="phone-country-dropdown">
+                    <button type="button" data-prefix="+34" data-flag="es">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> ES +34
+                    </button>
+                    <button type="button" data-prefix="+33" data-flag="fr">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> FR +33
+                    </button>
+                    <button type="button" data-prefix="+44" data-flag="gb">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> GB +44
+                    </button>
+                    <button type="button" data-prefix="+49" data-flag="de">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> DE +49
+                    </button>
+                    <button type="button" data-prefix="+39" data-flag="it">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> IT +39
+                    </button>
+                    <button type="button" data-prefix="+351" data-flag="pt">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> PT +351
+                    </button>
+                    <button type="button" data-prefix="+31" data-flag="nl">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#ae1c28"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.66" width="24" height="5.34" fill="#21468b"/></svg> NL +31
+                    </button>
+                    <button type="button" data-prefix="+32" data-flag="be">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#000"/><rect x="8" width="8" height="16" fill="#ffd90c"/><rect x="16" width="8" height="16" fill="#f31830"/></svg> BE +32
+                    </button>
+                    <button type="button" data-prefix="+41" data-flag="ch">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#d52b1e"/><rect x="10" y="4" width="4" height="8" fill="#fff"/><rect x="8" y="6" width="8" height="4" fill="#fff"/></svg> CH +41
+                    </button>
+                    <button type="button" data-prefix="+46" data-flag="se">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#006aa7"/><rect x="7" width="3" height="16" fill="#fecc00"/><rect y="6.5" width="24" height="3" fill="#fecc00"/></svg> SE +46
+                    </button>
+                    <button type="button" data-prefix="+47" data-flag="no">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#ef2b2d"/><rect x="6" width="4" height="16" fill="#002868"/><rect y="6" width="24" height="4" fill="#002868"/><rect x="7" width="2" height="16" fill="#fff"/><rect y="7" width="24" height="2" fill="#fff"/></svg> NO +47
+                    </button>
+                    <button type="button" data-prefix="+48" data-flag="pl">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="8" fill="#fff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg> PL +48
+                    </button>
+                    <button type="button" data-prefix="+1" data-flag="us">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#b22234"/><rect y="1.23" width="24" height="1.23" fill="#fff"/><rect y="3.69" width="24" height="1.23" fill="#fff"/><rect y="6.15" width="24" height="1.23" fill="#fff"/><rect y="8.62" width="24" height="1.23" fill="#fff"/><rect y="11.08" width="24" height="1.23" fill="#fff"/><rect y="13.54" width="24" height="1.23" fill="#fff"/><rect width="9.6" height="8.62" fill="#3c3b6e"/></svg> US +1
+                    </button>
+                    <button type="button" data-prefix="+52" data-flag="mx">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#006847"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce1126"/></svg> MX +52
+                    </button>
+                    <button type="button" data-prefix="+54" data-flag="ar">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#74acdf"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.66" width="24" height="5.34" fill="#74acdf"/></svg> AR +54
+                    </button>
+                    <button type="button" data-prefix="+55" data-flag="br">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#009c3b"/><polygon points="12,2 22,8 12,14 2,8" fill="#ffdf00"/><circle cx="12" cy="8" r="3" fill="#002776"/></svg> BR +55
+                    </button>
+                    <button type="button" data-prefix="+212" data-flag="ma">
+                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#c1272d"/><polygon points="12,4 13.2,7.2 16.6,7.2 13.8,9.2 14.8,12.4 12,10.4 9.2,12.4 10.2,9.2 7.4,7.2 10.8,7.2" fill="none" stroke="#006233" stroke-width="0.8"/></svg> MA +212
+                    </button>
+                  </div>
+                </div>
+                <input type="hidden" id="reg-phone-country" value="+34">
                 <input type="tel" id="reg-phone" placeholder="">
               </div>
             </div>

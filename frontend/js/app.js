@@ -101,10 +101,24 @@ const App = {
   updateVerifyBanner() {
     const banner = document.getElementById('verify-banner');
     if (!banner) return;
-    if (currentUser && !currentUser.is_verified && currentUser.verification_status !== 'pending') {
-      banner.classList.remove('hidden');
-    } else {
+    if (currentUser && currentUser.is_verified) {
       banner.classList.add('hidden');
+      return;
+    }
+    if (currentUser && currentUser.verification_status === 'pending') {
+      banner.classList.remove('hidden');
+      banner.classList.remove('verify-banner--red');
+      banner.classList.add('verify-banner--yellow');
+      banner.querySelector('.verify-banner-bold').textContent = t('banner_pending_title') || 'Verificación en curso';
+      banner.querySelector('.verify-banner-text').textContent = t('banner_pending_desc') || 'Tu documentación está siendo revisada. Te notificaremos cuando esté lista.';
+      banner.querySelector('.verify-banner-link').textContent = t('banner_pending_action') || 'Ver estado';
+    } else if (currentUser && !currentUser.is_verified) {
+      banner.classList.remove('hidden');
+      banner.classList.remove('verify-banner--yellow');
+      banner.classList.add('verify-banner--red');
+      banner.querySelector('.verify-banner-bold').textContent = t('banner_title') || 'Perfil no verificado';
+      banner.querySelector('.verify-banner-text').textContent = t('banner_desc') || 'Verifica tu identidad para desbloquear todas las funcionalidades de tu cuenta.';
+      banner.querySelector('.verify-banner-link').textContent = t('banner_action') || 'Verificar perfil';
     }
   },
 
@@ -459,6 +473,34 @@ document.addEventListener('click', (e) => {
   const dd = document.getElementById('lang-dropdown');
   if (dd && !dd.classList.contains('hidden')) {
     dd.classList.add('hidden');
+  }
+
+  // Phone country: toggle dropdown
+  if (e.target.closest('#phone-country-btn')) {
+    e.stopPropagation();
+    const pdd = document.getElementById('phone-country-dropdown');
+    if (pdd) pdd.classList.toggle('hidden');
+    return;
+  }
+
+  // Phone country: select a country
+  const countryBtn = e.target.closest('[data-prefix]');
+  if (countryBtn) {
+    e.stopPropagation();
+    const prefix = countryBtn.dataset.prefix;
+    const flagSvg = countryBtn.querySelector('.phone-flag');
+    document.getElementById('reg-phone-country').value = prefix;
+    document.getElementById('phone-prefix').textContent = prefix;
+    const btnFlag = document.querySelector('#phone-country-btn .phone-flag');
+    if (btnFlag && flagSvg) btnFlag.outerHTML = flagSvg.outerHTML;
+    document.getElementById('phone-country-dropdown').classList.add('hidden');
+    return;
+  }
+
+  // Close phone dropdown on outside click
+  const pdd = document.getElementById('phone-country-dropdown');
+  if (pdd && !pdd.classList.contains('hidden')) {
+    pdd.classList.add('hidden');
   }
 
   // Hobby buttons
