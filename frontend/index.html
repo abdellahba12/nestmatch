@@ -267,8 +267,19 @@
     <!-- Main App (authenticated) -->
     <div id="main-app" class="hidden">
 
+      <!-- Verification alert banner (like Stripe) -->
+      <div id="verify-banner" class="verify-banner hidden">
+        <div class="verify-banner-content">
+          <span class="verify-banner-bold" data-i18n="banner_title">Perfil no verificado</span>
+          <span class="verify-banner-text" data-i18n="banner_desc">Verifica tu identidad para desbloquear todas las funcionalidades de tu cuenta.</span>
+        </div>
+        <button class="verify-banner-link" onclick="App.goToVerify()" data-i18n="banner_action">Verificar perfil</button>
+      </div>
+
+      <div class="main-app-body">
       <!-- Sidebar / Bottom navigation (adapts via CSS) -->
       <nav class="bottom-nav" id="main-nav">
+        <div class="nav-section-label">Principal</div>
         <button class="nav-item active" data-tab="discover" onclick="App.switchTab('discover')">
           <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><span class="nav-label" data-i18n="nav_discover">Descubrir</span>
         </button>
@@ -280,6 +291,7 @@
           <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label" data-i18n="nav_messages">Mensajes</span>
           <span class="nav-badge hidden" id="chat-badge">0</span>
         </button>
+        <div class="nav-section-label">Cuenta</div>
         <button class="nav-item" data-tab="profile" onclick="App.switchTab('profile')">
           <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label" data-i18n="nav_profile">Perfil</span>
         </button>
@@ -294,6 +306,7 @@
 
       <!-- Content area (flex: 1 on desktop) -->
       <div class="app-content-area">
+
 
         <!-- ══ DISCOVER TAB ══ -->
         <div id="tab-discover" class="tab-content active">
@@ -579,17 +592,18 @@
         </div>
 
       </div><!-- /app-content-area -->
+      </div><!-- /main-app-body -->
     </div><!-- /main-app -->
   </div>
 
   <script src="https://cdn.socket.io/4.6.2/socket.io.min.js"></script>
-  <script src="/js/i18n.js?v=7"></script>
-  <script src="/js/api.js?v=7"></script>
-  <script src="/js/zonemap.js?v=7"></script>
-  <script src="/js/app.js?v=7"></script>
-  <script src="/js/discover.js?v=7"></script>
-  <script src="/js/chat.js?v=7"></script>
-  <script src="/js/profile.js?v=7"></script>
-  <script src="/js/payments.js?v=7"></script>
+  <script src="/js/i18n.js?v=8"></script>
+  <script src="/js/api.js?v=8"></script>
+  <script src="/js/zonemap.js?v=8"></script>
+  <script src="/js/app.js?v=8"></script>
+  <script src="/js/discover.js?v=8"></script>
+  <script src="/js/chat.js?v=8"></script>
+  <script src="/js/profile.js?v=8"></script>
+  <script src="/js/payments.js?v=8"></script>
 </body>
 </html>

@@ -94,7 +94,26 @@ const App = {
     requestAnimationFrame(() => {
       this.switchTab('discover');
       this.initSocket();
+      this.updateVerifyBanner();
     });
+  },
+
+  updateVerifyBanner() {
+    const banner = document.getElementById('verify-banner');
+    if (!banner) return;
+    if (currentUser && !currentUser.is_verified && currentUser.verification_status !== 'pending') {
+      banner.classList.remove('hidden');
+    } else {
+      banner.classList.add('hidden');
+    }
+  },
+
+  goToVerify() {
+    this.switchTab('profile');
+    setTimeout(() => {
+      const section = document.getElementById('verify-section');
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
   },
 
   showPage(page) {
@@ -111,6 +130,7 @@ const App = {
     try {
       currentUser = await API.getMe();
       this.showMainApp();
+      this.updateVerifyBanner();
     } catch (e) {
       localStorage.removeItem('pm_token');
       this.showAuthContainer();
