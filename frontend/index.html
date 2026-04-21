@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>NestMatch — Tu compañero de piso ideal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css?v=8">
 </head>
 <body>
@@ -46,6 +46,11 @@
           <!-- Nav on top -->
           <nav class="l-nav">
             <div class="l-nav-logo">NestMatch</div>
+            <div class="l-nav-center-links">
+              <a href="#how-section" class="l-nav-link" data-i18n="nav_how">Cómo funciona</a>
+              <a href="#cities-section" class="l-nav-link" data-i18n="nav_cities">Ciudades</a>
+              <a href="#testimonials-section" class="l-nav-link" data-i18n="nav_testimonials">Opiniones</a>
+            </div>
             <div class="l-nav-links">
               <div class="lang-selector" id="lang-selector">
                 <button class="lang-btn" id="lang-current" type="button">
@@ -61,18 +66,58 @@
                 </div>
               </div>
               <button class="l-nav-btn-ghost" onclick="App.showPage('login')" data-i18n="nav_login">Iniciar sesión</button>
+              <button class="l-nav-btn-solid" onclick="App.showPage('register')" data-i18n="nav_register">Registrarse</button>
             </div>
           </nav>
 
           <!-- Centered hero text -->
           <div class="l-hero-content">
-            <h1 class="l-hero-title" data-i18n="hero_title"><span class="hero-find">Encuentra tu</span><br><em>nido perfecto</em></h1>
-            <button class="l-cta-main" onclick="App.showPage('register')" data-i18n="hero_cta">Crear cuenta</button>
+            <h1 class="l-hero-title" data-i18n="hero_title"><span class="hero-find">Encuentra tu</span><br><em>compañero de piso ideal</em></h1>
+            <p class="l-hero-subtitle" data-i18n="hero_subtitle">Conecta con personas compatibles en tu ciudad. Verificados, seguros y a tu medida.</p>
+            <!-- Search bar -->
+            <div class="l-hero-search">
+              <div class="l-search-field">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <input type="text" placeholder="¿En qué ciudad buscas?" data-i18n-ph="hero_search_ph" id="hero-city-search">
+              </div>
+              <button class="l-search-btn" onclick="App.showPage('register')" data-i18n="hero_search_btn">Buscar</button>
+            </div>
+            <div class="l-hero-trust">
+              <span class="l-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Perfiles verificados</span>
+              <span class="l-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 100% gratis</span>
+              <span class="l-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> +10.000 usuarios</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- CITIES -->
+        <section class="l-cities" id="cities-section">
+          <h2 class="l-section-title" data-i18n="cities_title">Ciudades populares</h2>
+          <p class="l-section-sub" data-i18n="cities_sub">Encuentra compañeros de piso en las principales ciudades</p>
+          <div class="l-cities-grid">
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Madrid</h3><span>2.400+ usuarios</span></div>
+            </div>
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Barcelona</h3><span>3.100+ usuarios</span></div>
+            </div>
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1599922407934-232a0a8d22b8?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Valencia</h3><span>1.800+ usuarios</span></div>
+            </div>
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1515443961218-a51367888e4b?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Sevilla</h3><span>950+ usuarios</span></div>
+            </div>
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1564399579730-5. d?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Málaga</h3><span>720+ usuarios</span></div>
+            </div>
+            <div class="l-city-card" style="background-image: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=400&h=300&fit=crop')">
+              <div class="l-city-info"><h3>Bilbao</h3><span>580+ usuarios</span></div>
+            </div>
           </div>
         </section>
 
         <!-- HOW IT WORKS -->
-        <section class="l-how">
+        <section class="l-how" id="how-section">
           <h2 class="l-section-title" data-i18n="how_title">¿Cómo funciona?</h2>
           <p class="l-section-sub" data-i18n="how_sub">Tres pasos para encontrar a tu compañero ideal</p>
           <div class="l-steps">
@@ -117,12 +162,52 @@
         </section>
 
         <!-- TESTIMONIALS -->
-        <section class="l-testimonials">
-          <h2 class="l-section-title" data-i18n="test_title">Ya encontraron su nido</h2>
+        <section class="l-testimonials" id="testimonials-section">
+          <h2 class="l-section-title" data-i18n="test_title">Lo que dicen nuestros usuarios</h2>
+          <p class="l-section-sub" data-i18n="test_sub">Miles de personas ya encontraron su compañero ideal</p>
           <div class="l-testimonial-grid">
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#f97316,#ec4899)">L</div><p data-i18n="test_1">"Encontré a mi compañera de piso en menos de una semana. ¡Ahora somos amigas!"</p><strong>Laura, 24 · Barcelona</strong></div>
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#6366f1,#06b6d4)">M</div><p data-i18n="test_2">"El filtro por zonas es genial. Solo vi gente que buscaba en mi barrio."</p><strong>Marc, 29 · Madrid</strong></div>
-            <div class="l-testimonial"><div class="l-t-avatar" style="background:linear-gradient(135deg,#22c55e,#fbbf24)">S</div><p data-i18n="test_3">"Muy fácil de usar. Perfecto para cuando llegas nueva a una ciudad."</p><strong>Sara, 26 · Valencia</strong></div>
+            <div class="l-testimonial">
+              <div class="l-t-stars">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <p data-i18n="test_1">"Encontré a mi compañera de piso en menos de una semana. ¡Ahora somos amigas!"</p>
+              <div class="l-t-author">
+                <div class="l-t-avatar" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6)">L</div>
+                <div><strong>Laura García</strong><span>24 años · Barcelona</span></div>
+              </div>
+            </div>
+            <div class="l-testimonial">
+              <div class="l-t-stars">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <p data-i18n="test_2">"El filtro por zonas es genial. Solo vi gente que buscaba en mi barrio."</p>
+              <div class="l-t-author">
+                <div class="l-t-avatar" style="background:linear-gradient(135deg,#10B981,#3B82F6)">M</div>
+                <div><strong>Marc Fernández</strong><span>29 años · Madrid</span></div>
+              </div>
+            </div>
+            <div class="l-testimonial">
+              <div class="l-t-stars">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <p data-i18n="test_3">"Muy fácil de usar. Perfecto para cuando llegas nueva a una ciudad."</p>
+              <div class="l-t-author">
+                <div class="l-t-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">S</div>
+                <div><strong>Sara Martín</strong><span>26 años · Valencia</span></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -137,8 +222,36 @@
 
         <!-- Footer -->
         <footer class="l-footer">
-          <div class="l-footer-logo">NestMatch</div>
-          <p data-i18n="footer_text">© 2025 NestMatch · Tu compañero de piso ideal</p>
+          <div class="l-footer-inner">
+            <div class="l-footer-brand">
+              <div class="l-footer-logo">NestMatch</div>
+              <p class="l-footer-desc">La plataforma líder para encontrar compañeros de piso compatibles en España.</p>
+            </div>
+            <div class="l-footer-col">
+              <h4>Producto</h4>
+              <a href="#how-section">Cómo funciona</a>
+              <a href="#cities-section">Ciudades</a>
+              <a href="#" onclick="App.showPage('register')">Registrarse</a>
+              <a href="#" onclick="App.showPage('login')">Iniciar sesión</a>
+            </div>
+            <div class="l-footer-col">
+              <h4>Ciudades</h4>
+              <a href="#">Madrid</a>
+              <a href="#">Barcelona</a>
+              <a href="#">Valencia</a>
+              <a href="#">Sevilla</a>
+            </div>
+            <div class="l-footer-col">
+              <h4>Legal</h4>
+              <a href="#">Términos de uso</a>
+              <a href="#">Política de privacidad</a>
+              <a href="#">Cookies</a>
+              <a href="#">Contacto</a>
+            </div>
+          </div>
+          <div class="l-footer-bottom">
+            <p>© 2025 NestMatch. Todos los derechos reservados.</p>
+          </div>
         </footer>
       </div>
       <!-- Login -->
