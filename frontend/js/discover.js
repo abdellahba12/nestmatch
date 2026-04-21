@@ -231,40 +231,61 @@ const Discover = {
   },
 
   showProfileDetail(profile) {
-    const overlay = document.getElementById('profile-detail-overlay');
-    if (!overlay) return;
+    const page = document.getElementById('profile-detail-page');
+    if (!page) return;
 
-    // Photo
-    const photoEl = document.getElementById('pdm-photo');
-    const mainPhoto = profile.main_photo || (profile.photos && profile.photos[0]);
+    // --- Gallery ---
+    const mainPhotoEl = document.getElementById('pdp-main-photo');
+    const thumbsEl = document.getElementById('pdp-thumbs');
+    const photos = profile.photos || [];
+    const mainPhoto = profile.main_photo || (photos.length > 0 ? photos[0] : null);
+
     if (mainPhoto) {
-      photoEl.style.backgroundImage = `url(${mainPhoto})`;
-      photoEl.classList.remove('pdm-photo-placeholder');
-      photoEl.textContent = '';
+      mainPhotoEl.style.backgroundImage = `url(${mainPhoto})`;
+      mainPhotoEl.textContent = '';
     } else {
-      photoEl.style.backgroundImage = '';
-      photoEl.style.background = `linear-gradient(135deg, ${this.randomGradient()})`;
-      photoEl.classList.add('pdm-photo-placeholder');
-      photoEl.textContent = (profile.name || '?')[0].toUpperCase();
+      mainPhotoEl.style.backgroundImage = '';
+      mainPhotoEl.style.background = `linear-gradient(135deg, ${this.randomGradient()})`;
+      mainPhotoEl.textContent = (profile.name || '?')[0].toUpperCase();
     }
 
-    // Name + age
-    const nameEl = document.getElementById('pdm-name');
-    nameEl.textContent = `${profile.name || ''}${profile.age ? ', ' + profile.age : ''}`;
+    // Thumbnails
+    if (photos.length > 1) {
+      thumbsEl.innerHTML = photos.slice(0, 6).map((url, i) =>
+        `<div class="pdp-thumb${i === 0 ? ' active' : ''}" style="background-image:url(${url})" onclick="Discover.switchPhoto('${url}', this)"></div>`
+      ).join('');
+      thumbsEl.style.display = '';
+    } else {
+      thumbsEl.innerHTML = '';
+      thumbsEl.style.display = 'none';
+    }
 
-    // Verified badge
-    const verifiedEl = document.getElementById('pdm-verified');
+    // --- Name + age ---
+    document.getElementById('pdp-name').textContent =
+      `${profile.name || ''}${profile.age ? ', ' + profile.age : ''}`;
+
+    // --- Verified ---
+    const verifiedEl = document.getElementById('pdp-verified');
     if (profile.is_verified) verifiedEl.classList.remove('hidden');
     else verifiedEl.classList.add('hidden');
 
-    // Subtitle (profession + city)
-    const subtitleEl = document.getElementById('pdm-subtitle');
-    const parts = [profile.profession, profile.city].filter(Boolean);
-    subtitleEl.textContent = parts.join(' · ');
+    // --- Location ---
+    const locParts = [profile.neighborhood, profile.city].filter(Boolean);
+    document.getElementById('pdp-location').textContent = locParts.join(', ') || '';
 
-    // Bio
-    const bioSection = document.getElementById('pdm-bio-section');
-    const bioEl = document.getElementById('pdm-bio');
+    // --- Price / Budget ---
+    const priceEl = document.getElementById('pdp-price');
+    if (profile.budget_max) {
+      priceEl.innerHTML = `€${profile.budget_max} <small>${t('pdp_per_month')}</small>`;
+    } else if (profile.budget_min) {
+      priceEl.innerHTML = `€${profile.budget_min}+ <small>${t('pdp_per_month')}</small>`;
+    } else {
+      priceEl.innerHTML = '';
+    }
+
+    // --- Bio ---
+    const bioSection = document.getElementById('pdp-bio-section');
+    const bioEl = document.getElementById('pdp-bio');
     if (profile.bio) {
       bioEl.textContent = profile.bio;
       bioSection.classList.remove('hidden');
@@ -272,18 +293,79 @@ const Discover = {
       bioSection.classList.add('hidden');
     }
 
-    // Hobbies
-    const hobbiesSection = document.getElementById('pdm-hobbies-section');
-    const hobbiesEl = document.getElementById('pdm-hobbies');
+    // --- Traits grid ---
+    const traitsEl = document.getElementById('pdp-traits');
+    const ratingBar = (val, max = 10) => {
+      let html = '<div class="pdp-bar">';
+      for (let i = 1; i <= max; i++) html += `<span class="${i <= val ? 'filled' : ''}"></span>`;
+      return html + '</div>';
+    };
+
+    const scheduleLabel = profile.schedule === 'nocturno' ? t('pdp_schedule_night') : t('pdp_schedule_day');
+    const personalityKey = profile.personality ? `pdp_personality_${profile.personality}` : null;
+    const personalityLabel = personalityKey ? t(personalityKey) : '—';
+    const petsLabel = profile.has_pets ? t('pdp_pets_yes') : t('pdp_pets_no');
+    const smokerLabel = profile.is_smoker ? t('pdp_smoker_yes') : t('pdp_smoker_no');
+
+    traitsEl.innerHTML = `
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon blue">🧹</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_cleanliness')}</div>
+          <div class="pdp-trait-value">${profile.cleanliness || 5}/10</div>
+          ${ratingBar(profile.cleanliness || 5)}
+        </div>
+      </div>
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon amber">🍳</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_cooking')}</div>
+          <div class="pdp-trait-value">${profile.cooking || 5}/10</div>
+          ${ratingBar(profile.cooking || 5)}
+        </div>
+      </div>
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon violet">${profile.schedule === 'nocturno' ? '🌙' : '☀️'}</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_schedule')}</div>
+          <div class="pdp-trait-value">${scheduleLabel}</div>
+        </div>
+      </div>
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon rose">✨</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_personality')}</div>
+          <div class="pdp-trait-value">${personalityLabel}</div>
+        </div>
+      </div>
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon green">🐾</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_pets')}</div>
+          <div class="pdp-trait-value">${petsLabel}</div>
+        </div>
+      </div>
+      <div class="pdp-trait">
+        <div class="pdp-trait-icon sky">🚬</div>
+        <div>
+          <div class="pdp-trait-label">${t('pdp_smoke')}</div>
+          <div class="pdp-trait-value">${smokerLabel}</div>
+        </div>
+      </div>
+    `;
+
+    // --- Hobbies ---
+    const hobbiesSection = document.getElementById('pdp-hobbies-section');
+    const hobbiesEl = document.getElementById('pdp-hobbies');
     if (profile.hobbies && profile.hobbies.length > 0) {
-      hobbiesEl.innerHTML = profile.hobbies.map(h => `<span class="pdm-tag">${h}</span>`).join('');
+      hobbiesEl.innerHTML = profile.hobbies.map(h => `<span class="pdp-tag">${h}</span>`).join('');
       hobbiesSection.classList.remove('hidden');
     } else {
       hobbiesSection.classList.add('hidden');
     }
 
-    // Search grid (budget, duration, zones, room type)
-    const gridEl = document.getElementById('pdm-grid');
+    // --- Room search specs ---
+    const specsEl = document.getElementById('pdp-specs');
     const budget = profile.budget_min || profile.budget_max
       ? `€${profile.budget_min || '?'} – €${profile.budget_max || '?'}`
       : t('prof_not_specified');
@@ -293,45 +375,39 @@ const Discover = {
     const zones = (profile.preferred_zones || []).join(', ') || t('prof_no_zones');
     const room = profile.room_type === 'private' ? t('prof_room_private') : t('prof_room_shared');
 
-    gridEl.innerHTML = `
-      <div class="pdm-grid-item">
-        <div class="pdm-grid-label">${t('prof_budget')}</div>
-        <div class="pdm-grid-value">${budget}</div>
+    specsEl.innerHTML = `
+      <div class="pdp-spec">
+        <div class="pdp-spec-label">${t('prof_budget')}</div>
+        <div class="pdp-spec-value">${budget}</div>
       </div>
-      <div class="pdm-grid-item">
-        <div class="pdm-grid-label">${t('prof_duration')}</div>
-        <div class="pdm-grid-value">${duration}</div>
+      <div class="pdp-spec">
+        <div class="pdp-spec-label">${t('prof_duration')}</div>
+        <div class="pdp-spec-value">${duration}</div>
       </div>
-      <div class="pdm-grid-item">
-        <div class="pdm-grid-label">${t('prof_zones')}</div>
-        <div class="pdm-grid-value" style="font-size:13px">${zones}</div>
+      <div class="pdp-spec">
+        <div class="pdp-spec-label">${t('prof_zones')}</div>
+        <div class="pdp-spec-value">${zones}</div>
       </div>
-      <div class="pdm-grid-item">
-        <div class="pdm-grid-label">${t('prof_room')}</div>
-        <div class="pdm-grid-value">${room}</div>
+      <div class="pdp-spec">
+        <div class="pdp-spec-label">${t('prof_room')}</div>
+        <div class="pdp-spec-value">${room}</div>
       </div>
     `;
 
-    // Lifestyle flags
-    const flagsSection = document.getElementById('pdm-lifestyle-section');
-    const flagsEl = document.getElementById('pdm-flags');
-    const flags = [];
-    if (profile.is_smoker) flags.push(t('prof_smoker'));
-    if (profile.has_pets) flags.push(t('prof_has_pets'));
-    if (flags.length > 0) {
-      flagsEl.innerHTML = flags.map(f => `<span class="pdm-flag">${f}</span>`).join('');
-      flagsSection.classList.remove('hidden');
-    } else {
-      flagsSection.classList.add('hidden');
-    }
-
-    overlay.classList.add('visible');
+    // Show page
+    page.classList.remove('hidden');
+    page.scrollTop = 0;
   },
 
-  closeProfileDetail(event) {
-    if (event && event.target !== event.currentTarget && !event.target.closest('.pdm-close')) return;
-    const overlay = document.getElementById('profile-detail-overlay');
-    if (overlay) overlay.classList.remove('visible');
+  switchPhoto(url, thumbEl) {
+    document.getElementById('pdp-main-photo').style.backgroundImage = `url(${url})`;
+    document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+    if (thumbEl) thumbEl.classList.add('active');
+  },
+
+  closeProfileDetail() {
+    const page = document.getElementById('profile-detail-page');
+    if (page) page.classList.add('hidden');
   },
 
   animateSwipe(card, direction) {

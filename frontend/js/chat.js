@@ -25,10 +25,10 @@ const Chat = {
           id: m.other_user_id, name: m.other_user_name, city: m.other_user_city, avatar_url: m.other_user_avatar
         }).replace(/"/g, '&quot;')})">
           <div class="match-card-avatar" style="${m.other_user_avatar ? `background-image:url(${m.other_user_avatar});` : `background:linear-gradient(135deg,#f8a4b8,#c084fc)`}">
-            ${!m.other_user_avatar ? m.other_user_name[0].toUpperCase() : ''}
+            ${!m.other_user_avatar ? (m.other_user_name || '?')[0].toUpperCase() : ''}
           </div>
           <div class="match-card-info">
-            <div class="match-card-name">${m.other_user_name}</div>
+            <div class="match-card-name">${m.other_user_name || 'Usuario'}</div>
             <div class="match-card-preview">${m.last_message || t('chat_start')}</div>
           </div>
           <div class="match-card-meta">

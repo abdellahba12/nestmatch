@@ -151,5 +151,11 @@ DO $$ BEGIN
   ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
   ALTER TABLE users ALTER COLUMN age DROP NOT NULL;
   ALTER TABLE users ALTER COLUMN city DROP DEFAULT;
+  -- Ensure unique match_id on conversations for data integrity
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'conversations_match_id_key'
+  ) THEN
+    ALTER TABLE conversations ADD CONSTRAINT conversations_match_id_key UNIQUE (match_id);
+  END IF;
 EXCEPTION WHEN OTHERS THEN NULL;
 END $$;

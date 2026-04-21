@@ -16,7 +16,7 @@ router.get('/discover', authenticate, async (req, res) => {
     const seenIds = seenResult.rows.map(r => r.swiped_id);
     seenIds.push(userId); // exclude self
 
-    let conditions = ['u.id != ALL($1)'];
+    let conditions = ['u.id != ALL($1)', 'u.name IS NOT NULL'];
     let params = [seenIds];
     let paramIndex = 2;
 
@@ -51,6 +51,7 @@ router.get('/discover', authenticate, async (req, res) => {
     const result = await query(
       `SELECT u.id, u.name, u.age, u.gender, u.bio, u.city, u.neighborhood,
               u.profession, u.hobbies, u.languages, u.is_smoker, u.has_pets, u.avatar_url,
+              u.cleanliness, u.cooking, u.schedule, u.personality, u.is_verified,
               rp.budget_min, rp.budget_max, rp.preferred_zones, rp.stay_duration, rp.room_type,
               (SELECT url FROM user_photos WHERE user_id = u.id AND is_main = TRUE LIMIT 1) as main_photo,
               (SELECT json_agg(url) FROM user_photos WHERE user_id = u.id LIMIT 5) as photos
@@ -126,14 +127,17 @@ router.post('/swipe', authenticate, checkSwipeLimit, async (req, res) => {
 
     // Check for mutual like
     if (direction === 'like') {
+      console.log(`[Match] Checking mutual like: target=${target_id} → user=${userId}`);
       const mutualCheck = await query(
         'SELECT id FROM swipes WHERE swiper_id = $1 AND swiped_id = $2 AND direction = $3',
         [target_id, userId, 'like']
       );
+      console.log(`[Match] Mutual check result: ${mutualCheck.rows.length} rows`);
 
       if (mutualCheck.rows.length > 0) {
         // Create match (ensure consistent ordering)
         const [u1, u2] = [userId, target_id].sort();
+        console.log(`[Match] Creating match: u1=${u1}, u2=${u2}`);
         const matchResult = await query(
           `INSERT INTO matches (user1_id, user2_id) VALUES ($1, $2)
            ON CONFLICT (user1_id, user2_id) DO UPDATE SET created_at = NOW()
@@ -141,20 +145,24 @@ router.post('/swipe', authenticate, checkSwipeLimit, async (req, res) => {
           [u1, u2]
         );
         matchId = matchResult.rows[0].id;
+        console.log(`[Match] Match created: id=${matchId}`);
 
         // Create conversation
-        const convResult = await query(
-          `INSERT INTO conversations (match_id) VALUES ($1)
-           ON CONFLICT DO NOTHING
-           RETURNING id`,
-          [matchId]
-        );
-
-        if (!convResult.rows.length) {
+        try {
           const existConv = await query('SELECT id FROM conversations WHERE match_id = $1', [matchId]);
-          conversationId = existConv.rows[0]?.id;
-        } else {
-          conversationId = convResult.rows[0].id;
+          if (existConv.rows.length > 0) {
+            conversationId = existConv.rows[0].id;
+          } else {
+            const convResult = await query(
+              'INSERT INTO conversations (match_id) VALUES ($1) RETURNING id',
+              [matchId]
+            );
+            conversationId = convResult.rows[0].id;
+          }
+          console.log(`[Match] Conversation: id=${conversationId}`);
+        } catch (convErr) {
+          console.error('[Match] Conversation creation error:', convErr);
+          // Match is still valid even if conversation fails
         }
         matched = true;
       }
@@ -189,9 +197,9 @@ router.get('/matches', authenticate, async (req, res) => {
       `SELECT m.id as match_id, m.created_at as matched_at,
               c.id as conversation_id,
               CASE WHEN m.user1_id = $1 THEN u2.id ELSE u1.id END as other_user_id,
-              CASE WHEN m.user1_id = $1 THEN u2.name ELSE u1.name END as other_user_name,
+              CASE WHEN m.user1_id = $1 THEN COALESCE(u2.name, 'Usuario') ELSE COALESCE(u1.name, 'Usuario') END as other_user_name,
               CASE WHEN m.user1_id = $1 THEN u2.avatar_url ELSE u1.avatar_url END as other_user_avatar,
-              CASE WHEN m.user1_id = $1 THEN u2.city ELSE u1.city END as other_user_city,
+              CASE WHEN m.user1_id = $1 THEN COALESCE(u2.city, '') ELSE COALESCE(u1.city, '') END as other_user_city,
               (SELECT content FROM messages WHERE conversation_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message,
               (SELECT COUNT(*) FROM messages WHERE conversation_id = c.id AND sender_id != $1 AND is_read = FALSE) as unread_count
        FROM matches m
@@ -216,6 +224,7 @@ router.get('/:id', authenticate, async (req, res) => {
     const result = await query(
       `SELECT u.id, u.name, u.age, u.gender, u.bio, u.city, u.neighborhood,
               u.profession, u.hobbies, u.languages, u.is_smoker, u.has_pets, u.avatar_url,
+              u.cleanliness, u.cooking, u.schedule, u.personality, u.is_verified,
               u.created_at,
               rp.budget_min, rp.budget_max, rp.preferred_zones, rp.stay_duration, rp.room_type,
               (SELECT json_agg(url ORDER BY is_main DESC) FROM user_photos WHERE user_id = u.id) as photos
