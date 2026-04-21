@@ -68,6 +68,9 @@ const API = (() => {
     },
     sendMessage: (convId, content) => request('POST', `/conversations/${convId}/messages`, { content }),
 
+    // Account
+    delete: (path) => request('DELETE', path),
+
     // Payments
     createCheckout: () => request('POST', '/payments/create-checkout'),
     openPortal: () => request('POST', '/payments/portal'),

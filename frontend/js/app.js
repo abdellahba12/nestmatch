@@ -189,6 +189,18 @@ const App = {
     this.showPage('landing');
   },
 
+  async deleteAccount() {
+    const confirmed = confirm('¿Estás seguro de que quieres borrar tu cuenta? Esta acción no se puede deshacer.');
+    if (!confirmed) return;
+    try {
+      await API.delete('/users/me');
+      this.logout();
+    } catch (err) {
+      console.error('[App] Delete account error:', err);
+      alert('Error al borrar la cuenta. Inténtalo de nuevo.');
+    }
+  },
+
   goToChat(conversationId) {
     UI.closeMatchPopup();
     this.switchTab('chat');

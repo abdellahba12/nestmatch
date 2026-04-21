@@ -2341,6 +2341,19 @@ html, body {
 
 .btn-logout:hover { border-color: var(--primary); color: var(--primary); }
 
+.btn-delete-account {
+  background: transparent;
+  border: 1.5px solid #FCA5A5;
+  color: #DC2626;
+  padding: 12px 20px;
+  border-radius: 99px;
+  font-size: 15px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-delete-account:hover { background: #FEF2F2; border-color: #DC2626; }
+
 .edit-profile-btn {
   background: var(--primary-light);
   color: var(--primary);

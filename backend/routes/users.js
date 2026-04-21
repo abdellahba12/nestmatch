@@ -236,4 +236,15 @@ router.get('/:id', authenticate, async (req, res) => {
   }
 });
 
+// Delete account
+router.delete('/me', authenticate, async (req, res) => {
+  try {
+    await query('DELETE FROM users WHERE id = $1', [req.user.id]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[DELETE /me]', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
