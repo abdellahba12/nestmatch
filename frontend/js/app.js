@@ -143,12 +143,118 @@ const App = {
   async loadUser() {
     try {
       currentUser = await API.getMe();
-      this.showMainApp();
-      this.updateVerifyBanner();
+      // Check if profile is incomplete (no name = just registered)
+      if (!currentUser.name || !currentUser.age || !currentUser.city) {
+        this.showCompleteProfile();
+      } else {
+        this.showMainApp();
+        this.updateVerifyBanner();
+      }
     } catch (e) {
       localStorage.removeItem('pm_token');
       this.showAuthContainer();
       this.showPage('landing');
+    }
+  },
+
+  showCompleteProfile() {
+    document.getElementById('auth-container').classList.add('hidden');
+    document.getElementById('main-app').classList.add('hidden');
+    document.getElementById('complete-profile').classList.remove('hidden');
+    this.updateCpProgress();
+  },
+
+  updateCpProgress() {
+    const fields = ['cp-name', 'cp-age', 'cp-city'];
+    let filled = 0;
+    fields.forEach(id => {
+      if (document.getElementById(id)?.value?.trim()) filled++;
+    });
+    if (document.querySelector('#cp-schedule .cp-toggle.active')) filled++;
+    if (document.querySelector('#cp-personality .cp-toggle.active')) filled++;
+    if (document.querySelector('#cp-pets .cp-toggle.active')) filled++;
+    const pct = Math.round((filled / 6) * 100);
+    const bar = document.getElementById('cp-progress-bar');
+    if (bar) bar.style.width = pct + '%';
+  },
+
+  cpToggle(btn) {
+    const group = btn.parentElement;
+    group.querySelectorAll('.cp-toggle').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    this.updateCpProgress();
+  },
+
+  previewPhoto(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.getElementById('cp-photo-preview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  },
+
+  async submitCompleteProfile() {
+    const name = document.getElementById('cp-name').value.trim();
+    const age = parseInt(document.getElementById('cp-age').value);
+    const city = document.getElementById('cp-city').value.trim();
+    const bio = document.getElementById('cp-bio').value.trim();
+    const cleanliness = parseInt(document.getElementById('cp-clean').value);
+    const cooking = parseInt(document.getElementById('cp-cooking').value);
+    const scheduleEl = document.querySelector('#cp-schedule .cp-toggle.active');
+    const personalityEl = document.querySelector('#cp-personality .cp-toggle.active');
+    const petsEl = document.querySelector('#cp-pets .cp-toggle.active');
+
+    const errEl = document.getElementById('cp-error');
+
+    // Validation
+    if (!name) { errEl.textContent = 'Introduce tu nombre'; errEl.classList.remove('hidden'); return; }
+    if (!age || age < 18) { errEl.textContent = 'Introduce una edad válida (18+)'; errEl.classList.remove('hidden'); return; }
+    if (!city) { errEl.textContent = 'Introduce tu ciudad'; errEl.classList.remove('hidden'); return; }
+    if (!scheduleEl) { errEl.textContent = 'Selecciona tu horario'; errEl.classList.remove('hidden'); return; }
+    if (!personalityEl) { errEl.textContent = 'Selecciona tu personalidad'; errEl.classList.remove('hidden'); return; }
+    if (!petsEl) { errEl.textContent = 'Indica si tienes mascota'; errEl.classList.remove('hidden'); return; }
+
+    errEl.classList.add('hidden');
+
+    const btn = document.getElementById('cp-submit');
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    try {
+      await API.updateMe({
+        name,
+        age,
+        city,
+        bio: bio || null,
+        cleanliness,
+        cooking,
+        schedule: scheduleEl.dataset.val,
+        personality: personalityEl.dataset.val,
+        has_pets: petsEl.dataset.val === 'si',
+      });
+
+      // Upload photo if selected
+      const photoInput = document.getElementById('cp-photo-input');
+      if (photoInput.files && photoInput.files[0]) {
+        const formData = new FormData();
+        formData.append('photo', photoInput.files[0]);
+        formData.append('is_main', 'true');
+        try { await API.uploadPhoto(formData); } catch (e) { console.warn('[CP] Photo upload failed:', e); }
+      }
+
+      // Reload user and show app
+      currentUser = await API.getMe();
+      document.getElementById('complete-profile').classList.add('hidden');
+      this.showMainApp();
+      this.updateVerifyBanner();
+    } catch (err) {
+      errEl.textContent = err.error || 'Error al guardar. Inténtalo de nuevo.';
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Guardar y continuar';
     }
   },
 
@@ -694,4 +800,11 @@ function handleGoogleCredentialResponse(response) {
 }
 
 // Init on DOM ready
-document.addEventListener('DOMContentLoaded', () => App.init());
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+  // Update complete profile progress bar on input
+  ['cp-name', 'cp-age', 'cp-city'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => App.updateCpProgress());
+  });
+});

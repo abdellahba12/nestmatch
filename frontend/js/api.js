@@ -68,6 +68,9 @@ const API = (() => {
     },
     sendMessage: (convId, content) => request('POST', `/conversations/${convId}/messages`, { content }),
 
+    // Photos
+    uploadPhoto: (formData) => upload('/auth/upload-photo', formData),
+
     // Account
     delete: (path) => request('DELETE', path),
 

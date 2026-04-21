@@ -415,6 +415,114 @@
       </div>
     </div>
 
+    <!-- Complete Profile (after registration) -->
+    <div id="complete-profile" class="hidden">
+      <div class="complete-profile-page">
+        <div class="cp-header">
+          <h2 data-i18n="cp_title">Completa tu perfil</h2>
+          <p class="cp-sub" data-i18n="cp_sub">Cuéntanos un poco más sobre ti para encontrar compañeros compatibles</p>
+        </div>
+        <div class="cp-progress">
+          <div class="cp-progress-bar" id="cp-progress-bar" style="width: 0%"></div>
+        </div>
+        <form id="complete-profile-form" class="cp-form">
+          <!-- Nombre y apellidos -->
+          <div class="form-group">
+            <label data-i18n="cp_name">Nombre y apellidos *</label>
+            <input type="text" id="cp-name" placeholder="Tu nombre completo" required>
+          </div>
+
+          <!-- Edad -->
+          <div class="form-group">
+            <label data-i18n="cp_age">Edad *</label>
+            <input type="number" id="cp-age" min="18" max="99" placeholder="Ej: 24" required>
+          </div>
+
+          <!-- Ciudad -->
+          <div class="form-group">
+            <label data-i18n="cp_city">¿Dónde vives? *</label>
+            <input type="text" id="cp-city" placeholder="Ej: Barcelona" required>
+          </div>
+
+          <!-- Foto de perfil -->
+          <div class="form-group">
+            <label data-i18n="cp_photo">Foto de perfil</label>
+            <div class="cp-photo-upload" id="cp-photo-upload">
+              <div class="cp-photo-preview" id="cp-photo-preview">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+              </div>
+              <button type="button" class="cp-photo-btn" onclick="document.getElementById('cp-photo-input').click()" data-i18n="cp_photo_btn">Subir foto</button>
+              <input type="file" id="cp-photo-input" accept="image/*" class="hidden" onchange="App.previewPhoto(this)">
+            </div>
+          </div>
+
+          <!-- Bio -->
+          <div class="form-group">
+            <label data-i18n="cp_bio">Cuéntanos sobre ti <span class="label-hint">(opcional)</span></label>
+            <textarea id="cp-bio" rows="3" placeholder="¿Qué te gusta hacer? ¿A qué te dedicas?"></textarea>
+          </div>
+
+          <!-- Limpieza 1-10 -->
+          <div class="form-group">
+            <label data-i18n="cp_clean">Orden y limpieza *</label>
+            <div class="cp-slider-wrap">
+              <input type="range" id="cp-clean" min="1" max="10" value="5" class="cp-slider" oninput="document.getElementById('cp-clean-val').textContent=this.value">
+              <div class="cp-slider-labels">
+                <span>1 - Relajado</span>
+                <span id="cp-clean-val" class="cp-slider-value">5</span>
+                <span>10 - Impecable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Horario -->
+          <div class="form-group">
+            <label data-i18n="cp_schedule">Horario *</label>
+            <div class="cp-toggle-group" id="cp-schedule">
+              <button type="button" class="cp-toggle" data-val="diurno" onclick="App.cpToggle(this)">Diurno</button>
+              <button type="button" class="cp-toggle" data-val="nocturno" onclick="App.cpToggle(this)">Nocturno</button>
+            </div>
+          </div>
+
+          <!-- Personalidad -->
+          <div class="form-group">
+            <label data-i18n="cp_personality">¿Cómo eres? *</label>
+            <div class="cp-toggle-group" id="cp-personality">
+              <button type="button" class="cp-toggle" data-val="tranquila" onclick="App.cpToggle(this)">Tranquila</button>
+              <button type="button" class="cp-toggle" data-val="social" onclick="App.cpToggle(this)">Social</button>
+              <button type="button" class="cp-toggle" data-val="fiestera" onclick="App.cpToggle(this)">Fiestera</button>
+              <button type="button" class="cp-toggle" data-val="reservada" onclick="App.cpToggle(this)">Reservada</button>
+            </div>
+          </div>
+
+          <!-- Mascota -->
+          <div class="form-group">
+            <label data-i18n="cp_pets">¿Tienes mascota? *</label>
+            <div class="cp-toggle-group" id="cp-pets">
+              <button type="button" class="cp-toggle" data-val="si" onclick="App.cpToggle(this)">Sí</button>
+              <button type="button" class="cp-toggle" data-val="no" onclick="App.cpToggle(this)">No</button>
+            </div>
+          </div>
+
+          <!-- Cocinar 1-10 -->
+          <div class="form-group">
+            <label data-i18n="cp_cooking">¿Te gusta cocinar? *</label>
+            <div class="cp-slider-wrap">
+              <input type="range" id="cp-cooking" min="1" max="10" value="5" class="cp-slider" oninput="document.getElementById('cp-cooking-val').textContent=this.value">
+              <div class="cp-slider-labels">
+                <span>1 - Nada</span>
+                <span id="cp-cooking-val" class="cp-slider-value">5</span>
+                <span>10 - Chef</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="cp-error" class="form-error hidden"></div>
+          <button type="button" class="btn-submit" id="cp-submit" onclick="App.submitCompleteProfile()" data-i18n="cp_btn">Guardar y continuar</button>
+        </form>
+      </div>
+    </div>
+
     <!-- Main App (authenticated) -->
     <div id="main-app" class="hidden">
 

@@ -143,6 +143,10 @@ CREATE INDEX IF NOT EXISTS idx_verification_docs_user ON verification_documents(
 DO $$ BEGIN
   ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(30) UNIQUE;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_status VARCHAR(30) DEFAULT 'none';
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS cleanliness INTEGER DEFAULT 5;
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS cooking INTEGER DEFAULT 5;
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS schedule VARCHAR(30);
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS personality VARCHAR(30);
   -- Allow registration without name/age/city (simplified flow)
   ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
   ALTER TABLE users ALTER COLUMN age DROP NOT NULL;

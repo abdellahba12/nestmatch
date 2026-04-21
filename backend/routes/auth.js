@@ -262,6 +262,7 @@ router.get('/me', authenticate, async (req, res) => {
       `SELECT u.id, u.email, u.phone, u.name, u.age, u.gender, u.bio, u.city, u.neighborhood,
               u.profession, u.hobbies, u.languages, u.is_smoker, u.has_pets,
               u.avatar_url, u.is_verified, u.verification_status,
+              u.cleanliness, u.cooking, u.schedule, u.personality,
               u.subscription_status, u.subscription_expires_at,
               u.daily_swipes_count, u.daily_swipes_reset_at, u.created_at,
               rp.budget_min, rp.budget_max, rp.preferred_zones, rp.move_in_date,
@@ -300,6 +301,7 @@ router.put('/me', authenticate, async (req, res) => {
     const {
       name, age, gender, bio, city, neighborhood, profession,
       hobbies, languages, is_smoker, has_pets, avatar_url,
+      cleanliness, cooking, schedule, personality,
       budget_min, budget_max, preferred_zones, move_in_date,
       stay_duration, room_type, looking_for_gender, age_min, age_max,
       accepts_smokers, accepts_pets
@@ -311,10 +313,13 @@ router.put('/me', authenticate, async (req, res) => {
        profession = COALESCE($7, profession), hobbies = COALESCE($8, hobbies),
        languages = COALESCE($9, languages), is_smoker = COALESCE($10, is_smoker),
        has_pets = COALESCE($11, has_pets), avatar_url = COALESCE($12, avatar_url),
+       cleanliness = COALESCE($14, cleanliness), cooking = COALESCE($15, cooking),
+       schedule = COALESCE($16, schedule), personality = COALESCE($17, personality),
        updated_at = NOW()
        WHERE id = $13`,
       [name, age, gender, bio, city, neighborhood, profession,
-       hobbies, languages, is_smoker, has_pets, avatar_url, req.user.id]
+       hobbies, languages, is_smoker, has_pets, avatar_url, req.user.id,
+       cleanliness, cooking, schedule, personality]
     );
 
     // Upsert room preferences
@@ -392,6 +397,34 @@ router.get('/verification-status', authenticate, async (req, res) => {
     );
     res.json(result.rows[0] || { verification_status: 'none', is_verified: false });
   } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ── Upload profile photo ──
+router.post('/upload-photo', authenticate, upload.single('photo'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No photo provided' });
+
+    const base64 = req.file.buffer.toString('base64');
+    const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
+    const isMain = req.body.is_main === 'true';
+
+    if (isMain) {
+      // Update avatar_url on user
+      await query('UPDATE users SET avatar_url = $1, updated_at = NOW() WHERE id = $2', [dataUrl, req.user.id]);
+      // Mark existing photos as not main
+      await query('UPDATE user_photos SET is_main = false WHERE user_id = $1', [req.user.id]);
+    }
+
+    await query(
+      'INSERT INTO user_photos (user_id, url, is_main) VALUES ($1, $2, $3)',
+      [req.user.id, dataUrl, isMain]
+    );
+
+    res.json({ url: dataUrl });
+  } catch (error) {
+    console.error('Upload photo error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
