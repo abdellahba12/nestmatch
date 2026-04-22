@@ -106,15 +106,24 @@ router.post('/swipe', authenticate, checkSwipeLimit, async (req, res) => {
     }
 
     // Record swipe (upsert)
+    console.log(`[Swipe] ${userId} → ${target_id} (${direction})`);
     await query(
-      'INSERT INTO swipes (swiper_id, swiped_id, direction) VALUES ($1, $2, $3) ON CONFLICT (swiper_id, swiped_id) DO UPDATE SET direction = $3',
+      `INSERT INTO swipes (swiper_id, swiped_id, direction) VALUES ($1, $2, $3)
+       ON CONFLICT (swiper_id, swiped_id) DO UPDATE SET direction = EXCLUDED.direction`,
       [userId, target_id, direction]
     );
+
+    // Verify swipe was saved
+    const savedSwipe = await query(
+      'SELECT direction FROM swipes WHERE swiper_id = $1 AND swiped_id = $2',
+      [userId, target_id]
+    );
+    console.log(`[Swipe] Saved OK: ${savedSwipe.rows[0]?.direction}`);
 
     // Increment daily swipe count
     const today = new Date().toISOString().split('T')[0];
     await query(
-      `UPDATE users SET 
+      `UPDATE users SET
        daily_swipes_count = CASE WHEN daily_swipes_reset_at = $1 THEN daily_swipes_count + 1 ELSE 1 END,
        daily_swipes_reset_at = $1
        WHERE id = $2`,
@@ -127,21 +136,18 @@ router.post('/swipe', authenticate, checkSwipeLimit, async (req, res) => {
 
     // Check for mutual like
     if (direction === 'like') {
-      console.log(`[Match] User ${userId} liked ${target_id}`);
-
       // Check if target has already liked this user
       const mutualCheck = await query(
         'SELECT id FROM swipes WHERE swiper_id = $1 AND swiped_id = $2 AND direction = $3',
         [target_id, userId, 'like']
       );
-      console.log(`[Match] Mutual check (${target_id} → ${userId}): ${mutualCheck.rows.length} rows`);
 
-      // Debug: show all swipes between these two users
+      // Debug: show ALL swipes between these two users
       const debugSwipes = await query(
         'SELECT swiper_id, swiped_id, direction FROM swipes WHERE (swiper_id = $1 AND swiped_id = $2) OR (swiper_id = $2 AND swiped_id = $1)',
         [userId, target_id]
       );
-      console.log(`[Match] All swipes between users:`, debugSwipes.rows);
+      console.log(`[Match] Mutual check: ${mutualCheck.rows.length} rows | All swipes between:`, debugSwipes.rows);
 
       if (mutualCheck.rows.length > 0) {
         // Create match (ensure consistent ordering)
