@@ -107,10 +107,10 @@ router.post('/register', async (req, res) => {
     const defaultName = email ? email.split('@')[0] : phone;
 
     const userResult = await query(
-      `INSERT INTO users (email, phone, password_hash, name, is_verified)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO users (email, phone, password_hash, name, is_verified, verification_status)
+       VALUES ($1, $2, $3, $4, false, 'none')
        RETURNING id, email, phone, name, subscription_status`,
-      [email || null, phone || null, hash, defaultName, verified || false]
+      [email || null, phone || null, hash, defaultName]
     );
 
     const user = userResult.rows[0];
@@ -201,8 +201,8 @@ router.get('/google/callback', async (req, res) => {
       const hash = await bcrypt.hash(randomPass, 12);
 
       userResult = await query(
-        `INSERT INTO users (email, password_hash, name, avatar_url, is_verified)
-         VALUES ($1, $2, $3, $4, true)
+        `INSERT INTO users (email, password_hash, name, avatar_url, is_verified, verification_status)
+         VALUES ($1, $2, $3, $4, false, 'none')
          RETURNING *`,
         [email, hash, name || email.split('@')[0], picture || null]
       );
