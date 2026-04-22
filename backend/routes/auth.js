@@ -92,9 +92,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    // Check duplicates
+    // Check duplicates (case-insensitive)
     if (email) {
-      const existing = await query('SELECT id FROM users WHERE email = $1', [email]);
+      const existing = await query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
       if (existing.rows.length > 0) return res.status(409).json({ error: 'Email already registered' });
     }
     if (phone) {
@@ -193,23 +193,41 @@ router.get('/google/callback', async (req, res) => {
     const { email, name, picture } = profile;
     if (!email) return res.redirect('/?error=google_no_email');
 
-    // Find or create user
-    let userResult = await query('SELECT * FROM users WHERE email = $1', [email]);
+    // Find or create user (case-insensitive email match)
+    let userResult = await query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+    console.log(`[Google] Existing user lookup for ${email}: ${userResult.rows.length} rows`);
 
+    let isNewUser = false;
     if (userResult.rows.length === 0) {
       const randomPass = require('crypto').randomBytes(32).toString('hex');
       const hash = await bcrypt.hash(randomPass, 12);
 
+      // Use ON CONFLICT to prevent race-condition duplicates
       userResult = await query(
         `INSERT INTO users (email, password_hash, name, avatar_url, is_verified, verification_status)
          VALUES ($1, $2, $3, $4, false, 'none')
+         ON CONFLICT (email) DO UPDATE SET
+           name = COALESCE(NULLIF(users.name, ''), EXCLUDED.name),
+           avatar_url = COALESCE(users.avatar_url, EXCLUDED.avatar_url),
+           updated_at = NOW()
          RETURNING *`,
         [email, hash, name || email.split('@')[0], picture || null]
       );
+      // Check if it was actually inserted (new) or updated (existing)
+      isNewUser = userResult.rows[0].created_at.getTime() === userResult.rows[0].updated_at?.getTime();
+      console.log(`[Google] Upsert result: id=${userResult.rows[0].id}, isNew=${isNewUser}`);
 
-      sendWelcomeEmail(email, name || email.split('@')[0]).catch(err => {
-        console.error('Welcome email error:', err.message);
-      });
+      if (isNewUser) {
+        sendWelcomeEmail(email, name || email.split('@')[0]).catch(err => {
+          console.error('Welcome email error:', err.message);
+        });
+      }
+    } else {
+      console.log(`[Google] Found existing user: id=${userResult.rows[0].id}`);
+      // Update avatar if user doesn't have one
+      if (picture && !userResult.rows[0].avatar_url) {
+        await query('UPDATE users SET avatar_url = $1, updated_at = NOW() WHERE id = $2', [picture, userResult.rows[0].id]);
+      }
     }
 
     const user = userResult.rows[0];
@@ -231,7 +249,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email/phone and password required' });
     }
 
-    const result = await query('SELECT * FROM users WHERE email = $1 OR phone = $1', [email]);
+    const result = await query('SELECT * FROM users WHERE LOWER(email) = LOWER($1) OR phone = $1', [email]);
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

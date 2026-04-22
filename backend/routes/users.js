@@ -127,12 +127,21 @@ router.post('/swipe', authenticate, checkSwipeLimit, async (req, res) => {
 
     // Check for mutual like
     if (direction === 'like') {
-      console.log(`[Match] Checking mutual like: target=${target_id} → user=${userId}`);
+      console.log(`[Match] User ${userId} liked ${target_id}`);
+
+      // Check if target has already liked this user
       const mutualCheck = await query(
         'SELECT id FROM swipes WHERE swiper_id = $1 AND swiped_id = $2 AND direction = $3',
         [target_id, userId, 'like']
       );
-      console.log(`[Match] Mutual check result: ${mutualCheck.rows.length} rows`);
+      console.log(`[Match] Mutual check (${target_id} → ${userId}): ${mutualCheck.rows.length} rows`);
+
+      // Debug: show all swipes between these two users
+      const debugSwipes = await query(
+        'SELECT swiper_id, swiped_id, direction FROM swipes WHERE (swiper_id = $1 AND swiped_id = $2) OR (swiper_id = $2 AND swiped_id = $1)',
+        [userId, target_id]
+      );
+      console.log(`[Match] All swipes between users:`, debugSwipes.rows);
 
       if (mutualCheck.rows.length > 0) {
         // Create match (ensure consistent ordering)
