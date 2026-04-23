@@ -2956,6 +2956,8 @@ html, body {
   width: 22px;
   height: 15px;
   border-radius: 2px;
+  display: block;
+  flex-shrink: 0;
 }
 .lang-btn:hover { background: rgba(255,255,255,0.25); }
 .lang-dropdown {
