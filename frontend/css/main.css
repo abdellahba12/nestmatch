@@ -1764,7 +1764,7 @@ html, body {
   bottom: calc(100% + 4px);
   left: 16px;
   right: 16px;
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-lg);
@@ -1772,7 +1772,9 @@ html, body {
   overflow: hidden;
 }
 .nav-lang-dropdown button {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   text-align: left;
   padding: 9px 14px;
@@ -1812,6 +1814,7 @@ html, body {
     left: auto;
     right: 0;
     min-width: 150px;
+    background: #fff;
   }
 }
 
