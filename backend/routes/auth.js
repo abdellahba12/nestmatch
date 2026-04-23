@@ -21,6 +21,8 @@ const upload = multer({
 router.post('/send-code', async (req, res) => {
   try {
     const { contact, method } = req.body;
+    console.log(`[Auth] /send-code called — contact: ${contact}, method: ${method}`);
+
     if (!contact) return res.status(400).json({ error: 'Contact is required' });
 
     const code = String(Math.floor(100000 + Math.random() * 900000));
@@ -31,25 +33,34 @@ router.post('/send-code', async (req, res) => {
       'INSERT INTO verification_codes (contact, code, method, expires_at) VALUES ($1, $2, $3, $4)',
       [contact, code, method || 'email', expiresAt]
     );
+    console.log(`[Auth] Code ${code} stored in DB for ${contact}, expires: ${expiresAt.toISOString()}`);
 
     if (method === 'email') {
       try {
+        console.log(`[Auth] Attempting to send verification email to ${contact}...`);
         await sendCodeEmail(contact, code);
+        console.log(`[Auth] ✅ Verification email sent successfully to ${contact}`);
       } catch (emailErr) {
-        console.error('Email send error:', emailErr.message);
+        console.error(`[Auth] ❌ Email send FAILED for ${contact}:`, emailErr.message);
+        console.error(`[Auth]   Full error:`, emailErr.code, emailErr.command, emailErr.responseCode);
         if (!process.env.SMTP_USER) {
-          console.log(`[DEV] Verification code for ${contact}: ${code}`);
+          console.log(`[Auth] ⚠️  SMTP_USER not set — DEV MODE — code: ${code}`);
         } else {
           return res.status(500).json({ error: 'Failed to send verification email' });
         }
       }
+    } else if (method === 'phone') {
+      // ⚠️ SMS NOT IMPLEMENTED — no Twilio/SMS provider configured
+      // Code is stored in DB but NOT sent to the phone
+      console.log(`[Auth] ⚠️  SMS method selected but NO SMS provider configured`);
+      console.log(`[Auth] ⚠️  Code for ${contact}: ${code} (logged only, NOT sent via SMS)`);
     } else {
-      console.log(`[SMS] Verification code for ${contact}: ${code}`);
+      console.log(`[Auth] ⚠️  Unknown method: ${method}, code: ${code}`);
     }
 
     res.json({ message: 'Code sent', method });
   } catch (error) {
-    console.error('Send code error:', error);
+    console.error('[Auth] Send code error:', error);
     res.status(500).json({ error: 'Server error sending verification code' });
   }
 });
@@ -116,11 +127,16 @@ router.post('/register', async (req, res) => {
     const user = userResult.rows[0];
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-    // Send welcome email (async)
+    // Send welcome email (async, non-blocking)
     if (email) {
-      sendWelcomeEmail(email, defaultName).catch(err => {
-        console.error('Welcome email error:', err.message);
+      console.log(`[Auth] Sending welcome email to ${email}...`);
+      sendWelcomeEmail(email, defaultName).then(() => {
+        console.log(`[Auth] ✅ Welcome email sent to ${email}`);
+      }).catch(err => {
+        console.error(`[Auth] ❌ Welcome email FAILED for ${email}:`, err.message);
       });
+    } else {
+      console.log(`[Auth] No email provided (phone registration) — skipping welcome email`);
     }
 
     res.status(201).json({
