@@ -23,6 +23,28 @@ const Discover = {
     if (budgetMax) filters.budget_max = budgetMax;
     if (budgetMin) filters.budget_min = budgetMin;
 
+    // Schedule filter
+    const scheduleActive = document.querySelector('#filter-schedule .filter-pill.active');
+    if (scheduleActive) {
+      const map = { early: 'diurno', normal: 'diurno', late: 'nocturno' };
+      filters.schedule = map[scheduleActive.dataset.val] || '';
+    }
+
+    // Smoking filter
+    const smokeActive = document.querySelector('#filter-smoke .filter-pill.active');
+    if (smokeActive) filters.is_smoker = smokeActive.dataset.val === 'yes' ? 'true' : 'false';
+
+    // Pets filter
+    const petsActive = document.querySelector('#filter-pets .filter-pill.active');
+    if (petsActive) filters.has_pets = petsActive.dataset.val === 'yes' ? 'true' : 'false';
+
+    // Vibe/personality filter
+    const vibeActive = document.querySelector('#filter-vibe .filter-pill.active');
+    if (vibeActive) {
+      const map = { quiet: 'tranquila', social: 'social', party: 'fiestera' };
+      filters.personality = map[vibeActive.dataset.val] || '';
+    }
+
     try {
       const data = await API.discover(filters);
       this.profiles = data.profiles || [];
@@ -115,25 +137,24 @@ const Discover = {
         ).join('')}</div>`
       : '';
 
-    // Verified badge
     const verifiedBadge = profile.is_verified
       ? '<span class="verified-badge" title="Verified">✓</span>'
       : '';
 
-    // Room-style title: use neighborhood/zones or fallback to name
-    const roomTitle = profile.neighborhood
-      ? `Habitación en ${profile.neighborhood}`
-      : (profile.preferred_zones && profile.preferred_zones.length > 0)
-      ? `Habitación en ${profile.preferred_zones[0]}`
-      : profile.name || 'Habitación disponible';
-
+    const displayName = profile.name || 'Usuario';
+    const ageText = profile.age ? `, ${profile.age}` : '';
     const cityName = profile.city || '';
+    const neighborhoodText = profile.neighborhood ? profile.neighborhood : '';
+    const locationText = [neighborhoodText, cityName].filter(Boolean).join(', ');
 
     const priceText = profile.budget_max
-      ? `€${profile.budget_max}`
+      ? `€${profile.budget_max}/mes`
       : profile.budget_min
-      ? `€${profile.budget_min}`
+      ? `€${profile.budget_min}+/mes`
       : '';
+
+    const scheduleIcon = profile.schedule === 'nocturno' ? '🌙' : '☀️';
+    const personalityText = profile.personality || '';
 
     card.innerHTML = `
       <div class="card-photo" style="${photoStyle}">
@@ -143,9 +164,9 @@ const Discover = {
         ${!mainPhoto ? `<span style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))">${this.avatarEmoji(profile)}</span>` : ''}
       </div>
       <div class="card-info">
-        <div class="card-room-title">${roomTitle}</div>
-        <div class="card-room-city">${cityName}</div>
-        ${priceText ? `<div class="card-room-divider"></div><div class="card-room-price"><span class="price-amount">${priceText}</span> / mes</div>` : ''}
+        <div class="card-room-title">${displayName}${ageText} ${verifiedBadge}</div>
+        <div class="card-room-city">${locationText}</div>
+        ${priceText ? `<div class="card-room-divider"></div><div class="card-room-price"><span class="price-amount">${priceText}</span></div>` : ''}
       </div>
     `;
 

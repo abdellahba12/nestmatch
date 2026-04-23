@@ -6,7 +6,8 @@ const { authenticate, checkSwipeLimit } = require('../middleware/auth');
 // Get profiles to discover (with zone filter)
 router.get('/discover', authenticate, async (req, res) => {
   try {
-    const { city, zone, age_min, age_max, gender, budget_max } = req.query;
+    const { city, zone, age_min, age_max, gender, budget_max, budget_min,
+            schedule, is_smoker, has_pets, personality } = req.query;
     const userId = req.user.id;
 
     // Already seen / swiped users
@@ -43,6 +44,26 @@ router.get('/discover', authenticate, async (req, res) => {
     if (budget_max) {
       conditions.push(`(rp.budget_max IS NULL OR rp.budget_max <= $${paramIndex})`);
       params.push(parseInt(budget_max));
+      paramIndex++;
+    }
+    if (schedule) {
+      conditions.push(`u.schedule = $${paramIndex}`);
+      params.push(schedule);
+      paramIndex++;
+    }
+    if (is_smoker !== undefined && is_smoker !== '') {
+      conditions.push(`u.is_smoker = $${paramIndex}`);
+      params.push(is_smoker === 'true');
+      paramIndex++;
+    }
+    if (has_pets !== undefined && has_pets !== '') {
+      conditions.push(`u.has_pets = $${paramIndex}`);
+      params.push(has_pets === 'true');
+      paramIndex++;
+    }
+    if (personality) {
+      conditions.push(`u.personality = $${paramIndex}`);
+      params.push(personality);
       paramIndex++;
     }
 

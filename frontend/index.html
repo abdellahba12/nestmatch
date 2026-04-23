@@ -438,10 +438,26 @@
             <input type="number" id="cp-age" min="18" max="99" placeholder="Ej: 24" required>
           </div>
 
+          <!-- Genero -->
+          <div class="form-group">
+            <label data-i18n="cp_gender">Genero *</label>
+            <div class="cp-toggle-group" id="cp-gender">
+              <button type="button" class="cp-toggle" data-val="male" onclick="App.cpToggle(this)">Hombre</button>
+              <button type="button" class="cp-toggle" data-val="female" onclick="App.cpToggle(this)">Mujer</button>
+              <button type="button" class="cp-toggle" data-val="non-binary" onclick="App.cpToggle(this)">No binario</button>
+            </div>
+          </div>
+
           <!-- Ciudad -->
           <div class="form-group">
-            <label data-i18n="cp_city">¿Dónde vives? *</label>
+            <label data-i18n="cp_city">Ciudad *</label>
             <input type="text" id="cp-city" placeholder="Ej: Barcelona" required>
+          </div>
+
+          <!-- Barrio -->
+          <div class="form-group">
+            <label data-i18n="cp_neighborhood">Barrio <span class="label-hint">(opcional)</span></label>
+            <input type="text" id="cp-neighborhood" placeholder="Ej: Gracia, Eixample...">
           </div>
 
           <!-- Foto de perfil -->
@@ -460,6 +476,35 @@
           <div class="form-group">
             <label data-i18n="cp_bio">Cuéntanos sobre ti <span class="label-hint">(opcional)</span></label>
             <textarea id="cp-bio" rows="3" placeholder="¿Qué te gusta hacer? ¿A qué te dedicas?"></textarea>
+          </div>
+
+          <!-- Presupuesto -->
+          <div class="form-group">
+            <label data-i18n="cp_budget">Presupuesto mensual (€) *</label>
+            <div style="display:flex;gap:10px;align-items:center">
+              <input type="number" id="cp-budget-min" min="0" max="5000" step="50" placeholder="Min" style="flex:1" class="filter-input-styled">
+              <span style="color:var(--text-muted)">–</span>
+              <input type="number" id="cp-budget-max" min="0" max="5000" step="50" placeholder="Max" style="flex:1" class="filter-input-styled">
+            </div>
+          </div>
+
+          <!-- Tipo de habitacion -->
+          <div class="form-group">
+            <label data-i18n="cp_room_type">Tipo de habitacion *</label>
+            <div class="cp-toggle-group" id="cp-room-type">
+              <button type="button" class="cp-toggle" data-val="private" onclick="App.cpToggle(this)">Privada</button>
+              <button type="button" class="cp-toggle" data-val="shared" onclick="App.cpToggle(this)">Compartida</button>
+            </div>
+          </div>
+
+          <!-- Duracion estancia -->
+          <div class="form-group">
+            <label data-i18n="cp_duration">Duracion de la estancia *</label>
+            <div class="cp-toggle-group" id="cp-duration">
+              <button type="button" class="cp-toggle" data-val="short" onclick="App.cpToggle(this)">Corta (&lt;3 meses)</button>
+              <button type="button" class="cp-toggle" data-val="medium" onclick="App.cpToggle(this)">Media (3-12 meses)</button>
+              <button type="button" class="cp-toggle" data-val="long" onclick="App.cpToggle(this)">Larga (1+ año)</button>
+            </div>
           </div>
 
           <!-- Limpieza 1-10 -->
@@ -486,7 +531,7 @@
 
           <!-- Personalidad -->
           <div class="form-group">
-            <label data-i18n="cp_personality">¿Cómo eres? *</label>
+            <label data-i18n="cp_personality">¿Como eres? *</label>
             <div class="cp-toggle-group" id="cp-personality">
               <button type="button" class="cp-toggle" data-val="tranquila" onclick="App.cpToggle(this)">Tranquila</button>
               <button type="button" class="cp-toggle" data-val="social" onclick="App.cpToggle(this)">Social</button>
@@ -495,11 +540,20 @@
             </div>
           </div>
 
+          <!-- Fumador -->
+          <div class="form-group">
+            <label data-i18n="cp_smoker">¿Fumas? *</label>
+            <div class="cp-toggle-group" id="cp-smoker">
+              <button type="button" class="cp-toggle" data-val="si" onclick="App.cpToggle(this)">Si</button>
+              <button type="button" class="cp-toggle" data-val="no" onclick="App.cpToggle(this)">No</button>
+            </div>
+          </div>
+
           <!-- Mascota -->
           <div class="form-group">
             <label data-i18n="cp_pets">¿Tienes mascota? *</label>
             <div class="cp-toggle-group" id="cp-pets">
-              <button type="button" class="cp-toggle" data-val="si" onclick="App.cpToggle(this)">Sí</button>
+              <button type="button" class="cp-toggle" data-val="si" onclick="App.cpToggle(this)">Si</button>
               <button type="button" class="cp-toggle" data-val="no" onclick="App.cpToggle(this)">No</button>
             </div>
           </div>
@@ -605,39 +659,12 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Row: Move-in date + Offer type -->
-                  <div class="filters-row">
-                    <div class="filter-block">
-                      <label class="filter-label">Fecha de entrada</label>
-                      <div class="filter-select-wrap">
-                        <input type="date" id="filter-movein" class="filter-input-styled">
-                      </div>
-                    </div>
-                    <div class="filter-block">
-                      <label class="filter-label">Tipo de oferta</label>
-                      <div class="filter-toggle-group" id="filter-offer-type">
-                        <button class="filter-pill active" data-val="room">Habitación</button>
-                        <button class="filter-pill" data-val="full">Piso entero</button>
-                        <button class="filter-pill" data-val="search">Busco compañeros</button>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Cleanliness -->
-                  <div class="filter-block">
-                    <label class="filter-label">Limpieza</label>
-                    <div class="filter-toggle-group" id="filter-clean">
-                      <button class="filter-pill" data-val="low">Bajo</button>
-                      <button class="filter-pill" data-val="mid">Medio</button>
-                      <button class="filter-pill" data-val="high">Alto</button>
-                    </div>
-                  </div>
                   <!-- Row: Schedule + Smoking -->
                   <div class="filters-row">
                     <div class="filter-block">
                       <label class="filter-label">Horarios</label>
                       <div class="filter-toggle-group" id="filter-schedule">
                         <button class="filter-pill" data-val="early">Diurno</button>
-                        <button class="filter-pill" data-val="normal">Normal</button>
                         <button class="filter-pill" data-val="late">Nocturno</button>
                       </div>
                     </div>

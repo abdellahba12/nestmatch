@@ -165,15 +165,20 @@ const App = {
   },
 
   updateCpProgress() {
-    const fields = ['cp-name', 'cp-age', 'cp-city'];
+    const fields = ['cp-name', 'cp-age', 'cp-city', 'cp-budget-max'];
     let filled = 0;
     fields.forEach(id => {
       if (document.getElementById(id)?.value?.trim()) filled++;
     });
+    if (document.querySelector('#cp-gender .cp-toggle.active')) filled++;
+    if (document.querySelector('#cp-room-type .cp-toggle.active')) filled++;
+    if (document.querySelector('#cp-duration .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-schedule .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-personality .cp-toggle.active')) filled++;
+    if (document.querySelector('#cp-smoker .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-pets .cp-toggle.active')) filled++;
-    const pct = Math.round((filled / 6) * 100);
+    const total = 11;
+    const pct = Math.round((filled / total) * 100);
     const bar = document.getElementById('cp-progress-bar');
     if (bar) bar.style.width = pct + '%';
   },
@@ -200,21 +205,33 @@ const App = {
     const name = document.getElementById('cp-name').value.trim();
     const age = parseInt(document.getElementById('cp-age').value);
     const city = document.getElementById('cp-city').value.trim();
+    const neighborhood = document.getElementById('cp-neighborhood').value.trim();
     const bio = document.getElementById('cp-bio').value.trim();
+    const budgetMin = document.getElementById('cp-budget-min').value ? parseInt(document.getElementById('cp-budget-min').value) : null;
+    const budgetMax = document.getElementById('cp-budget-max').value ? parseInt(document.getElementById('cp-budget-max').value) : null;
     const cleanliness = parseInt(document.getElementById('cp-clean').value);
     const cooking = parseInt(document.getElementById('cp-cooking').value);
+    const genderEl = document.querySelector('#cp-gender .cp-toggle.active');
     const scheduleEl = document.querySelector('#cp-schedule .cp-toggle.active');
     const personalityEl = document.querySelector('#cp-personality .cp-toggle.active');
+    const smokerEl = document.querySelector('#cp-smoker .cp-toggle.active');
     const petsEl = document.querySelector('#cp-pets .cp-toggle.active');
+    const roomTypeEl = document.querySelector('#cp-room-type .cp-toggle.active');
+    const durationEl = document.querySelector('#cp-duration .cp-toggle.active');
 
     const errEl = document.getElementById('cp-error');
 
     // Validation
     if (!name) { errEl.textContent = 'Introduce tu nombre'; errEl.classList.remove('hidden'); return; }
-    if (!age || age < 18) { errEl.textContent = 'Introduce una edad válida (18+)'; errEl.classList.remove('hidden'); return; }
+    if (!age || age < 18) { errEl.textContent = 'Introduce una edad valida (18+)'; errEl.classList.remove('hidden'); return; }
+    if (!genderEl) { errEl.textContent = 'Selecciona tu genero'; errEl.classList.remove('hidden'); return; }
     if (!city) { errEl.textContent = 'Introduce tu ciudad'; errEl.classList.remove('hidden'); return; }
+    if (!budgetMax) { errEl.textContent = 'Introduce tu presupuesto maximo'; errEl.classList.remove('hidden'); return; }
+    if (!roomTypeEl) { errEl.textContent = 'Selecciona tipo de habitacion'; errEl.classList.remove('hidden'); return; }
+    if (!durationEl) { errEl.textContent = 'Selecciona duracion de estancia'; errEl.classList.remove('hidden'); return; }
     if (!scheduleEl) { errEl.textContent = 'Selecciona tu horario'; errEl.classList.remove('hidden'); return; }
     if (!personalityEl) { errEl.textContent = 'Selecciona tu personalidad'; errEl.classList.remove('hidden'); return; }
+    if (!smokerEl) { errEl.textContent = 'Indica si fumas'; errEl.classList.remove('hidden'); return; }
     if (!petsEl) { errEl.textContent = 'Indica si tienes mascota'; errEl.classList.remove('hidden'); return; }
 
     errEl.classList.add('hidden');
@@ -227,12 +244,19 @@ const App = {
       await API.updateMe({
         name,
         age,
+        gender: genderEl.dataset.val,
         city,
+        neighborhood: neighborhood || null,
         bio: bio || null,
+        budget_min: budgetMin,
+        budget_max: budgetMax,
+        room_type: roomTypeEl.dataset.val,
+        stay_duration: durationEl.dataset.val,
         cleanliness,
         cooking,
         schedule: scheduleEl.dataset.val,
         personality: personalityEl.dataset.val,
+        is_smoker: smokerEl.dataset.val === 'si',
         has_pets: petsEl.dataset.val === 'si',
       });
 
@@ -803,7 +827,7 @@ function handleGoogleCredentialResponse(response) {
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
   // Update complete profile progress bar on input
-  ['cp-name', 'cp-age', 'cp-city'].forEach(id => {
+  ['cp-name', 'cp-age', 'cp-city', 'cp-budget-min', 'cp-budget-max', 'cp-neighborhood'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => App.updateCpProgress());
   });
