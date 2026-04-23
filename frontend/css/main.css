@@ -2950,8 +2950,9 @@ html, body {
   overflow: hidden;
 }
 .lang-btn .lang-flag {
-  width: 36px;
-  height: 36px;
+  width: 22px;
+  height: 15px;
+  border-radius: 2px;
 }
 .lang-btn:hover { background: rgba(255,255,255,0.25); }
 .lang-dropdown {
