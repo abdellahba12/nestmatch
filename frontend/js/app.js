@@ -16,6 +16,12 @@ const App = {
       const lang = I18n.getLang();
       const btn = document.getElementById('lang-current');
       if (btn) btn.innerHTML = I18n.getFlag(lang);
+      // Set in-app lang label
+      const appLabel = document.getElementById('app-lang-label');
+      if (appLabel) {
+        const names = { es: 'Español', en: 'English', fr: 'Français', pt: 'Português', de: 'Deutsch', it: 'Italiano' };
+        appLabel.textContent = names[lang] || names.es;
+      }
       I18n.translatePage();
     } catch (err) {
       console.error('[App] i18n error:', err);
@@ -607,7 +613,7 @@ const App = {
 
 // ── Event delegation (language selector + toggle buttons + hobbies) ──
 document.addEventListener('click', (e) => {
-  // Language: toggle dropdown
+  // Language: toggle landing dropdown
   if (e.target.closest('#lang-current')) {
     e.stopPropagation();
     const dd = document.getElementById('lang-dropdown');
@@ -615,7 +621,15 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  // Language: select a language
+  // Language: toggle in-app dropdown
+  if (e.target.closest('#app-lang-current')) {
+    e.stopPropagation();
+    const dd = document.getElementById('app-lang-dropdown');
+    if (dd) dd.classList.toggle('hidden');
+    return;
+  }
+
+  // Language: select a language (works for both dropdowns)
   const langBtn = e.target.closest('[data-lang]');
   if (langBtn) {
     e.stopPropagation();
@@ -626,15 +640,22 @@ document.addEventListener('click', (e) => {
     } catch (err) {
       console.error('[Lang] setLang error:', err);
     }
+    // Close both dropdowns
     const dd = document.getElementById('lang-dropdown');
     if (dd) dd.classList.add('hidden');
+    const appDd = document.getElementById('app-lang-dropdown');
+    if (appDd) appDd.classList.add('hidden');
     return;
   }
 
-  // Close lang dropdown on outside click
+  // Close lang dropdowns on outside click
   const dd = document.getElementById('lang-dropdown');
   if (dd && !dd.classList.contains('hidden')) {
     dd.classList.add('hidden');
+  }
+  const appDd = document.getElementById('app-lang-dropdown');
+  if (appDd && !appDd.classList.contains('hidden')) {
+    appDd.classList.add('hidden');
   }
 
   // Phone country: toggle dropdown
