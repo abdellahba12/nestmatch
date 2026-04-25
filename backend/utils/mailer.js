@@ -41,14 +41,18 @@ async function sendVerificationCode(to, code) {
   `;
 
   try {
-    const result = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: FROM,
       to,
       subject: `${code} — Tu código de verificación de NestMatch`,
       html,
     });
-    console.log(`[Mailer] ✅ Verification code sent to ${to} — id: ${result.data?.id}`);
-    return result;
+    if (error) {
+      console.error(`[Mailer] ❌ Resend API error for ${to}:`, JSON.stringify(error));
+      throw new Error(error.message || 'Resend API error');
+    }
+    console.log(`[Mailer] ✅ Verification code sent to ${to} — id: ${data?.id}`);
+    return data;
   } catch (err) {
     console.error(`[Mailer] ❌ Failed to send verification code to ${to}:`, err.message || err);
     throw err;
@@ -101,14 +105,18 @@ async function sendWelcomeEmail(to, name) {
   `;
 
   try {
-    const result = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: FROM,
       to,
       subject: `🏡 ¡Bienvenido/a a NestMatch, ${name}!`,
       html,
     });
-    console.log(`[Mailer] ✅ Welcome email sent to ${to} — id: ${result.data?.id}`);
-    return result;
+    if (error) {
+      console.error(`[Mailer] ❌ Resend API error for ${to}:`, JSON.stringify(error));
+      throw new Error(error.message || 'Resend API error');
+    }
+    console.log(`[Mailer] ✅ Welcome email sent to ${to} — id: ${data?.id}`);
+    return data;
   } catch (err) {
     console.error(`[Mailer] ❌ Failed to send welcome email to ${to}:`, err.message || err);
     throw err;
