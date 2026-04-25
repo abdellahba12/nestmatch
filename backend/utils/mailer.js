@@ -1,28 +1,13 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// ── SMTP config diagnostics ──
+// ── Resend config diagnostics ──
 console.log('[Mailer] ═══════════════════════════════════════');
-console.log('[Mailer] SMTP_USER configured:', !!process.env.SMTP_USER, process.env.SMTP_USER ? `(${process.env.SMTP_USER.substring(0, 4)}...@${process.env.SMTP_USER.split('@')[1] || '?'})` : '(NOT SET)');
-console.log('[Mailer] SMTP_PASS configured:', !!process.env.SMTP_PASS, process.env.SMTP_PASS ? `(${process.env.SMTP_PASS.length} chars)` : '(NOT SET)');
+console.log('[Mailer] RESEND_API_KEY configured:', !!process.env.RESEND_API_KEY, process.env.RESEND_API_KEY ? `(${process.env.RESEND_API_KEY.substring(0, 8)}...)` : '(NOT SET)');
+console.log('[Mailer] EMAIL_FROM configured:', process.env.EMAIL_FROM || 'onboarding@resend.dev (default)');
 console.log('[Mailer] ═══════════════════════════════════════');
 
-// Gmail SMTP transporter — uses App Password (no external services needed)
-// Railway compatible: set SMTP_USER and SMTP_PASS env vars
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  debug: process.env.NODE_ENV !== 'production', // SMTP debug in dev
-});
-
-// Verify SMTP connection on startup
-transporter.verify()
-  .then(() => console.log('[Mailer] ✅ SMTP connection OK — Gmail ready to send'))
-  .catch(err => console.error('[Mailer] ❌ SMTP connection FAILED:', err.message));
-
-const FROM = `NestMatch <${process.env.SMTP_USER || 'noreply@nestmatch.app'}>`;
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = process.env.EMAIL_FROM || 'NestMatch <onboarding@resend.dev>';
 
 // Send verification code email
 async function sendVerificationCode(to, code) {
@@ -30,7 +15,7 @@ async function sendVerificationCode(to, code) {
   console.log(`[Mailer]   To: ${to}`);
   console.log(`[Mailer]   Code: ${code}`);
   console.log(`[Mailer]   From: ${FROM}`);
-  console.log(`[Mailer]   SMTP user: ${process.env.SMTP_USER || 'NOT SET'}`);
+
   const html = `
     <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#f8f9ff;border-radius:16px">
       <div style="text-align:center;margin-bottom:24px">
@@ -56,17 +41,16 @@ async function sendVerificationCode(to, code) {
   `;
 
   try {
-    const result = await transporter.sendMail({
+    const result = await resend.emails.send({
       from: FROM,
       to,
       subject: `${code} — Tu código de verificación de NestMatch`,
       html,
     });
-    console.log(`[Mailer] ✅ Verification code sent to ${to} — messageId: ${result.messageId}`);
+    console.log(`[Mailer] ✅ Verification code sent to ${to} — id: ${result.data?.id}`);
     return result;
   } catch (err) {
-    console.error(`[Mailer] ❌ Failed to send verification code to ${to}:`, err.message);
-    console.error(`[Mailer]   Error code: ${err.code}, command: ${err.command}`);
+    console.error(`[Mailer] ❌ Failed to send verification code to ${to}:`, err.message || err);
     throw err;
   }
 }
@@ -75,6 +59,7 @@ async function sendVerificationCode(to, code) {
 async function sendWelcomeEmail(to, name) {
   console.log(`[Mailer] ── sendWelcomeEmail ──`);
   console.log(`[Mailer]   To: ${to}, Name: ${name}`);
+
   const html = `
     <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:480px;margin:0 auto;padding:40px 24px;background:#f8f9ff;border-radius:16px">
       <div style="text-align:center;margin-bottom:24px">
@@ -116,19 +101,18 @@ async function sendWelcomeEmail(to, name) {
   `;
 
   try {
-    const result = await transporter.sendMail({
+    const result = await resend.emails.send({
       from: FROM,
       to,
       subject: `🏡 ¡Bienvenido/a a NestMatch, ${name}!`,
       html,
     });
-    console.log(`[Mailer] ✅ Welcome email sent to ${to} — messageId: ${result.messageId}`);
+    console.log(`[Mailer] ✅ Welcome email sent to ${to} — id: ${result.data?.id}`);
     return result;
   } catch (err) {
-    console.error(`[Mailer] ❌ Failed to send welcome email to ${to}:`, err.message);
-    console.error(`[Mailer]   Error code: ${err.code}, command: ${err.command}`);
+    console.error(`[Mailer] ❌ Failed to send welcome email to ${to}:`, err.message || err);
     throw err;
   }
 }
 
-module.exports = { sendVerificationCode, sendWelcomeEmail, transporter };
+module.exports = { sendVerificationCode, sendWelcomeEmail };
