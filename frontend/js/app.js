@@ -171,19 +171,17 @@ const App = {
   },
 
   updateCpProgress() {
-    const fields = ['cp-name', 'cp-age', 'cp-city', 'cp-budget-max'];
+    const fields = ['cp-name', 'cp-age', 'cp-city'];
     let filled = 0;
     fields.forEach(id => {
       if (document.getElementById(id)?.value?.trim()) filled++;
     });
     if (document.querySelector('#cp-gender .cp-toggle.active')) filled++;
-    if (document.querySelector('#cp-room-type .cp-toggle.active')) filled++;
-    if (document.querySelector('#cp-duration .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-schedule .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-personality .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-smoker .cp-toggle.active')) filled++;
     if (document.querySelector('#cp-pets .cp-toggle.active')) filled++;
-    const total = 11;
+    const total = 8;
     const pct = Math.round((filled / total) * 100);
     const bar = document.getElementById('cp-progress-bar');
     if (bar) bar.style.width = pct + '%';
@@ -193,6 +191,11 @@ const App = {
     const group = btn.parentElement;
     group.querySelectorAll('.cp-toggle').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    this.updateCpProgress();
+  },
+
+  cpToggleMulti(btn) {
+    btn.classList.toggle('active');
     this.updateCpProgress();
   },
 
@@ -213,17 +216,13 @@ const App = {
     const city = document.getElementById('cp-city').value.trim();
     const neighborhood = document.getElementById('cp-neighborhood').value.trim();
     const bio = document.getElementById('cp-bio').value.trim();
-    const budgetMin = document.getElementById('cp-budget-min').value ? parseInt(document.getElementById('cp-budget-min').value) : null;
-    const budgetMax = document.getElementById('cp-budget-max').value ? parseInt(document.getElementById('cp-budget-max').value) : null;
     const cleanliness = parseInt(document.getElementById('cp-clean').value);
     const cooking = parseInt(document.getElementById('cp-cooking').value);
     const genderEl = document.querySelector('#cp-gender .cp-toggle.active');
     const scheduleEl = document.querySelector('#cp-schedule .cp-toggle.active');
-    const personalityEl = document.querySelector('#cp-personality .cp-toggle.active');
+    const personalityEls = document.querySelectorAll('#cp-personality .cp-toggle.active');
     const smokerEl = document.querySelector('#cp-smoker .cp-toggle.active');
     const petsEl = document.querySelector('#cp-pets .cp-toggle.active');
-    const roomTypeEl = document.querySelector('#cp-room-type .cp-toggle.active');
-    const durationEl = document.querySelector('#cp-duration .cp-toggle.active');
 
     const errEl = document.getElementById('cp-error');
 
@@ -232,11 +231,8 @@ const App = {
     if (!age || age < 18) { errEl.textContent = 'Introduce una edad valida (18+)'; errEl.classList.remove('hidden'); return; }
     if (!genderEl) { errEl.textContent = 'Selecciona tu genero'; errEl.classList.remove('hidden'); return; }
     if (!city) { errEl.textContent = 'Introduce tu ciudad'; errEl.classList.remove('hidden'); return; }
-    if (!budgetMax) { errEl.textContent = 'Introduce tu presupuesto maximo'; errEl.classList.remove('hidden'); return; }
-    if (!roomTypeEl) { errEl.textContent = 'Selecciona tipo de habitacion'; errEl.classList.remove('hidden'); return; }
-    if (!durationEl) { errEl.textContent = 'Selecciona duracion de estancia'; errEl.classList.remove('hidden'); return; }
     if (!scheduleEl) { errEl.textContent = 'Selecciona tu horario'; errEl.classList.remove('hidden'); return; }
-    if (!personalityEl) { errEl.textContent = 'Selecciona tu personalidad'; errEl.classList.remove('hidden'); return; }
+    if (personalityEls.length === 0) { errEl.textContent = 'Selecciona al menos una personalidad'; errEl.classList.remove('hidden'); return; }
     if (!smokerEl) { errEl.textContent = 'Indica si fumas'; errEl.classList.remove('hidden'); return; }
     if (!petsEl) { errEl.textContent = 'Indica si tienes mascota'; errEl.classList.remove('hidden'); return; }
 
@@ -254,14 +250,10 @@ const App = {
         city,
         neighborhood: neighborhood || null,
         bio: bio || null,
-        budget_min: budgetMin,
-        budget_max: budgetMax,
-        room_type: roomTypeEl.dataset.val,
-        stay_duration: durationEl.dataset.val,
         cleanliness,
         cooking,
         schedule: scheduleEl.dataset.val,
-        personality: personalityEl.dataset.val,
+        personality: Array.from(personalityEls).map(el => el.dataset.val),
         is_smoker: smokerEl.dataset.val === 'si',
         has_pets: petsEl.dataset.val === 'si',
       });
@@ -398,19 +390,7 @@ const App = {
   resendTimer: null,
 
   setRegMethod(method) {
-    this.regMethod = method;
-    const emailGroup = document.getElementById('reg-email-group');
-    const phoneGroup = document.getElementById('reg-phone-group');
-    if (method === 'email') {
-      emailGroup.classList.remove('hidden');
-      phoneGroup.classList.add('hidden');
-    } else {
-      emailGroup.classList.add('hidden');
-      phoneGroup.classList.remove('hidden');
-    }
-    document.querySelectorAll('#reg-method-toggle .toggle-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.val === method);
-    });
+    this.regMethod = 'email';
   },
 
   async regNext(step) {
@@ -428,13 +408,10 @@ const App = {
       btn.disabled = true;
       btn.textContent = t('reg2_sending');
       try {
-        const contact = this.regMethod === 'email'
-          ? document.getElementById('reg-email').value.trim()
-          : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
-        await API.sendVerificationCode(contact, this.regMethod);
+        const contact = document.getElementById('reg-email').value.trim();
+        await API.sendVerificationCode(contact, 'email');
         document.getElementById('verification-target').textContent = contact;
-        document.getElementById('reg2-sub').textContent =
-          t(this.regMethod === 'email' ? 'reg2_sub_email' : 'reg2_sub_phone');
+        document.getElementById('reg2-sub').textContent = t('reg2_sub_email');
         this.startResendTimer();
       } catch (err) {
         if (errEl) { errEl.textContent = err.error || 'Error sending code'; errEl.classList.remove('hidden'); }
@@ -453,10 +430,8 @@ const App = {
       btn.disabled = true;
       btn.textContent = t('reg2_verifying');
       try {
-        const contact = this.regMethod === 'email'
-          ? document.getElementById('reg-email').value.trim()
-          : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
-        await API.verifyCode(contact, code, this.regMethod);
+        const contact = document.getElementById('reg-email').value.trim();
+        await API.verifyCode(contact, code, 'email');
         this.regVerified = true;
         // Auto register after verification
         await this.submitRegister();
@@ -514,13 +489,8 @@ const App = {
   validateRegStep(step) {
     if (step === 1) {
       const pass = document.getElementById('reg-password').value;
-      if (this.regMethod === 'email') {
-        const email = document.getElementById('reg-email').value.trim();
-        if (!email || !/\S+@\S+\.\S+/.test(email)) return t('val_email_invalid');
-      } else {
-        const phone = document.getElementById('reg-phone').value.trim().replace(/\s/g, '');
-        if (!phone || !/^\d{6,15}$/.test(phone)) return t('val_phone_invalid');
-      }
+      const email = document.getElementById('reg-email').value.trim();
+      if (!email || !/\S+@\S+\.\S+/.test(email)) return t('val_email_invalid');
       if (!pass || pass.length < 6) return t('val_pass_short');
     }
     if (step === 2) {
@@ -549,11 +519,9 @@ const App = {
   },
 
   async resendCode() {
-    const contact = this.regMethod === 'email'
-      ? document.getElementById('reg-email').value.trim()
-      : (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, ''));
+    const contact = document.getElementById('reg-email').value.trim();
     try {
-      await API.sendVerificationCode(contact, this.regMethod);
+      await API.sendVerificationCode(contact, 'email');
       UI.showToast(t('reg2_sent'));
       this.startResendTimer();
     } catch (err) {
@@ -565,16 +533,14 @@ const App = {
     const btn = document.getElementById('verify-btn');
     if (btn) { btn.disabled = true; btn.textContent = t('reg5_submitting'); }
 
-    const email = this.regMethod === 'email' ? document.getElementById('reg-email').value.trim() : null;
-    const phone = this.regMethod === 'phone' ? (document.getElementById('reg-phone-country').value + document.getElementById('reg-phone').value.trim().replace(/\s/g, '')) : null;
+    const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
 
     const data = {
       email,
-      phone,
       password,
       verified: this.regVerified,
-      reg_method: this.regMethod,
+      reg_method: 'email',
     };
 
     try {
@@ -705,7 +671,9 @@ document.addEventListener('click', (e) => {
   if (pill) {
     const group = pill.closest('.filter-toggle-group');
     if (group) {
-      if (group.classList.contains('filter-binary')) {
+      if (group.classList.contains('filter-multi')) {
+        pill.classList.toggle('active');
+      } else if (group.classList.contains('filter-binary')) {
         group.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
       } else {
@@ -753,20 +721,9 @@ const UI = {
 
   resetFilters() {
     document.querySelectorAll('#filters-modal input').forEach(el => {
-      if (el.type === 'range') return;
       el.value = '';
     });
-    document.getElementById('filter-budget-min').value = 200;
-    document.getElementById('filter-budget-max').value = 1200;
-    this.updatePriceRange();
     document.querySelectorAll('#filters-modal .filter-pill').forEach(p => p.classList.remove('active'));
-  },
-
-  updatePriceRange() {
-    const min = document.getElementById('filter-budget-min').value;
-    const max = document.getElementById('filter-budget-max').value;
-    document.getElementById('price-min-val').textContent = '€ ' + min;
-    document.getElementById('price-max-val').textContent = '€ ' + max;
   },
 
   applyFilters() {
@@ -848,7 +805,7 @@ function handleGoogleCredentialResponse(response) {
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
   // Update complete profile progress bar on input
-  ['cp-name', 'cp-age', 'cp-city', 'cp-budget-min', 'cp-budget-max', 'cp-neighborhood'].forEach(id => {
+  ['cp-name', 'cp-age', 'cp-city', 'cp-neighborhood'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => App.updateCpProgress());
   });

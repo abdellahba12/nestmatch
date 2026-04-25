@@ -28,9 +28,10 @@ const Profile = {
       ? (user.hobbies || []).map(h => `<span class="card-tag">${h}</span>`).join('')
       : `<span style="color:var(--text-muted);font-size:14px">${t('prof_no_hobbies')}</span>`;
 
-    const zones = (user.preferred_zones || []).join(', ') || t('prof_no_zones');
-    const budget = user.budget_min || user.budget_max
-      ? `€${user.budget_min || '?'} – €${user.budget_max || '?'}/mes`
+    const personalityArr = Array.isArray(user.personality) ? user.personality
+      : (user.personality ? [user.personality] : []);
+    const personalityLabel = personalityArr.length > 0
+      ? personalityArr.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ')
       : t('prof_not_specified');
 
     const premiumBadge = user.is_premium
@@ -86,24 +87,9 @@ const Profile = {
       </div>
 
       <div class="profile-section">
-        <h4>${t('prof_search')}</h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
-          <div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${t('prof_budget')}</div>
-            <div style="font-weight:600;color:var(--text)">${budget}</div>
-          </div>
-          <div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${t('prof_duration')}</div>
-            <div style="font-weight:600;color:var(--text)">${this.formatDuration(user.stay_duration)}</div>
-          </div>
-          <div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${t('prof_zones')}</div>
-            <div style="font-weight:600;color:var(--text);font-size:13px">${zones}</div>
-          </div>
-          <div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">${t('prof_room')}</div>
-            <div style="font-weight:600;color:var(--text)">${user.room_type === 'private' ? t('prof_room_private') : t('prof_room_shared')}</div>
-          </div>
+        <h4>${t('pdp_personality')}</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          ${personalityArr.map(p => `<span class="card-tag">${p.charAt(0).toUpperCase() + p.slice(1)}</span>`).join('')}
         </div>
       </div>
 

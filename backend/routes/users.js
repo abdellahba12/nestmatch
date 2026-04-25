@@ -62,8 +62,9 @@ router.get('/discover', authenticate, async (req, res) => {
       paramIndex++;
     }
     if (personality) {
-      conditions.push(`u.personality = $${paramIndex}`);
-      params.push(personality);
+      const personalityList = personality.split(',').filter(Boolean);
+      conditions.push(`u.personality && $${paramIndex}::text[]`);
+      params.push(personalityList);
       paramIndex++;
     }
 

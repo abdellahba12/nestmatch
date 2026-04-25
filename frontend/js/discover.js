@@ -16,12 +16,8 @@ const Discover = {
 
     const filters = {};
     const city = document.getElementById('filter-city')?.value?.trim();
-    const budgetMin = document.getElementById('filter-budget-min')?.value;
-    const budgetMax = document.getElementById('filter-budget-max')?.value;
 
     if (city) filters.city = city;
-    if (budgetMax) filters.budget_max = budgetMax;
-    if (budgetMin) filters.budget_min = budgetMin;
 
     // Schedule filter
     const scheduleActive = document.querySelector('#filter-schedule .filter-pill.active');
@@ -38,11 +34,10 @@ const Discover = {
     const petsActive = document.querySelector('#filter-pets .filter-pill.active');
     if (petsActive) filters.has_pets = petsActive.dataset.val === 'yes' ? 'true' : 'false';
 
-    // Vibe/personality filter
-    const vibeActive = document.querySelector('#filter-vibe .filter-pill.active');
-    if (vibeActive) {
-      const map = { quiet: 'tranquila', social: 'social', party: 'fiestera' };
-      filters.personality = map[vibeActive.dataset.val] || '';
+    // Personality filter (multi-select)
+    const personalityActive = document.querySelectorAll('#filter-personality .filter-pill.active');
+    if (personalityActive.length > 0) {
+      filters.personality = Array.from(personalityActive).map(el => el.dataset.val).join(',');
     }
 
     try {
@@ -119,17 +114,9 @@ const Discover = {
       ? `background-image: url(${mainPhoto}); background-size: cover; background-position: center;`
       : `background: linear-gradient(135deg, ${this.randomGradient()});`;
 
-    const budget = profile.budget_min && profile.budget_max
-      ? t('disc_budget_range', { min: profile.budget_min, max: profile.budget_max })
-      : profile.budget_max
-      ? t('disc_budget_max', { max: profile.budget_max })
-      : '';
-
     const hobbyTags = (profile.hobbies || []).slice(0, 4).map(h =>
       `<span class="card-tag">${h}</span>`
     ).join('');
-
-    const zones = (profile.preferred_zones || []).slice(0, 2).join(', ');
 
     const photoDots = photos.length > 1
       ? `<div class="card-photo-dots">${photos.slice(0, 5).map((_, i) =>
@@ -147,14 +134,7 @@ const Discover = {
     const neighborhoodText = profile.neighborhood ? profile.neighborhood : '';
     const locationText = [neighborhoodText, cityName].filter(Boolean).join(', ');
 
-    const priceText = profile.budget_max
-      ? `€${profile.budget_max}/mes`
-      : profile.budget_min
-      ? `€${profile.budget_min}+/mes`
-      : '';
-
     const scheduleIcon = profile.schedule === 'nocturno' ? '🌙' : '☀️';
-    const personalityText = profile.personality || '';
 
     card.innerHTML = `
       <div class="card-photo" style="${photoStyle}">
@@ -166,7 +146,6 @@ const Discover = {
       <div class="card-info">
         <div class="card-room-title">${displayName}${ageText} ${verifiedBadge}</div>
         <div class="card-room-city">${locationText}</div>
-        ${priceText ? `<div class="card-room-divider"></div><div class="card-room-price"><span class="price-amount">${priceText}</span></div>` : ''}
       </div>
     `;
 
@@ -294,15 +273,9 @@ const Discover = {
     const locParts = [profile.neighborhood, profile.city].filter(Boolean);
     document.getElementById('pdp-location').textContent = locParts.join(', ') || '';
 
-    // --- Price / Budget ---
+    // --- Price / Budget (removed) ---
     const priceEl = document.getElementById('pdp-price');
-    if (profile.budget_max) {
-      priceEl.innerHTML = `€${profile.budget_max} <small>${t('pdp_per_month')}</small>`;
-    } else if (profile.budget_min) {
-      priceEl.innerHTML = `€${profile.budget_min}+ <small>${t('pdp_per_month')}</small>`;
-    } else {
-      priceEl.innerHTML = '';
-    }
+    if (priceEl) priceEl.innerHTML = '';
 
     // --- Bio ---
     const bioSection = document.getElementById('pdp-bio-section');
@@ -323,8 +296,11 @@ const Discover = {
     };
 
     const scheduleLabel = profile.schedule === 'nocturno' ? t('pdp_schedule_night') : t('pdp_schedule_day');
-    const personalityKey = profile.personality ? `pdp_personality_${profile.personality}` : null;
-    const personalityLabel = personalityKey ? t(personalityKey) : '—';
+    const personalityArr = Array.isArray(profile.personality) ? profile.personality
+      : (profile.personality ? [profile.personality] : []);
+    const personalityLabel = personalityArr.length > 0
+      ? personalityArr.map(p => { const k = `pdp_personality_${p}`; const v = t(k); return v !== k ? v : p; }).join(', ')
+      : '—';
     const petsLabel = profile.has_pets ? t('pdp_pets_yes') : t('pdp_pets_no');
     const smokerLabel = profile.is_smoker ? t('pdp_smoker_yes') : t('pdp_smoker_no');
 
@@ -385,35 +361,9 @@ const Discover = {
       hobbiesSection.classList.add('hidden');
     }
 
-    // --- Room search specs ---
+    // --- Room search specs (removed budget/duration/room) ---
     const specsEl = document.getElementById('pdp-specs');
-    const budget = profile.budget_min || profile.budget_max
-      ? `€${profile.budget_min || '?'} – €${profile.budget_max || '?'}`
-      : t('prof_not_specified');
-    const duration = profile.stay_duration === 'short' ? t('prof_duration_short')
-      : profile.stay_duration === 'long' ? t('prof_duration_long')
-      : t('prof_duration_medium');
-    const zones = (profile.preferred_zones || []).join(', ') || t('prof_no_zones');
-    const room = profile.room_type === 'private' ? t('prof_room_private') : t('prof_room_shared');
-
-    specsEl.innerHTML = `
-      <div class="pdp-spec">
-        <div class="pdp-spec-label">${t('prof_budget')}</div>
-        <div class="pdp-spec-value">${budget}</div>
-      </div>
-      <div class="pdp-spec">
-        <div class="pdp-spec-label">${t('prof_duration')}</div>
-        <div class="pdp-spec-value">${duration}</div>
-      </div>
-      <div class="pdp-spec">
-        <div class="pdp-spec-label">${t('prof_zones')}</div>
-        <div class="pdp-spec-value">${zones}</div>
-      </div>
-      <div class="pdp-spec">
-        <div class="pdp-spec-label">${t('prof_room')}</div>
-        <div class="pdp-spec-value">${room}</div>
-      </div>
-    `;
+    if (specsEl) specsEl.innerHTML = '';
 
     // Show page
     page.classList.remove('hidden');

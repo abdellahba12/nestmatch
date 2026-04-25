@@ -307,83 +307,9 @@
               <span data-i18n="google_signup">Registrarse con Google</span>
             </a>
             <div class="auth-divider"><span data-i18n="auth_or">o</span></div>
-            <!-- Registration method toggle -->
             <div class="form-group">
-              <div class="toggle-group" id="reg-method-toggle">
-                <button class="toggle-btn active" data-val="email" onclick="App.setRegMethod('email')" data-i18n="reg1_method_email">Email</button>
-                <button class="toggle-btn" data-val="phone" onclick="App.setRegMethod('phone')" data-i18n="reg1_method_phone">Teléfono</button>
-              </div>
-            </div>
-            <div class="form-group" id="reg-email-group">
               <label data-i18n="reg1_email_label">Email *</label>
               <input type="email" id="reg-email" placeholder="" required>
-            </div>
-            <div class="form-group hidden" id="reg-phone-group">
-              <label data-i18n="reg1_phone_label">Teléfono *</label>
-              <div class="phone-input-wrap">
-                <div class="phone-country-custom" id="phone-country-custom">
-                  <button type="button" class="phone-country-btn" id="phone-country-btn">
-                    <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg>
-                    <span class="phone-prefix" id="phone-prefix">+34</span>
-                    <svg class="phone-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <div class="phone-country-dropdown hidden" id="phone-country-dropdown">
-                    <button type="button" data-prefix="+34" data-flag="es">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="4" fill="#c60b1e"/><rect y="4" width="24" height="8" fill="#ffc400"/><rect y="12" width="24" height="4" fill="#c60b1e"/></svg> ES +34
-                    </button>
-                    <button type="button" data-prefix="+33" data-flag="fr">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#002395"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ed2939"/></svg> FR +33
-                    </button>
-                    <button type="button" data-prefix="+44" data-flag="gb">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#012169"/><path d="M0 0l24 16M24 0L0 16" stroke="#fff" stroke-width="2.5"/><path d="M0 0l24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><path d="M12 0v16M0 8h24" stroke="#fff" stroke-width="4"/><path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="2.5"/></svg> GB +44
-                    </button>
-                    <button type="button" data-prefix="+49" data-flag="de">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.66" width="24" height="5.34" fill="#ffcc00"/></svg> DE +49
-                    </button>
-                    <button type="button" data-prefix="+39" data-flag="it">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg> IT +39
-                    </button>
-                    <button type="button" data-prefix="+351" data-flag="pt">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9" cy="8" r="3" fill="#ffcc00"/></svg> PT +351
-                    </button>
-                    <button type="button" data-prefix="+31" data-flag="nl">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#ae1c28"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.66" width="24" height="5.34" fill="#21468b"/></svg> NL +31
-                    </button>
-                    <button type="button" data-prefix="+32" data-flag="be">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#000"/><rect x="8" width="8" height="16" fill="#ffd90c"/><rect x="16" width="8" height="16" fill="#f31830"/></svg> BE +32
-                    </button>
-                    <button type="button" data-prefix="+41" data-flag="ch">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#d52b1e"/><rect x="10" y="4" width="4" height="8" fill="#fff"/><rect x="8" y="6" width="8" height="4" fill="#fff"/></svg> CH +41
-                    </button>
-                    <button type="button" data-prefix="+46" data-flag="se">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#006aa7"/><rect x="7" width="3" height="16" fill="#fecc00"/><rect y="6.5" width="24" height="3" fill="#fecc00"/></svg> SE +46
-                    </button>
-                    <button type="button" data-prefix="+47" data-flag="no">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#ef2b2d"/><rect x="6" width="4" height="16" fill="#002868"/><rect y="6" width="24" height="4" fill="#002868"/><rect x="7" width="2" height="16" fill="#fff"/><rect y="7" width="24" height="2" fill="#fff"/></svg> NO +47
-                    </button>
-                    <button type="button" data-prefix="+48" data-flag="pl">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="8" fill="#fff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg> PL +48
-                    </button>
-                    <button type="button" data-prefix="+1" data-flag="us">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#b22234"/><rect y="1.23" width="24" height="1.23" fill="#fff"/><rect y="3.69" width="24" height="1.23" fill="#fff"/><rect y="6.15" width="24" height="1.23" fill="#fff"/><rect y="8.62" width="24" height="1.23" fill="#fff"/><rect y="11.08" width="24" height="1.23" fill="#fff"/><rect y="13.54" width="24" height="1.23" fill="#fff"/><rect width="9.6" height="8.62" fill="#3c3b6e"/></svg> US +1
-                    </button>
-                    <button type="button" data-prefix="+52" data-flag="mx">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="8" height="16" fill="#006847"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ce1126"/></svg> MX +52
-                    </button>
-                    <button type="button" data-prefix="+54" data-flag="ar">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="5.33" fill="#74acdf"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.66" width="24" height="5.34" fill="#74acdf"/></svg> AR +54
-                    </button>
-                    <button type="button" data-prefix="+55" data-flag="br">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#009c3b"/><polygon points="12,2 22,8 12,14 2,8" fill="#ffdf00"/><circle cx="12" cy="8" r="3" fill="#002776"/></svg> BR +55
-                    </button>
-                    <button type="button" data-prefix="+212" data-flag="ma">
-                      <svg class="phone-flag" viewBox="0 0 24 16"><rect width="24" height="16" fill="#c1272d"/><polygon points="12,4 13.2,7.2 16.6,7.2 13.8,9.2 14.8,12.4 12,10.4 9.2,12.4 10.2,9.2 7.4,7.2 10.8,7.2" fill="none" stroke="#006233" stroke-width="0.8"/></svg> MA +212
-                    </button>
-                  </div>
-                </div>
-                <input type="hidden" id="reg-phone-country" value="+34">
-                <input type="tel" id="reg-phone" placeholder="">
-              </div>
             </div>
             <div class="form-group">
               <label data-i18n="reg1_pass_label">Contraseña *</label>
@@ -478,35 +404,6 @@
             <textarea id="cp-bio" rows="3" placeholder="¿Qué te gusta hacer? ¿A qué te dedicas?"></textarea>
           </div>
 
-          <!-- Presupuesto -->
-          <div class="form-group">
-            <label data-i18n="cp_budget">Presupuesto mensual (€) *</label>
-            <div style="display:flex;gap:10px;align-items:center">
-              <input type="number" id="cp-budget-min" min="0" max="5000" step="50" placeholder="Min" style="flex:1" class="filter-input-styled">
-              <span style="color:var(--text-muted)">–</span>
-              <input type="number" id="cp-budget-max" min="0" max="5000" step="50" placeholder="Max" style="flex:1" class="filter-input-styled">
-            </div>
-          </div>
-
-          <!-- Tipo de habitacion -->
-          <div class="form-group">
-            <label data-i18n="cp_room_type">Tipo de habitacion *</label>
-            <div class="cp-toggle-group" id="cp-room-type">
-              <button type="button" class="cp-toggle" data-val="private" onclick="App.cpToggle(this)">Privada</button>
-              <button type="button" class="cp-toggle" data-val="shared" onclick="App.cpToggle(this)">Compartida</button>
-            </div>
-          </div>
-
-          <!-- Duracion estancia -->
-          <div class="form-group">
-            <label data-i18n="cp_duration">Duracion de la estancia *</label>
-            <div class="cp-toggle-group" id="cp-duration">
-              <button type="button" class="cp-toggle" data-val="short" onclick="App.cpToggle(this)">Corta (&lt;3 meses)</button>
-              <button type="button" class="cp-toggle" data-val="medium" onclick="App.cpToggle(this)">Media (3-12 meses)</button>
-              <button type="button" class="cp-toggle" data-val="long" onclick="App.cpToggle(this)">Larga (1+ año)</button>
-            </div>
-          </div>
-
           <!-- Limpieza 1-10 -->
           <div class="form-group">
             <label data-i18n="cp_clean">Orden y limpieza *</label>
@@ -529,14 +426,17 @@
             </div>
           </div>
 
-          <!-- Personalidad -->
+          <!-- Personalidad (multi-select) -->
           <div class="form-group">
-            <label data-i18n="cp_personality">¿Como eres? *</label>
-            <div class="cp-toggle-group" id="cp-personality">
-              <button type="button" class="cp-toggle" data-val="tranquila" onclick="App.cpToggle(this)">Tranquila</button>
-              <button type="button" class="cp-toggle" data-val="social" onclick="App.cpToggle(this)">Social</button>
-              <button type="button" class="cp-toggle" data-val="fiestera" onclick="App.cpToggle(this)">Fiestera</button>
-              <button type="button" class="cp-toggle" data-val="reservada" onclick="App.cpToggle(this)">Reservada</button>
+            <label data-i18n="cp_personality">¿Como eres? * <span class="label-hint">(puedes elegir varias)</span></label>
+            <div class="cp-toggle-group cp-multi" id="cp-personality">
+              <button type="button" class="cp-toggle" data-val="tranquila" onclick="App.cpToggleMulti(this)">Tranquila</button>
+              <button type="button" class="cp-toggle" data-val="social" onclick="App.cpToggleMulti(this)">Social</button>
+              <button type="button" class="cp-toggle" data-val="fiestera" onclick="App.cpToggleMulti(this)">Fiestera</button>
+              <button type="button" class="cp-toggle" data-val="reservada" onclick="App.cpToggleMulti(this)">Reservada</button>
+              <button type="button" class="cp-toggle" data-val="creativa" onclick="App.cpToggleMulti(this)">Creativa</button>
+              <button type="button" class="cp-toggle" data-val="deportista" onclick="App.cpToggleMulti(this)">Deportista</button>
+              <button type="button" class="cp-toggle" data-val="aventurera" onclick="App.cpToggleMulti(this)">Aventurera</button>
             </div>
           </div>
 
@@ -654,7 +554,7 @@
                   <button class="filters-close-btn" onclick="UI.toggleFilters()">&times;</button>
                 </div>
                 <div class="filters-modal-body">
-                  <!-- Row: Location + Price -->
+                  <!-- Row: Location + Schedule -->
                   <div class="filters-row">
                     <div class="filter-block">
                       <label class="filter-label">Ubicación</label>
@@ -663,26 +563,15 @@
                       </div>
                     </div>
                     <div class="filter-block">
-                      <label class="filter-label">Precio</label>
-                      <div class="filter-price-range">
-                        <span class="price-val" id="price-min-val">€ 200</span>
-                        <span class="price-val" id="price-max-val">€ 1200</span>
-                      </div>
-                      <div class="range-slider-wrap">
-                        <input type="range" id="filter-budget-min" min="0" max="2000" step="50" value="200" class="range-slider range-min" oninput="UI.updatePriceRange()">
-                        <input type="range" id="filter-budget-max" min="0" max="2000" step="50" value="1200" class="range-slider range-max" oninput="UI.updatePriceRange()">
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Row: Schedule + Smoking -->
-                  <div class="filters-row">
-                    <div class="filter-block">
                       <label class="filter-label">Horarios</label>
                       <div class="filter-toggle-group" id="filter-schedule">
                         <button class="filter-pill" data-val="early">Diurno</button>
                         <button class="filter-pill" data-val="late">Nocturno</button>
                       </div>
                     </div>
+                  </div>
+                  <!-- Row: Smoking + Pets -->
+                  <div class="filters-row">
                     <div class="filter-block">
                       <label class="filter-label">Fumar</label>
                       <div class="filter-toggle-group filter-binary" id="filter-smoke">
@@ -690,22 +579,26 @@
                         <button class="filter-pill active filter-pill-no" data-val="no">No</button>
                       </div>
                     </div>
-                  </div>
-                  <!-- Row: Ambiente + Pets -->
-                  <div class="filters-row">
-                    <div class="filter-block">
-                      <label class="filter-label">Ambiente</label>
-                      <div class="filter-toggle-group" id="filter-vibe">
-                        <button class="filter-pill" data-val="quiet">Tranquilo</button>
-                        <button class="filter-pill" data-val="social">Social</button>
-                        <button class="filter-pill" data-val="party">Fiesta</button>
-                      </div>
-                    </div>
                     <div class="filter-block">
                       <label class="filter-label">Mascotas</label>
                       <div class="filter-toggle-group filter-binary" id="filter-pets">
                         <button class="filter-pill" data-val="yes">Sí</button>
                         <button class="filter-pill active filter-pill-no" data-val="no">No</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row: Personalidad (multi-select) -->
+                  <div class="filters-row">
+                    <div class="filter-block" style="flex:1">
+                      <label class="filter-label">Personalidad <span class="label-hint">(puedes elegir varias)</span></label>
+                      <div class="filter-toggle-group filter-multi" id="filter-personality">
+                        <button class="filter-pill" data-val="tranquila">Tranquila</button>
+                        <button class="filter-pill" data-val="social">Social</button>
+                        <button class="filter-pill" data-val="fiestera">Fiestera</button>
+                        <button class="filter-pill" data-val="reservada">Reservada</button>
+                        <button class="filter-pill" data-val="creativa">Creativa</button>
+                        <button class="filter-pill" data-val="deportista">Deportista</button>
+                        <button class="filter-pill" data-val="aventurera">Aventurera</button>
                       </div>
                     </div>
                   </div>

@@ -146,7 +146,7 @@ DO $$ BEGIN
   ALTER TABLE users ADD COLUMN IF NOT EXISTS cleanliness INTEGER DEFAULT 5;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS cooking INTEGER DEFAULT 5;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS schedule VARCHAR(30);
-  ALTER TABLE users ADD COLUMN IF NOT EXISTS personality VARCHAR(30);
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS personality TEXT[];
   -- Allow registration without name/age/city (simplified flow)
   ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
   ALTER TABLE users ALTER COLUMN age DROP NOT NULL;
@@ -156,6 +156,16 @@ DO $$ BEGIN
     SELECT 1 FROM pg_constraint WHERE conname = 'conversations_match_id_key'
   ) THEN
     ALTER TABLE conversations ADD CONSTRAINT conversations_match_id_key UNIQUE (match_id);
+  END IF;
+  -- Migrate personality from VARCHAR to TEXT[] if needed
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'users' AND column_name = 'personality' AND data_type = 'character varying'
+  ) THEN
+    ALTER TABLE users ADD COLUMN personality_new TEXT[];
+    UPDATE users SET personality_new = ARRAY[personality] WHERE personality IS NOT NULL;
+    ALTER TABLE users DROP COLUMN personality;
+    ALTER TABLE users RENAME COLUMN personality_new TO personality;
   END IF;
 EXCEPTION WHEN OTHERS THEN NULL;
 END $$;

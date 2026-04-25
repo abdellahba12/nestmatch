@@ -35,27 +35,18 @@ router.post('/send-code', async (req, res) => {
     );
     console.log(`[Auth] Code ${code} stored in DB for ${contact}, expires: ${expiresAt.toISOString()}`);
 
-    if (method === 'email') {
-      try {
-        console.log(`[Auth] Attempting to send verification email to ${contact}...`);
-        await sendCodeEmail(contact, code);
-        console.log(`[Auth] ✅ Verification email sent successfully to ${contact}`);
-      } catch (emailErr) {
-        console.error(`[Auth] ❌ Email send FAILED for ${contact}:`, emailErr.message);
-        console.error(`[Auth]   Full error:`, emailErr.code, emailErr.command, emailErr.responseCode);
-        if (!process.env.SMTP_USER) {
-          console.log(`[Auth] ⚠️  SMTP_USER not set — DEV MODE — code: ${code}`);
-        } else {
-          return res.status(500).json({ error: 'Failed to send verification email' });
-        }
+    try {
+      console.log(`[Auth] Attempting to send verification email to ${contact}...`);
+      await sendCodeEmail(contact, code);
+      console.log(`[Auth] ✅ Verification email sent successfully to ${contact}`);
+    } catch (emailErr) {
+      console.error(`[Auth] ❌ Email send FAILED for ${contact}:`, emailErr.message);
+      console.error(`[Auth]   Full error:`, emailErr.code, emailErr.command, emailErr.responseCode);
+      if (!process.env.SMTP_USER) {
+        console.log(`[Auth] ⚠️  SMTP_USER not set — DEV MODE — code: ${code}`);
+      } else {
+        return res.status(500).json({ error: 'Failed to send verification email' });
       }
-    } else if (method === 'phone') {
-      // ⚠️ SMS NOT IMPLEMENTED — no Twilio/SMS provider configured
-      // Code is stored in DB but NOT sent to the phone
-      console.log(`[Auth] ⚠️  SMS method selected but NO SMS provider configured`);
-      console.log(`[Auth] ⚠️  Code for ${contact}: ${code} (logged only, NOT sent via SMS)`);
-    } else {
-      console.log(`[Auth] ⚠️  Unknown method: ${method}, code: ${code}`);
     }
 
     res.json({ message: 'Code sent', method });
@@ -69,6 +60,8 @@ router.post('/send-code', async (req, res) => {
 router.post('/verify-code', async (req, res) => {
   try {
     const { contact, code, method } = req.body;
+    console.log(`[Auth] /verify-code called — contact: ${contact}, code: ${code}, method: ${method || 'email'}`);
+
     if (!contact || !code) return res.status(400).json({ error: 'Contact and code are required' });
 
     const result = await query(
@@ -79,69 +72,63 @@ router.post('/verify-code', async (req, res) => {
     );
 
     if (result.rows.length === 0) {
+      console.log(`[Auth] ❌ Invalid or expired code for ${contact}`);
       return res.status(400).json({ error: 'Invalid or expired code' });
     }
 
     await query('UPDATE verification_codes SET verified = true WHERE id = $1', [result.rows[0].id]);
+    console.log(`[Auth] ✅ Code verified for ${contact}`);
     res.json({ verified: true });
   } catch (error) {
-    console.error('Verify code error:', error);
+    console.error('[Auth] Verify code error:', error);
     res.status(500).json({ error: 'Server error verifying code' });
   }
 });
 
-// ── Register (simplified: email/phone + password only) ──
+// ── Register (email + password) ──
 router.post('/register', async (req, res) => {
   try {
-    const { email, phone, password, verified, reg_method } = req.body;
+    const { email, password } = req.body;
 
-    const contact = email || phone;
-    if (!contact || !password) {
-      return res.status(400).json({ error: 'Email/phone and password are required' });
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
     }
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
     // Check duplicates (case-insensitive)
-    if (email) {
-      const existing = await query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
-      if (existing.rows.length > 0) return res.status(409).json({ error: 'Email already registered' });
-    }
-    if (phone) {
-      const existing = await query('SELECT id FROM users WHERE phone = $1', [phone]);
-      if (existing.rows.length > 0) return res.status(409).json({ error: 'Phone already registered' });
-    }
+    const existing = await query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+    if (existing.rows.length > 0) return res.status(409).json({ error: 'Email already registered' });
 
     const hash = await bcrypt.hash(password, 12);
-    // Default name from email or phone
-    const defaultName = email ? email.split('@')[0] : phone;
+    const defaultName = email.split('@')[0];
+
+    console.log(`[Auth] Creating user for ${email}...`);
 
     const userResult = await query(
-      `INSERT INTO users (email, phone, password_hash, name, is_verified, verification_status)
-       VALUES ($1, $2, $3, $4, false, 'none')
-       RETURNING id, email, phone, name, subscription_status`,
-      [email || null, phone || null, hash, defaultName]
+      `INSERT INTO users (email, password_hash, name, is_verified, verification_status)
+       VALUES ($1, $2, $3, false, 'none')
+       RETURNING id, email, name, subscription_status`,
+      [email, hash, defaultName]
     );
 
     const user = userResult.rows[0];
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
+    console.log(`[Auth] ✅ User created: ${user.id} (${email})`);
+
     // Send welcome email (async, non-blocking)
-    if (email) {
-      console.log(`[Auth] Sending welcome email to ${email}...`);
-      sendWelcomeEmail(email, defaultName).then(() => {
-        console.log(`[Auth] ✅ Welcome email sent to ${email}`);
-      }).catch(err => {
-        console.error(`[Auth] ❌ Welcome email FAILED for ${email}:`, err.message);
-      });
-    } else {
-      console.log(`[Auth] No email provided (phone registration) — skipping welcome email`);
-    }
+    console.log(`[Auth] Sending welcome email to ${email}...`);
+    sendWelcomeEmail(email, defaultName).then(() => {
+      console.log(`[Auth] ✅ Welcome email sent to ${email}`);
+    }).catch(err => {
+      console.error(`[Auth] ❌ Welcome email FAILED for ${email}:`, err.message);
+    });
 
     res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, phone: user.phone, name: user.name }
+      user: { id: user.id, email: user.email, name: user.name }
     });
   } catch (error) {
     console.error('Register error:', error);
@@ -341,6 +328,10 @@ router.put('/me', authenticate, async (req, res) => {
       accepts_smokers, accepts_pets
     } = req.body;
 
+    // Ensure personality is stored as a Postgres text array
+    const personalityArr = Array.isArray(personality) ? personality
+      : (typeof personality === 'string' && personality ? [personality] : null);
+
     await query(
       `UPDATE users SET name = COALESCE($1, name), age = COALESCE($2, age), gender = COALESCE($3, gender),
        bio = COALESCE($4, bio), city = COALESCE($5, city), neighborhood = COALESCE($6, neighborhood),
@@ -353,7 +344,7 @@ router.put('/me', authenticate, async (req, res) => {
        WHERE id = $13`,
       [name, age, gender, bio, city, neighborhood, profession,
        hobbies, languages, is_smoker, has_pets, avatar_url, req.user.id,
-       cleanliness, cooking, schedule, personality]
+       cleanliness, cooking, schedule, personalityArr]
     );
 
     // Upsert room preferences
